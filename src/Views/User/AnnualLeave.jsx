@@ -23,7 +23,7 @@ const AnnualLeave = () => {
     setModalVisible(false); // Hide the modal
   };
 
-  // sonu is fuck
+  // lowda dineshand
   
   return (
     <div className="bg-[#E3EDF9]">
