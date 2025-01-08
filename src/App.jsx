@@ -15,6 +15,7 @@ import ApplyforLeave from "./Views/User/ApplyforLeave";
 import Usernavbar from "./Views/User/Usernavbar";
 import AnnualLeave from "./Views/User/AnnualLeave";
 import Sickleave from "./Views/User/Sickleave";
+import UpdateProfie from "./Views/User/UpdateProfie";
 
 function App() {
   return (
@@ -45,6 +46,8 @@ function App() {
         <Route path="/leaveapply" element={<ApplyforLeave/>}/>
         <Route path="/annualleave" element={<AnnualLeave/>}/>
         <Route path="/sickleave" element={<Sickleave/>}/>
+        <Route path="/update" element={<UpdateProfie/>}/>
+
 
 
 
