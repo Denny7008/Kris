@@ -16,7 +16,6 @@ import Usernavbar from "./Views/User/Usernavbar";
 import AnnualLeave from "./Views/User/AnnualLeave";
 import Sickleave from "./Views/User/Sickleave";
 import UpdateProfie from "./Views/User/UpdateProfie";
-
 function App() {
   return (
     <>
