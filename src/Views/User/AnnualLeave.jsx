@@ -22,8 +22,6 @@ const AnnualLeave = () => {
   const handleCloseModal = () => {
     setModalVisible(false); // Hide the modal
   };
-
-
   return (
     <div className="bg-[#E3EDF9]">
       <Navbar />
