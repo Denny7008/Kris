@@ -71,14 +71,7 @@ function App() {
 
 
 
-        
-
-
-
-
-
-
-
+  
 
       </Routes>
     </>
