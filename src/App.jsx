@@ -27,9 +27,9 @@ import ProfessionalDetails from "./Views/Admin/pages/ProfessionalDetails";
 import AcaDetails from "./Views/Admin/pages/AcaDetails";
 import Gurantor from "./Views/Admin/pages/Gurantor";
 import ViewGurantor from "./Views/Admin/pages/ViewGurantor";
-import FamilyDetails from "./Views/Admin/pages/FamilyDetails";
+import FamilyDetails1 from "./Views/Admin/pages/FamilyDetails";
 import ViewFamilyDetails from "./Views/Admin/pages/ViewFamilyDetails";
-import JobDetails from "./Views/Admin/pages/JobDetails";
+import JobDetails1 from "./Views/Admin/pages/JobDetails";
 import ViewJob from "./Views/Admin/pages/ViewJob";
 import FinancialDetails from "./Views/Admin/pages/FinancialDetails";
 import PerformanceManagement from "./Views/Admin/pages/PerformanceManagement";
@@ -109,9 +109,9 @@ function App() {
         <Route path="/adetails" element={<AcaDetails/>}/>
         <Route path="/gurantor" element={<Gurantor/>}/>
         <Route path="/viewgurant" element={<ViewGurantor/>}/>
-        <Route path="/familydetails" element={<FamilyDetails/>}/>
+        <Route path="/familydetails" element={<FamilyDetails1/>}/>
         <Route path="/viewfam" element={<ViewFamilyDetails/>}/>
-        <Route path="/jobdetails" element={<JobDetails/>}/>
+        <Route path="/jobdetails" element={<JobDetails1/>}/>
         <Route path="/viewjob" element={<ViewJob/>}/>
         <Route path="/financialdetails" element={<FinancialDetails/>}/>
         <Route path="/performance" element={<PerformanceManagement/>}/>

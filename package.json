@@ -10,11 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
+
     "lucide-react": "^0.469.0",
-=======
     "@heroicons/react": "^1.0.6",
->>>>>>> a6d31b34d13c808aad36660326328b1b44080eca
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",
