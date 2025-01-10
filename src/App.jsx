@@ -16,6 +16,7 @@ import ApplyforLeave from "./Views/User/ApplyforLeave";
 import Usernavbar from "./Views/User/Usernavbar";
 import AnnualLeave from "./Views/User/AnnualLeave";
 import Sickleave from "./Views/User/Sickleave";
+
 import EmployeeManagement from "./Views/Admin/pages/EmployeeManagement";
 import EmployeeProfile from "./Views/Admin/pages/EmployeeProfile";
 import ContactDetails from "./Views/Admin/pages/ContactDetails";
@@ -35,6 +36,19 @@ import PerformanceManagement from "./Views/Admin/pages/PerformanceManagement";
 import TargetSetup from "./Views/Admin/pages/TargetSetup";
 import ManageTargets from "./Views/Admin/pages/ManageTargets";
 
+
+
+import UpdateProfie from "./Views/User/UpdateProfie";
+import Contact from "./Views/User/ContactDetails";
+import NextDetails from "./Views/User/NextDetails";
+import EducationQualifications from "./Views/User/Educational";
+import GuarantorDetails from "./Views/User/GurantorDetails";
+import FamilyDetails from "./Views/User/FamilyDetails";
+import JobDetails from "./Views/User/JobDetails";
+import UploadDocuments from "./Views/User/UploadDocs";
+import ViewDocuments from "./Views/User/ViewDocs";
+import FinancialDocs from "./Views/User/FinancialDocs";
+import UpdateAcademicDetailsForm from "./Views/User/UpdateEdu";
 
 function App() {
   return (
@@ -65,6 +79,26 @@ function App() {
         <Route path="/leaveapply" element={<ApplyforLeave/>}/>
         <Route path="/annualleave" element={<AnnualLeave/>}/>
         <Route path="/sickleave" element={<Sickleave/>}/>
+        <Route path="/update" element={<UpdateProfie/>}/>
+        <Route path="/contact" element={<Contact/>}/>
+        <Route path="/next" element={<NextDetails/>}/>
+        <Route path="/education" element={<EducationQualifications/>}/>
+        <Route path="/grt" element={<GuarantorDetails/>}/>
+        <Route path="/family" element={<FamilyDetails/>}/>
+        <Route path="/job" element={<JobDetails/>}/>
+        <Route path="/docs" element={<UploadDocuments/>}/>
+        <Route path="/viewdocs" element={<ViewDocuments/>}/>
+        <Route path="/findocs" element={<FinancialDocs/>}/>
+        <Route path="/upedu" element={<UpdateAcademicDetailsForm/>}/>
+
+
+
+
+
+        
+
+
+
 
 
 
