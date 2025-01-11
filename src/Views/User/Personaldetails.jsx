@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "./Usernavbar";
 
-const Updateprofile = () => {
+const Personaldetails = () => {
   return (
     <div className="ml-8 bg-white flex-1 p-6 pl-8 rounded-lg">
           <div className="mt-6 flex justify-end">
@@ -46,4 +46,4 @@ const Updateprofile = () => {
   );
 };
 
-export default Updateprofile;
+export default Personaldetails;

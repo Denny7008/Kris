@@ -2,51 +2,9 @@ import React, { useState } from "react";
 import Navbar from "./Usernavbar";
 
 const NextDetails = () => {
-  const menuItems = [
-    "Personal Details",
-    "Contact Details",
-    "Next of Kin Details",
-    "Education Qualifications",
-    "Guarantor Details",
-    "Family Details",
-    "Job Details",
-    "Financial Details",
-  ];
-
-  const [activeTab, setActiveTab] = useState("Next of Kin Details");
 
   return (
-    <div className="bg-[#E3EDF9] min-h-screen">
-      <Navbar />
-      <div className="bg-white mt-6 ml-8 mr-8 flex space-x-8 text-gray-700 text-lg">
-        <a href="#" className="p-4 ml-6 text-2xl hover:text-blue-500">
-          Dashboard / Next of Kin Details
-        </a>
-      </div>
-
-      <div className="flex gap-4 mt-4 justify-center bg-[#E3EDF9]">
-        <div className="w-3/4 max-w-7xl rounded-lg flex">
-          {/* Sidebar */}
-          <div className="w-1/3 h-[80vh] border-r bg-gray-100 p-4">
-            <ul className="space-y-4">
-              {menuItems.map((item) => (
-                <button
-                  key={item}
-                  onClick={() => setActiveTab(item)}
-                  className={`w-full text-left p-4 rounded-lg ${
-                    item === activeTab
-                      ? "bg-[#FFC107] text-black"
-                      : "bg-gray-200 hover:bg-gray-300"
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
-            </ul>
-          </div>
-
-          {/* Main Content */}
-          <div className="flex-1 rounded-lg bg-[#E3EDF9]">
+    <div className=" flex-1 rounded-lg bg-[#E3EDF9]">
             <div className="w-[40vw] px-10 mx-10 bg-white rounded-lg p-6 space-y-8 shadow-lg">
               <form>
                 <div className="grid grid-cols-2 gap-6">
@@ -120,9 +78,6 @@ const NextDetails = () => {
               </form>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
   );
 };
 

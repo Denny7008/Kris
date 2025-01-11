@@ -50,6 +50,7 @@ import ViewDocuments from "./Views/User/ViewDocs";
 import FinancialDocs from "./Views/User/FinancialDocs";
 import UpdateAcademicDetailsForm from "./Views/User/UpdateEdu";
 
+import Upddating from "./Views/User/Updating";
 function App() {
   return (
     <>
@@ -90,6 +91,9 @@ function App() {
         <Route path="/viewdocs" element={<ViewDocuments/>}/>
         <Route path="/findocs" element={<FinancialDocs/>}/>
         <Route path="/upedu" element={<UpdateAcademicDetailsForm/>}/>
+        <Route path="/updatingjsx" element={<Upddating/>}/>
+
+
 
 
 
