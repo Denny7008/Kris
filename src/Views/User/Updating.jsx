@@ -57,18 +57,18 @@ const Updateprofile = () => {
       </div>
 
       <div className="flex gap-4 h-screen mt-4 justify-center rounded-lg bg-[#E3EDF9]">
-        <div className="w-3/4 max-w-4xl h-[80vh] rounded-lg flex">
+        <div className="w-max max-w-6xl h-[80vh] rounded-lg flex">
           {/* Sidebar */}
-          <div className="w-1/3 h-full border-r bg-gray-100 p-4">
+          <div className="w-1/3 mt-6 rounded-lg h-full  border-r bg-white p-4">
             <ul className="space-y-4">
               {menuItems.map((item) => (
                 <button
                   key={item}
                   onClick={() => setActiveTab(item)}
-                  className={`w-full text-left p-4 rounded-lg ${
+                  className={`w-full  text-center p-4 rounded-lg ${
                     item === activeTab
                       ? "bg-[#FFC107] text-black"
-                      : "bg-gray-200 hover:bg-gray-300"
+                      : "bg-[#E3EDF9] hover:bg-blue-100"
                   }`}
                 >
                   {item}
@@ -78,7 +78,7 @@ const Updateprofile = () => {
           </div>
 
           {/* Main Content */}
-          <div className="ml-10 bg-[#E3EDF9] flex-1 p-6 pl-8 rounded-lg">
+          <div className="mx-auto bg-[#E3EDF9] flex-1 p-6 pl-8 rounded-lg ">
             {renderContent()}
           </div>
         </div>

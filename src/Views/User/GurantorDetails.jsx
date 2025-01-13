@@ -16,8 +16,8 @@ const GuarantorDetails = () => {
   const [activeTab, setActiveTab] = useState("Guarantor Details");
 
   return (
-    <div className="flex-1 pl-8 rounded-lg bg-[#E3EDF9]">
-            <div className="max-w-2xl mx-auto bg-white rounded-lg p-6 space-y-6 shadow-lg">
+    <div className="flex-1  rounded-lg bg-[#E3EDF9]">
+            <div className="max-w-2xl  bg-white rounded-lg p-6 space-y-2 shadow-lg">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">
                 Guarantor Details
               </h2>

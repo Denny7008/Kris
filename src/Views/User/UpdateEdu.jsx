@@ -1,36 +1,37 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-const UpdateAcademicDetailsForm = () => {
+const UpdateAcademicDetailsForm = ({ onSubmit }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    alert("Form submitted successfully!");
+  const handleFormSubmit = (data) => {
+    onSubmit(data); // Pass data to the parent component
   };
 
   return (
-    <div className="bg-white min-h-screen flex items-center justify-center">
+    <div className="h-[80vh] flex justify-center">
       <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="bg-white  rounded-lg shadow-lg p-6 max-w-3xl w-full"
+        onSubmit={handleSubmit(handleFormSubmit)}
+        className="bg-white rounded-lg shadow-lg p-6 max-w-3xl w-full"
       >
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-          Academic Records / Academic Details
+          Update Academic Details
         </h2>
 
         <div className="grid grid-cols-2 gap-4">
-          {/* Name of Institution */}
+          {/* Institution */}
           <div>
             <label className="block text-gray-700 mb-1" htmlFor="institution">
               Name of Institution
             </label>
             <input
-              {...register("institution", { required: "Institution is required" })}
+              {...register("institution", {
+                required: "Institution is required",
+              })}
               id="institution"
               type="text"
               placeholder="Enter Institution Name"
@@ -39,25 +40,6 @@ const UpdateAcademicDetailsForm = () => {
             {errors.institution && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.institution.message}
-              </p>
-            )}
-          </div>
-
-          {/* Department */}
-          <div>
-            <label className="block text-gray-700 mb-1" htmlFor="department">
-              Department
-            </label>
-            <input
-              {...register("department", { required: "Department is required" })}
-              id="department"
-              type="text"
-              placeholder="Enter Department"
-              className="w-full border rounded-lg p-2 text-gray-700 bg-[#E3EDF9] focus:ring-blue-500"
-            />
-            {errors.department && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.department.message}
               </p>
             )}
           </div>
@@ -75,7 +57,30 @@ const UpdateAcademicDetailsForm = () => {
               className="w-full border rounded-lg p-2 text-gray-700 bg-[#E3EDF9] focus:ring-blue-500"
             />
             {errors.course && (
-              <p className="text-red-500 text-sm mt-1">{errors.course.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.course.message}
+              </p>
+            )}
+          </div>
+
+          {/* Department */}
+          <div>
+            <label className="block text-gray-700 mb-1" htmlFor="department">
+              Department
+            </label>
+            <input
+              {...register("department", {
+                required: "Department is required",
+              })}
+              id="department"
+              type="text"
+              placeholder="Enter Department Name"
+              className="w-full border rounded-lg p-2 text-gray-700 bg-[#E3EDF9] focus:ring-blue-500"
+            />
+            {errors.department && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.department.message}
+              </p>
             )}
           </div>
 
@@ -128,31 +133,32 @@ const UpdateAcademicDetailsForm = () => {
               className="w-full border rounded-lg p-2 text-gray-700 bg-[#E3EDF9] focus:ring-blue-500"
             />
             {errors.endDate && (
-              <p className="text-red-500 text-sm mt-1">{errors.endDate.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.endDate.message}
+              </p>
+            )}
+          </div>
+           {/* Description */}
+          <div>
+            <label className="block text-gray-700 mb-1" htmlFor="description">
+              Description
+            </label>
+            <textarea
+              {...register("description", {
+                required: "Description is required",
+              })}
+              id="description"
+              placeholder="Enter Description"
+              className="w-full border rounded-lg p-2 text-gray-700 bg-[#E3EDF9] focus:ring-blue-500"
+            />
+            {errors.description && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.description.message}
+              </p>
             )}
           </div>
         </div>
 
-        {/* Description */}
-        <div className="mt-4">
-          <label className="block text-gray-700 mb-1" htmlFor="description">
-            Description
-          </label>
-          <textarea
-            {...register("description", { required: "Description is required" })}
-            id="description"
-            placeholder="Enter Description"
-            rows={4}
-            className="w-full border rounded-lg p-2 text-gray-700 bg-[#E3EDF9] focus:ring-blue-500"
-          ></textarea>
-          {errors.description && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.description.message}
-            </p>
-          )}
-        </div>
-
-        {/* Submit Button */}
         <div className="mt-6 flex justify-end">
           <button
             type="submit"

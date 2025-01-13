@@ -20,8 +20,8 @@ const FinancialDocs = () => {
   ];
 
   return (
-    <div className="flex-1 pl-8 rounded-lg bg-[#E3EDF9]">
-            <div className="max-w-2xl mx-auto bg-white rounded-lg p-6 space-y-6 shadow-lg">
+    <div className="flex-1  rounded-lg bg-[#E3EDF9]">
+            <div className="w-[35vw] bg-white rounded-lg p-6 space-y-6 shadow-lg">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">
                 Financial Details
               </h2>
@@ -29,7 +29,7 @@ const FinancialDocs = () => {
                 {financialDetails.map((detail, index) => (
                   <div
                     key={index}
-                    className="bg-[#F6F9FC] p-4 rounded-lg shadow flex justify-between items-center"
+                    className="bg-[#F6F9FC] w-[33vw] p-4 rounded-lg shadow flex justify-between items-center"
                   >
                     <div>
                       <p className="font-medium text-lg">
