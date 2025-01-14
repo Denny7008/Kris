@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import AdminSideNavbar from "../../../Components/AdminSideNavbar";
-import AdminUpperNavbar from "../../../Components/AdminUpperNavbar";
 
 const ManageTargets = () => {
   const menuItems = ["Target Setup", "Targets", "Appraisals", "Settings", "Reports"];
@@ -29,35 +27,7 @@ const ManageTargets = () => {
   };
 
   return (
-    <div className="flex bg-[#E3EDF9]">
-      <AdminSideNavbar />
-      <div className="flex-col w-full">
-        <AdminUpperNavbar />
-
-        <div className="my-4 mx-4 w-[80vw] rounded-lg">
-          <div className="mb-3">
-            <h1 className="text-xl font-semibold">Performance Management</h1>
-          </div>
-
-          {/* Navigation Tabs */}
-          <div className="flex space-x-4 mb-6">
-            {menuItems.map((item) => (
-              <button
-                key={item}
-                onClick={() => setActiveTab(item)}
-                className={`px-6 py-3 rounded-full text-sm font-medium ${
-                  item === activeTab
-                    ? "bg-[#FFC107] text-black"
-                    : "bg-white hover:bg-gray-100 text-gray-700"
-                }`}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-
-          {/* Manage Targets Table */}
-          <div className="bg-white p-8 rounded-lg shadow-md">
+          <div className="bg-white p-2">
             <h2 className="text-lg font-semibold mb-6">Manage Targets</h2>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
@@ -133,9 +103,6 @@ const ManageTargets = () => {
               </table>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
   );
 };
 

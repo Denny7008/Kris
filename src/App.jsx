@@ -1,6 +1,6 @@
 import "./App.css";
 import UserLogin from "./Views/User/UserLogin";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import UserRegister from "./Views/User/UserRegister";
 import Adminlogin from "./Views/Admin/Adminlogin";
 import AdminSideNavbar from "./Components/AdminSideNavbar";
@@ -30,7 +30,7 @@ import ViewGurantor from "./Views/Admin/pages/ViewGurantor";
 import FamilyDetails1 from "./Views/Admin/pages/FamilyDetails";
 import ViewFamilyDetails from "./Views/Admin/pages/ViewFamilyDetails";
 import JobDetails1 from "./Views/Admin/pages/JobDetails";
-import ViewJob from "./Views/Admin/pages/ViewJob";
+import ViewJob from "./Views/Admin/pages/ViewJobDetails";
 import FinancialDetails from "./Views/Admin/pages/FinancialDetails";
 import PerformanceManagement from "./Views/Admin/pages/PerformanceManagement";
 import TargetSetup from "./Views/Admin/pages/TargetSetup";
@@ -51,6 +51,14 @@ import FinancialDocs from "./Views/User/FinancialDocs";
 import UpdateAcademicDetailsForm from "./Views/User/UpdateEdu";
 
 import Upddating from "./Views/User/Updating";
+import Test from "./Views/Admin/pages/Test";
+import JobPanels from "./Views/Admin/pages/JobPanels";
+import PersonalDetails from "./Views/Admin/pages/PersonalDetails";
+import NextOfKinDetails from "./Views/Admin/pages/KinPage";
+import ViewGuarantorDetails from "./Views/Admin/pages/ViewGuarantorDetails";
+import ViewJobDetails from "./Views/Admin/pages/ViewJobDetails";
+
+
 function App() {
   return (
     <>
@@ -69,6 +77,31 @@ function App() {
           {/* <Route path="relief" element={<ReliefOfficers />} /> */}
         </Route>
 
+
+
+          {/* Admin Dashboard Routes */}
+          <Route path="/admin/login/AdminDashboard" element={<AdminDashboard />}>
+          {/* Default Route */}
+          <Route index element={<Navigate to="JobPanels" replace />} />
+
+          {/* Nested Subroutes */}
+          <Route path="JobPanels" element={<JobPanels />} />
+          <Route path="LeaveManagement" element={<LeaveManagement />} />
+          <Route path="EmployeeManagement" element={<EmployeeManagement />} />
+          <Route path="ContactDetails" element={<ContactDetails/>}/>
+          <Route path="PersonalDetails" element={<PersonalDetails />}/>
+          <Route path="KinDetails" element={<NextOfKinDetails/>}/>
+          <Route path="GuarantorDetails" element={<GuarantorDetails/>}/>
+          <Route path="GuarantorDetails" element={<ViewGuarantorDetails/>}/>
+          <Route path="ViewFamily" element={<ViewFamilyDetails/>}/>
+          <Route path="JobDetails" element={<ViewJobDetails/>}/>
+          <Route path="FinancialDetails" element={<FinancialDetails/>}/>
+          <Route path="ManageTargets" element={<ManageTargets/>}/>
+          <Route path="PerformanceManagement" element={<PerformanceManagement/>}/>
+        
+        </Route>
+
+
         <Route path="/upper" element={<AdminUpperNavbar />} />
         <Route path="/recall" element={<Leaverecall />} />
         <Route path="/leavehistory" element={<LeaveHistory />} />
@@ -86,7 +119,7 @@ function App() {
         <Route path="/education" element={<EducationQualifications/>}/>
         <Route path="/grt" element={<GuarantorDetails/>}/>
         <Route path="/family" element={<FamilyDetails/>}/>
-        <Route path="/job" element={<JobDetails/>}/>
+        
         <Route path="/docs" element={<UploadDocuments/>}/>
         <Route path="/viewdocs" element={<ViewDocuments/>}/>
         <Route path="/findocs" element={<FinancialDocs/>}/>
@@ -95,32 +128,25 @@ function App() {
 
 
 
-
-
-
-
-  
-
-
         {/* Admin routes */}
         <Route path="/emanagement" element={<EmployeeManagement/>}/>
-        <Route path="/eprofile" element={<EmployeeProfile/>}/>
-        <Route path="/contact-details" element={<ContactDetails/>}/>
-        <Route path="/kinpage" element={<KinPage/>}/>
+        
+        
         <Route path="/equalification" element={<Equalification/>}/>
         <Route path="/records" element={<AcademicRecords/>}/>
         <Route path="/profes" element={<ProfessionalDetails/>}/>
         <Route path="/adetails" element={<AcaDetails/>}/>
         <Route path="/gurantor" element={<Gurantor/>}/>
-        <Route path="/viewgurant" element={<ViewGurantor/>}/>
+        
         <Route path="/familydetails" element={<FamilyDetails1/>}/>
-        <Route path="/viewfam" element={<ViewFamilyDetails/>}/>
+        
         <Route path="/jobdetails" element={<JobDetails1/>}/>
         <Route path="/viewjob" element={<ViewJob/>}/>
-        <Route path="/financialdetails" element={<FinancialDetails/>}/>
-        <Route path="/performance" element={<PerformanceManagement/>}/>
+        
+        
         <Route path="/targetsetup" element={<TargetSetup/>}/>
-        <Route path="/managetargets" element={<ManageTargets/>}/>
+        
+        <Route path="/test" element={<Test/>}/>
 
 
 

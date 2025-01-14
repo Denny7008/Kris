@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import AdminSideNavbar from "../../../Components/AdminSideNavbar";
-import AdminUpperNavbar from "../../../Components/AdminUpperNavbar";
+
+import React, { useState } from 'react';
+import ViewProfile from '../pages/ViewProfile';
+import EditProfile from '../pages/EditProfile';
 
 const EmployeeManagement = () => {
   const [actionDropdown, setActionDropdown] = useState(null);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [activeView, setActiveView] = useState('table');
 
   const employees = [
     {
@@ -54,45 +57,48 @@ const EmployeeManagement = () => {
       category: "Full time",
       gender: "Male",
     },
-    {
-      name: "Sarah Wilson",
-      dept: "Design",
-      jobTitle: "UI UX Designer",
-      startDate: "28/04/2022",
-      category: "Full time",
-      gender: "Female",
-    },
   ];
 
   const handleActionClick = (index) => {
     setActionDropdown(index === actionDropdown ? null : index);
   };
 
-  return (
-    <div className="flex bg-[#E3EDF9]">
-      <AdminSideNavbar />
-      <div className="flex-col">
-        <AdminUpperNavbar />
+  const handleViewProfile = (employee) => {
+    setSelectedEmployee(employee);
+    setActiveView('view');
+    setActionDropdown(null);
+  };
 
-        <div className="my-4 mx-4 w-[80vw] rounded-lg">
-          <div className="mb-3">
-            <h1 className="text-xl font-semibold">Employee Management</h1>
-          </div>
+  const handleEditProfile = (employee) => {
+    setSelectedEmployee(employee);
+    setActiveView('edit');
+    setActionDropdown(null);
+  };
 
-          {/* Employee Table */}
+  const handleSaveProfile = (updatedEmployee) => {
+    // Here you would typically update the employee data in your backend
+    console.log('Saving updated employee:', updatedEmployee);
+    setActiveView('table');
+    setSelectedEmployee(null);
+  };
+
+  const renderContent = () => {
+    switch (activeView) {
+      case 'view':
+        return selectedEmployee && <ViewProfile employee={selectedEmployee} />;
+      case 'edit':
+        return selectedEmployee && (
+          <EditProfile 
+            employee={selectedEmployee} 
+            onSave={handleSaveProfile}
+          />
+        );
+      default:
+        return (
           <div className="bg-white p-8 rounded-lg shadow-md">
             <div className="flex justify-between mb-4">
               <button className="flex items-center px-4 py-2 bg-gray-200 rounded-md">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="2"
-                  stroke="currentColor"
-                  className="w-5 h-5 mr-2"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h8m-8 6h16" />
-                </svg>
+                <span className="material-icons mr-2">filter_list</span>
                 Filter
               </button>
               <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
@@ -128,33 +134,20 @@ const EmployeeManagement = () => {
                             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
                           >
                             Actions
-                            <svg
-                              className="w-4 h-4 ml-2"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M19 9l-7 7-7-7"
-                              />
-                            </svg>
+                            <span className="material-icons ml-2">arrow_drop_down</span>
                           </button>
                           {actionDropdown === index && (
                             <div className="absolute right-0 top-full mt-2 w-40 bg-white rounded-md shadow-lg z-10">
                               <ul className="text-sm text-gray-700">
                                 <li
                                   className="p-2 hover:bg-gray-100 cursor-pointer"
-                                  onClick={() => alert("View Profile")}
+                                  onClick={() => handleViewProfile(employee)}
                                 >
                                   View Profile
                                 </li>
                                 <li
                                   className="p-2 hover:bg-gray-100 cursor-pointer"
-                                  onClick={() => alert("Edit Profile")}
+                                  onClick={() => handleEditProfile(employee)}
                                 >
                                   Edit Profile
                                 </li>
@@ -169,6 +162,27 @@ const EmployeeManagement = () => {
               </table>
             </div>
           </div>
+        );
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen bg-[#E3EDF9]">
+      <div className="flex-1">
+        <div className="p-6">
+          {/* <div className="mb-6">
+            <h1 className="text-2xl font-semibold">Employee Management</h1>
+            {activeView !== 'table' && (
+              <div className="flex items-center mt-2 text-sm text-gray-600">
+                <span className="cursor-pointer hover:text-blue-600" onClick={() => setActiveView('table')}>
+                  Employee Management
+                </span>
+                <span className="mx-2">/</span>
+                <span>{activeView === 'view' ? 'View Profile' : 'Edit Profile'}</span>
+              </div>
+            )}
+          </div> */}
+          {renderContent()}
         </div>
       </div>
     </div>

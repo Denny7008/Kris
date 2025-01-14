@@ -1,10 +1,11 @@
 import { PencilIcon } from 'lucide-react'
 import React from 'react'
 
-const EmployeeProfile = () => {
+const PersonalDetails = () => {
   return (
-    <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4">
-    <div className="bg-white rounded-3xl shadow-sm p-8 w-full max-w-md">
+
+   <div className='flex justify-center items-center'>
+     <div className="p-8  w-full max-w-md">
       <div className="relative">
         <div className="absolute right-0 top-0">
           <button 
@@ -18,7 +19,7 @@ const EmployeeProfile = () => {
         <div className="flex flex-col items-center text-center space-y-4">
           <div className="w-24 h-24 rounded-full bg-yellow-400 overflow-hidden">
             <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-60twXVMoGJKDG5ZJaUWkiL9QiAF2wv.png"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBUCCQ3eFBqAcB_eSiH0gUT1BqptQULaU4wg&s"
               alt="Employee avatar"
               className="w-full h-full object-cover"
             />
@@ -50,8 +51,8 @@ const EmployeeProfile = () => {
         </div>
       </div>
     </div>
-  </div>
+   </div>
   )
 }
 
-export default EmployeeProfile
+export default PersonalDetails
