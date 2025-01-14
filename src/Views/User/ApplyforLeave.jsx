@@ -39,9 +39,8 @@ const LeaveDashboard = () => {
   ];
 
   return (
-    <div className="bg-[#E3EDF9] min-h-screen">
-      <Usernavbar />
-      <div className="bg-white  mt-6 ml-8 mr-8 flex space-x-8 text-gray-700 text-lg">
+    <div className="bg-sky-600 ">
+      <div className="bg-white border mt-4 ml-8 mr-8 flex space-x-8 text-gray-700 text-lg">
         <a href="#" className="p-4 ml-6 text-2xl hover:text-blue-500">
           Dashboard/applyforleave
         </a>

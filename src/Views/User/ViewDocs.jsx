@@ -17,16 +17,8 @@ const ViewDocuments = () => {
   };
 
   return (
-    <div className="bg-[#E3EDF9] min-h-screen">
-      <Navbar />
-      <div className="bg-white mt-6 ml-8 mr-8 flex space-x-8 text-gray-700 text-lg">
-        <a href="#" className="p-4 ml-6 text-2xl hover:text-blue-500">
-          Dashboard / View Documents
-        </a>
-      </div>
-
-      <div className="flex gap-4 mt-4 justify-center bg-[#E3EDF9]">
-        <div className="w-3/4 max-w-5xl rounded-lg bg-white p-8 shadow-lg">
+      <div className="flex  mt-4  bg-[#E3EDF9]">
+        <div className="max-w-full rounded-lg bg-white p-8 shadow-lg">
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">
             Job Details / View Documents
           </h2>
@@ -56,7 +48,6 @@ const ViewDocuments = () => {
           </button>
         </div>
       </div>
-    </div>
   );
 };
 

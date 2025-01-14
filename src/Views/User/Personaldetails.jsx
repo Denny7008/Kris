@@ -3,7 +3,7 @@ import Navbar from "./Usernavbar";
 
 const Personaldetails = () => {
   return (
-    <div className="ml-8 bg-white flex-1 p-6 pl-8 rounded-lg">
+    <div className="max-w-full w-full px-10 mx-auto bg-white rounded-lg p-6 space-y-8 shadow-lg">
           <div className="mt-6 flex justify-end">
                 <button className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600">
                   Edit
