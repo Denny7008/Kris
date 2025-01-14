@@ -39,11 +39,9 @@ const LeaveDashboard = () => {
   ];
 
   return (
-    <div className="bg-sky-600 ">
-      <div className="bg-white border mt-4 ml-8 mr-8 flex space-x-8 text-gray-700 text-lg">
-        <a href="#" className="p-4 ml-6 text-2xl hover:text-blue-500">
-          Dashboard/applyforleave
-        </a>
+    <div className="bg-[#E3EDF9] py-4 ">
+      <div className="p-4 ml-6 mr-6 bg-white text-2xl hover:text-blue-500">
+        Dashboard/applyforleave
       </div>
 
       <div className="p-6 bg-white p-4 mt-8 ml-8 mr-8">

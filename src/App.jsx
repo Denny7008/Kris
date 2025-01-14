@@ -49,7 +49,6 @@ import FinancialDocs from "./Views/User/FinancialDocs";
 import UpdateAcademicDetailsForm from "./Views/User/UpdateEdu";
 
 import Upddating from "./Views/User/Updating";
-<<<<<<< HEAD
 import Test from "./Views/Admin/pages/Test";
 import JobPanels from "./Views/Admin/pages/JobPanels";
 import PersonalDetails from "./Views/Admin/pages/PersonalDetails";
@@ -58,10 +57,12 @@ import ViewGuarantorDetails from "./Views/Admin/pages/ViewGuarantorDetails";
 import ViewJobDetails from "./Views/Admin/pages/ViewJobDetails";
 
 
-=======
+
 import Dashboard from "./Views/User/Dashboard";
 import Userdashborad from "./Views/User/Userdashborad";
->>>>>>> 89d90486180ee41f00c25ad377f205fd099bc264
+import Navbar from "./Views/User/Usernavbar";
+import Testexp from "./Views/User/Testexp";
+
 function App() {
   return (
     <>
@@ -112,10 +113,10 @@ function App() {
         <Route path="/leavehistory" element={<LeaveHistory />} />
 
         {/* user routes */}
-        <Route path="/userlogin" element={<UserLogin />} />
+        <Route path="/" element={<UserLogin />} />
         <Route path="/userdash" element={<Usernavbar />} />
         <Route path="/user/register" element={<UserRegister />} />
-<<<<<<< HEAD
+
         <Route path="/leaveapply" element={<ApplyforLeave/>}/>
         <Route path="/annualleave" element={<AnnualLeave/>}/>
         <Route path="/sickleave" element={<Sickleave/>}/>
@@ -157,10 +158,6 @@ function App() {
 
 
 
-
-
-=======
-
         <Route path="/annualleave" element={<AnnualLeave />} />
         <Route path="/sickleave" element={<Sickleave />} />
         <Route path="/update" element={<UpdateProfie />} />
@@ -177,6 +174,9 @@ function App() {
         <Route path="/updatingjsx" element={<Upddating />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/leaveapply" element={<ApplyforLeave />} />
+        <Route path="/usernavbar" element={<Navbar />} />
+        <Route path="/testt" element={<Testexp/>} />
+
 
         <Route path="/userlogin/dashboard" element={<Dashboard />}>
         <Route index element={<Navigate to="userpanel" replace/>}/>
@@ -210,7 +210,6 @@ function App() {
         <Route path="/performance" element={<PerformanceManagement />} />
         <Route path="/targetsetup" element={<TargetSetup />} />
         <Route path="/managetargets" element={<ManageTargets />} />
->>>>>>> 89d90486180ee41f00c25ad377f205fd099bc264
       </Routes>
     </>
   );

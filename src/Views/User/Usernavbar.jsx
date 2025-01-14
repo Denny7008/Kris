@@ -2,7 +2,7 @@ import React from "react";
 import logo from "../../assets/kris logo 3.png";
 const Navbar = () => {
   return (
-    <nav className="bg-green-400 shadow p-4 flex justify-between items-center">
+    <nav className="bg-white shadow p-4 flex justify-between items-center">
       {/* Logo Section */}
       <div className="flex items-center">
         <div className="text-blue-600 text-2xl font-bold flex items-center">
