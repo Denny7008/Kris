@@ -103,7 +103,7 @@ const AdminSideNavbar = () => {
       </div>
 
       {/* Navigation Links */}
-      <div className="flex flex-col mt-6 pl-2">
+      <div className="flex flex-col mt-6 pl-3">
         <NavLink
           to="/admin/login/AdminDashboard/JobPanels"
           className={({ isActive }) =>

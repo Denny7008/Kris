@@ -62,6 +62,7 @@ import Dashboard from "./Views/User/Dashboard";
 import Userdashborad from "./Views/User/Userdashborad";
 import Navbar from "./Views/User/Usernavbar";
 import Testexp from "./Views/User/Testexp";
+import NotFound from "./Components/NotFound";
 
 function App() {
   return (
@@ -108,6 +109,7 @@ function App() {
         </Route>
 
         <Route path="JobDetails" index element={<ViewJobDetails/>} replace/>
+        <Route path="*" element={<NotFound />} />
 
         {/* user dashboard routes */} 
 
