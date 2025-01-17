@@ -180,13 +180,10 @@
 
 
 import React, { useState } from "react";
-import { toast } from "react-toastify"; // Import toastify
-import "react-toastify/dist/ReactToastify.css"; // Import the CSS for toastify
 import stock from "../../assets/stock.png";
 import logo from "../../assets/kris logo 2.svg";
-
-// Initialize toast container outside of the component
-import { ToastContainer } from 'react-toastify';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserRegister = () => {
   const [formData, setFormData] = useState({
@@ -196,41 +193,64 @@ const UserRegister = () => {
     phone: "",
     password: "",
     confirmPassword: "",
-    receiveNewsletter: false,
-    agreeToTerms: false,
+    receiveNewsletters: false,
+    agreeTerms: false,
   });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prevState) => ({
+      ...prevState,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Here you can call your API endpoint for user registration
+  
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
+    }
+  
     try {
-      const response = await fetch("/use/register", {
+      const response = await fetch("/user/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password,
+          receiveNewsletters: formData.receiveNewsletters,
+          agreeTerms: formData.agreeTerms,
+        }),
       });
-
+  
+      let data;
+      try {
+        // Attempt to parse the response as JSON
+        data = await response.json();
+      } catch (err) {
+        // Handle empty or invalid JSON
+        data = null;
+      }
+  
       if (response.ok) {
-        toast.success("Registration successful!"); // Success toast
-        // You can redirect the user to a login page or home page after successful registration
+        toast.success(data?.message || "Account created successfully!");
+        // Optionally reset the form or redirect the user
       } else {
-        toast.error("Registration failed. Please try again."); // Error toast
+        toast.error(data?.message || "Registration failed. Please try again.");
       }
     } catch (error) {
-      toast.error("An error occurred. Please try again."); // Error toast for network issues
+      toast.error("An error occurred. Please try again.");
+      console.error("Error during registration:", error);
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -265,7 +285,9 @@ const UserRegister = () => {
 
         {/* Right side - Registration form */}
         <div className="w-1/2 p-8">
-          <h2 className="text-3xl font-bold text-blue-800 mb-4">Welcome to KRIS</h2>
+          <h2 className="text-3xl font-bold text-blue-800 mb-4">
+            Welcome to KRIS
+          </h2>
           <p className="mb-8 text-gray-600">Register your account</p>
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 gap-6">
@@ -383,8 +405,8 @@ const UserRegister = () => {
               <label className="flex items-center">
                 <input
                   type="checkbox"
-                  name="receiveNewsletter"
-                  checked={formData.receiveNewsletter}
+                  name="receiveNewsletters"
+                  checked={formData.receiveNewsletters}
                   onChange={handleChange}
                   className="form-checkbox"
                 />
@@ -398,8 +420,8 @@ const UserRegister = () => {
               <label className="flex items-center">
                 <input
                   type="checkbox"
-                  name="agreeToTerms"
-                  checked={formData.agreeToTerms}
+                  name="agreeTerms"
+                  checked={formData.agreeTerms}
                   onChange={handleChange}
                   className="form-checkbox"
                 />
@@ -428,9 +450,6 @@ const UserRegister = () => {
           </form>
         </div>
       </div>
-
-      {/* Toast container */}
-      <ToastContainer />
     </div>
   );
 };

@@ -1,0 +1,12 @@
+// REGISTER API(http://localhost:5000/user/register) 
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "phone": "1234567890",
+  "password": "password123",
+  "confirmPassword": "password123",
+  "receiveNewsletters": true,
+  "agreeTerms": true
+}
