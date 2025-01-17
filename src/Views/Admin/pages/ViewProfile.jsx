@@ -150,6 +150,9 @@ import GuarantorDetails from "./ViewGuarantorDetails";
 import ViewFamilyDetails from "./ViewFamilyDetails";
 import ViewJobDetails from "./ViewJobDetails";
 import FinancialDetails from "./FinancialDetails";
+import ViewDocuments from "./../../User/ViewDocs";
+import { Route, Router, Routes } from "react-router-dom";
+import JobDetailsRoute from "./JobDetailsRoute";
 // import FinancialDetails from "./FinancialDetails";
 
 const EmployeeProfile = () => {
@@ -180,7 +183,7 @@ const EmployeeProfile = () => {
   };
 
   return (
-    <div className="flex-col h-screen">
+    <div className="flex-col">
       {/* Current Route */}
         <h1 className="text-xl font-semibold">
           Employee Mgmt / Employee Profile / {selectedMenu}

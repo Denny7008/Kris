@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AdminSideNavbar from "../../../Components/AdminSideNavbar";
 import AdminUpperNavbar from "../../../Components/AdminUpperNavbar";
+import ViewDocuments from "../../User/ViewDocs";
 
 const ViewJobDetails = () => {
   const menuItems = [
@@ -15,6 +16,31 @@ const ViewJobDetails = () => {
   ];
 
   const [activeTab, setActiveTab] = useState("Job Details");
+
+
+  const [isViewingDocuments, setIsViewingDocuments] = useState(false);
+
+  const handleViewDocuments = () => {
+    setIsViewingDocuments(true); // Switch to ViewDocuments component
+  };
+
+  const handleBackToJobDetails = () => {
+    setIsViewingDocuments(false); // Switch back to job details
+  };
+
+  if (isViewingDocuments) {
+    return (
+      <div className="p-3">
+        <ViewDocuments />
+        {/* <button
+          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600"
+          onClick={handleBackToJobDetails}
+        >
+          Back to Job Details
+        </button> */}
+      </div>
+    );
+  }
 
   return (
             <div className="flex-1 bg-white rounded-lg p-8">
@@ -88,7 +114,7 @@ const ViewJobDetails = () => {
                   </div>
 
                   {/* View Documents Button */}
-                  <button className="mt-6 bg-green-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600">
+                  <button onClick={handleViewDocuments} className="mt-6 bg-green-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600">
                     View Documents
                   </button>
                 </div>

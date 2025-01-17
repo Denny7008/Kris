@@ -100,13 +100,16 @@ function App() {
           <Route path="GuarantorDetails" element={<GuarantorDetails/>}/>
           <Route path="GuarantorDetails" element={<ViewGuarantorDetails/>}/>
           <Route path="ViewFamily" element={<ViewFamilyDetails/>}/>
-          <Route path="JobDetails" element={<ViewJobDetails/>}/>
+          
           <Route path="FinancialDetails" element={<FinancialDetails/>}/>
           <Route path="ManageTargets" element={<ManageTargets/>}/>
           <Route path="PerformanceManagement" element={<PerformanceManagement/>}/>
         
         </Route>
 
+        <Route path="JobDetails" index element={<ViewJobDetails/>} replace/>
+
+        {/* user dashboard routes */} 
 
         <Route path="/upper" element={<AdminUpperNavbar />} />
         <Route path="/recall" element={<Leaverecall />} />
@@ -128,7 +131,7 @@ function App() {
         <Route path="/family" element={<FamilyDetails/>}/>
         
         <Route path="/docs" element={<UploadDocuments/>}/>
-        <Route path="/viewdocs" element={<ViewDocuments/>}/>
+        <Route path="/view-documents" element={<ViewDocuments/>}/>
         <Route path="/findocs" element={<FinancialDocs/>}/>
         <Route path="/upedu" element={<UpdateAcademicDetailsForm/>}/>
         <Route path="/updatingjsx" element={<Upddating/>}/>

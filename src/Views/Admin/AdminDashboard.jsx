@@ -7,7 +7,6 @@ import gina from "../../assets/Ellipse 13.png";
 import loe from "../../assets/Ellipse 14.png";
 import AdminSideNavbar from "../../Components/AdminSideNavbar";
 import AdminUpperNavbar from "../../Components/AdminUpperNavbar";
-import JobPanels from "./pages/JobPanels";
 import { Outlet } from "react-router-dom";
 
 const AdminDashboard = () => {

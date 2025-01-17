@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "./Usernavbar";
+import pdfIcon from "../../assets/pdf_img.jpg";
 
 const ViewDocuments = () => {
   const documents = [
@@ -17,8 +17,8 @@ const ViewDocuments = () => {
   };
 
   return (
-      <div className="flex  mt-4  bg-[#E3EDF9]">
-        <div className="max-w-full rounded-lg bg-white p-8 shadow-lg">
+      <div className="flex  bg-[#E3EDF9]">
+        <div className="max-w-full bg-white p-4 flex-1">
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">
             Job Details / View Documents
           </h2>
@@ -26,10 +26,10 @@ const ViewDocuments = () => {
             {documents.map((doc, index) => (
               <div
                 key={index}
-                className="flex flex-col items-center justify-center p-4 border border-gray-300 rounded-lg bg-gray-50"
+                className="flex flex-col items-center justify-center p-4 border border-gray-300 rounded-lg bg-white"
               >
                 <img
-                  src="/pdf-icon.png" // Replace with a real PDF icon if available
+                  src={pdfIcon} 
                   alt="PDF Icon"
                   className="w-16 h-16 mb-2"
                 />
