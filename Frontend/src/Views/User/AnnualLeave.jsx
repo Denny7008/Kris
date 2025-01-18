@@ -24,12 +24,6 @@ const AnnualLeave = () => {
   };
   return (
     <div className="bg-[#E3EDF9]">
-      <Navbar />
-      <div className="bg-white mt-6 ml-8 mr-8 flex space-x-8 text-gray-700 text-lg">
-        <a href="#" className="p-4 ml-6 text-2xl hover:text-blue-500">
-          Dashboard/applyforleave/Annual leave
-        </a>
-      </div>
 
       <div className="min-h-screen mt-6 bg-[#E3EDF9] flex items-center justify-center">
         <div className="bg-white shadow-lg rounded-lg p-8 w-[50vw]">

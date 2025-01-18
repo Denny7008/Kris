@@ -12,7 +12,7 @@ export const registerUser = async (req, res) => {
     return res.status(400).json({ message: "Passwords do not match" });
   }
 
-  // Validate user input (you can add custom validation if needed)
+  // Validate user input
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -28,13 +28,13 @@ export const registerUser = async (req, res) => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 12); // Hashing with a salt of 12 rounds
 
-    // Create new user
+    // Create new user (excluding confirmPassword)
     const newUser = new User({
       firstName,
       lastName,
       email,
       phone,
-      password: hashedPassword,
+      password: hashedPassword, // Save hashed password only
       receiveNewsletters,
       agreeTerms,
     });
@@ -67,6 +67,7 @@ export const registerUser = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 // Login Controller (Example)
 export const loginUser = async (req, res) => {

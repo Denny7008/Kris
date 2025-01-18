@@ -1,8 +1,18 @@
 import React from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import AdminUpperNavbar from "../../Components/AdminUpperNavbar";
 import Usernavbar from "./Usernavbar";
 
 const LeaveDashboard = () => {
+  const navigate = useNavigate();
+
+  const leaveTypes = [
+    { type: "Annual Leave", route: "/leavedashboard/annualleave" },
+    { type: "Sick Leave", route: "/leavedashboard/sickleave" },
+    { type: "Maternity Leave", route: "/maternity-leave" },
+    { type: "Compassionate Leave", route: "/compassionate-leave" },
+  ];
+
   const leaveData = [
     {
       name: "John Steven Doe",
@@ -39,34 +49,25 @@ const LeaveDashboard = () => {
   ];
 
   return (
-    <div className="bg-[#E3EDF9] py-4 ">
+    <div className="bg-[#E3EDF9] py-4">
       <div className="p-4 ml-6 mr-6 bg-white text-2xl hover:text-blue-500">
         Dashboard/applyforleave
       </div>
 
-      <div className="p-6 bg-white p-4 mt-8 ml-8 mr-8">
+      <div className="p-6 bg-white mt-8 ml-8 mr-8">
         <h1 className="text-2xl mt-4 font-semibold mb-6">Leave Application</h1>
 
-        <div className=" grid grid-cols-4 gap-4 mb-8">
-          {[
-            { type: "Annual Leave", count: 60 },
-            { type: "Sick Leave", count: 20 },
-            { type: "Maternity Leave", count: 60 },
-            { type: "Compassionate Leave", count: 30 },
-          ].map((leave, index) => (
+        <div className="grid grid-cols-4 gap-4 mb-8">
+          {leaveTypes.map((leave, index) => (
             <div
               key={index}
               className="bg-blue-600 shadow rounded-lg p-6 flex flex-col items-center"
             >
-              <span className="text-4xl font-bold text-white">
-                {leave.count}
-              </span>
-              <span className="text-lg font-medium text-black">
+              <span className="text-4xl font-bold text-white">{60}</span>
+              <Link to="/userlogin/dashboard/leaveapply/annualleave"
+                className="mt-4 px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-green-600">
                 {leave.type}
-              </span>
-              <button className="mt-4 px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-blue-600">
-                Apply
-              </button>
+              </Link>
             </div>
           ))}
         </div>
@@ -95,7 +96,11 @@ const LeaveDashboard = () => {
                   <td className="p-4">{leave.duration}</td>
                   <td className="p-4">{leave.startDate}</td>
                   <td className="p-4">{leave.endDate}</td>
-                  <td className="p-4">{leave.type}</td>
+                  <td className="p-4">
+                    <button className="px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                      {leave.type}
+                    </button>
+                  </td>
                   <td className="p-4">{leave.reason}</td>
                   <td className="p-4">
                     <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
@@ -111,5 +116,4 @@ const LeaveDashboard = () => {
     </div>
   );
 };
-
 export default LeaveDashboard;

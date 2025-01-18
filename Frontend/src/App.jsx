@@ -56,13 +56,12 @@ import NextOfKinDetails from "./Views/Admin/pages/KinPage";
 import ViewGuarantorDetails from "./Views/Admin/pages/ViewGuarantorDetails";
 import ViewJobDetails from "./Views/Admin/pages/ViewJobDetails";
 
-
-
 import Dashboard from "./Views/User/Dashboard";
 import Userdashborad from "./Views/User/Userdashborad";
 import Navbar from "./Views/User/Usernavbar";
 import Testexp from "./Views/User/Testexp";
 import NotFound from "./Components/NotFound";
+import LeaveDashboard from "./Views/User/ApplyforLeave";
 
 function App() {
   return (
@@ -84,10 +83,8 @@ function App() {
           {/* <Route path="relief" element={<ReliefOfficers />} /> */}
         </Route>
 
-
-
-          {/* Admin Dashboard Routes */}
-          <Route path="/admin/login/AdminDashboard" element={<AdminDashboard />}>
+        {/* Admin Dashboard Routes */}
+        <Route path="/admin/login/AdminDashboard" element={<AdminDashboard />}>
           {/* Default Route */}
           <Route index element={<Navigate to="JobPanels" replace />} />
 
@@ -95,23 +92,25 @@ function App() {
           <Route path="JobPanels" element={<JobPanels />} />
           <Route path="LeaveManagement" element={<LeaveManagement />} />
           <Route path="EmployeeManagement" element={<EmployeeManagement />} />
-          <Route path="ContactDetails" element={<ContactDetails/>}/>
-          <Route path="PersonalDetails" element={<PersonalDetails />}/>
-          <Route path="KinDetails" element={<NextOfKinDetails/>}/>
-          <Route path="GuarantorDetails" element={<GuarantorDetails/>}/>
-          <Route path="GuarantorDetails" element={<ViewGuarantorDetails/>}/>
-          <Route path="ViewFamily" element={<ViewFamilyDetails/>}/>
-          
-          <Route path="FinancialDetails" element={<FinancialDetails/>}/>
-          <Route path="ManageTargets" element={<ManageTargets/>}/>
-          <Route path="PerformanceManagement" element={<PerformanceManagement/>}/>
-        
+          <Route path="ContactDetails" element={<ContactDetails />} />
+          <Route path="PersonalDetails" element={<PersonalDetails />} />
+          <Route path="KinDetails" element={<NextOfKinDetails />} />
+          <Route path="GuarantorDetails" element={<GuarantorDetails />} />
+          <Route path="GuarantorDetails" element={<ViewGuarantorDetails />} />
+          <Route path="ViewFamily" element={<ViewFamilyDetails />} />
+
+          <Route path="FinancialDetails" element={<FinancialDetails />} />
+          <Route path="ManageTargets" element={<ManageTargets />} />
+          <Route
+            path="PerformanceManagement"
+            element={<PerformanceManagement />}
+          />
         </Route>
 
-        <Route path="JobDetails" index element={<ViewJobDetails/>} replace/>
+        <Route path="JobDetails" index element={<ViewJobDetails />} replace />
         <Route path="*" element={<NotFound />} />
 
-        {/* user dashboard routes */} 
+        {/* user dashboard routes */}
 
         <Route path="/upper" element={<AdminUpperNavbar />} />
         <Route path="/recall" element={<Leaverecall />} />
@@ -122,48 +121,41 @@ function App() {
         <Route path="/userdash" element={<Usernavbar />} />
         <Route path="/user/register" element={<UserRegister />} />
 
-        <Route path="/leaveapply" element={<ApplyforLeave/>}/>
-        <Route path="/annualleave" element={<AnnualLeave/>}/>
-        <Route path="/sickleave" element={<Sickleave/>}/>
-        <Route path="/update" element={<UpdateProfie/>}/>
-        <Route path="/contact" element={<Contact/>}/>
-        <Route path="/next" element={<NextDetails/>}/>
-        <Route path="/education" element={<EducationQualifications/>}/>
-        <Route path="/grt" element={<GuarantorDetails/>}/>
-        <Route path="/family" element={<FamilyDetails/>}/>
-        
-        <Route path="/docs" element={<UploadDocuments/>}/>
-        <Route path="/view-documents" element={<ViewDocuments/>}/>
-        <Route path="/findocs" element={<FinancialDocs/>}/>
-        <Route path="/upedu" element={<UpdateAcademicDetailsForm/>}/>
-        <Route path="/updatingjsx" element={<Upddating/>}/>
+        <Route path="/leaveapply" element={<ApplyforLeave />} />
+        <Route path="/annualleave" element={<AnnualLeave />} />
+        <Route path="/sickleave" element={<Sickleave />} />
+        <Route path="/update" element={<UpdateProfie />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/next" element={<NextDetails />} />
+        <Route path="/education" element={<EducationQualifications />} />
+        <Route path="/grt" element={<GuarantorDetails />} />
+        <Route path="/family" element={<FamilyDetails />} />
 
-
+        <Route path="/docs" element={<UploadDocuments />} />
+        <Route path="/view-documents" element={<ViewDocuments />} />
+        <Route path="/findocs" element={<FinancialDocs />} />
+        <Route path="/upedu" element={<UpdateAcademicDetailsForm />} />
+        <Route path="/updatingjsx" element={<Upddating />} />
 
         {/* Admin routes */}
-        <Route path="/emanagement" element={<EmployeeManagement/>}/>
-        
-        
-        <Route path="/equalification" element={<Equalification/>}/>
-        <Route path="/records" element={<AcademicRecords/>}/>
-        <Route path="/profes" element={<ProfessionalDetails/>}/>
-        <Route path="/adetails" element={<AcaDetails/>}/>
-        <Route path="/gurantor" element={<Gurantor/>}/>
-        
-        <Route path="/familydetails" element={<FamilyDetails1/>}/>
-        
-        <Route path="/jobdetails" element={<JobDetails1/>}/>
-        <Route path="/viewjob" element={<ViewJob/>}/>
-        
-        
-        <Route path="/targetsetup" element={<TargetSetup/>}/>
-        
-        <Route path="/test" element={<Test/>}/>
+        <Route path="/emanagement" element={<EmployeeManagement />} />
 
+        <Route path="/equalification" element={<Equalification />} />
+        <Route path="/records" element={<AcademicRecords />} />
+        <Route path="/profes" element={<ProfessionalDetails />} />
+        <Route path="/adetails" element={<AcaDetails />} />
+        <Route path="/gurantor" element={<Gurantor />} />
 
+        <Route path="/familydetails" element={<FamilyDetails1 />} />
 
+        <Route path="/jobdetails" element={<JobDetails1 />} />
+        <Route path="/viewjob" element={<ViewJob />} />
 
-        <Route path="/annualleave" element={<AnnualLeave />} />
+        <Route path="/targetsetup" element={<TargetSetup />} />
+
+        <Route path="/test" element={<Test />} />
+
+        {/* <Route path="/annualleave" element={<AnnualLeave />} /> */}
         <Route path="/sickleave" element={<Sickleave />} />
         <Route path="/update" element={<UpdateProfie />} />
         <Route path="/contact" element={<Contact />} />
@@ -180,16 +172,36 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/leaveapply" element={<ApplyforLeave />} />
         <Route path="/usernavbar" element={<Navbar />} />
-        <Route path="/testt" element={<Testexp/>} />
+        <Route path="/testt" element={<Testexp />} />
 
+       
 
         <Route path="/userlogin/dashboard" element={<Dashboard />}>
+        
         <Route index element={<Navigate to="userpanel" replace/>}/>
          {/* sub route */}
           <Route path="userpanel" element={<Userdashborad />} />
-          <Route path="leaveapply" element={<ApplyforLeave />} />
+          <Route path="leaveapply" element={<ApplyforLeave />}/>
+          
           <Route path="updatingjsx" element={<Upddating />} />
         </Route>
+
+
+        
+        <Route path="/userlogin/dashboard/leaveapply" element={<ApplyforLeave />}>
+
+          <Route path ="annualleave" element={<AnnualLeave/>}/>
+          
+         </Route>
+       
+
+
+
+
+
+
+
+
 
 
 
