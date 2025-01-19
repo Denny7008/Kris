@@ -1,9 +1,9 @@
-
 import React, { useState } from "react";
 import stock from "../../assets/stock.png";
 import logo from "../../assets/kris logo 2.svg";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const UserRegister = () => {
   const [formData, setFormData] = useState({
@@ -25,57 +25,79 @@ const UserRegister = () => {
     }));
   };
 
+  const validateForm = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.password) {
+      toast.error("Please fill in all required fields.");
+      return false;
+    }
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email address.");
+      return false;
+    }
+    if (formData.password.length < 8) {
+      toast.error("Password must be at least 8 characters long.");
+      return false;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match.");
+      return false;
+    }
+    if (!formData.agreeTerms) {
+      toast.error("You must agree to the terms and conditions.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match!");
+
+    if (!validateForm()) {
       return;
     }
-  
+
     try {
-      const response = await fetch("http://localhost:5000/user/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          password: formData.password,
-          receiveNewsletters: formData.receiveNewsletters,
-          agreeTerms: formData.agreeTerms,
-        }),
+      const response = await axios.post("http://localhost:5000/user/register", {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+        receiveNewsletters: formData.receiveNewsletters,
+        agreeTerms: formData.agreeTerms,
       });
-  
-      let data;
-      try {
-        // Attempt to parse the response as JSON
-        data = await response.json();
-      } catch (err) {
-        // Handle empty or invalid JSON
-        data = null;
-      }
-  
-      if (response.ok) {
-        toast.success(data?.message || "Account created successfully!");
-        // Optionally reset the form or redirect the user
-      } else {
-        toast.error(data?.message || "Registration failed. Please try again.");
-      }
-    } catch (error) {
-      toast.error("An error occurred. Please try again.");
+
+      toast.success(response.data?.message || "Account created successfully!");
+      // Reset form
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+        receiveNewsletters: false,
+        agreeTerms: false,
+      });
+    } 
+    catch (error) {
       console.error("Error during registration:", error);
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message || "Registration failed. Please try again.");
+      } else {
+        toast.error("Network error. Please check your internet connection.");
+      }
     }
+    
   };
-  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg flex max-w-5xl w-full">
-        {/* Left side - Info section with background */}
+        {/* Left Side */}
         <div
           className="w-1/2 relative p-8 flex items-center justify-center"
           style={{
@@ -88,10 +110,7 @@ const UserRegister = () => {
           <div className="relative z-10 text-white text-center">
             <img src={logo} alt="Kris Logo" className="mb-6" />
             <h2 className="text-3xl font-bold mb-4">HR Management Platform</h2>
-            <p className="mb-6">
-              Manage all employees, payrolls, and other human resource
-              operations.
-            </p>
+            <p className="mb-6">Manage all employees, payrolls, and other human resource operations.</p>
             <div className="flex space-x-4 justify-center">
               <button className="bg-yellow-400 text-black font-semibold py-2 px-6 rounded-lg hover:bg-yellow-300">
                 Learn More
@@ -103,19 +122,14 @@ const UserRegister = () => {
           </div>
         </div>
 
-        {/* Right side - Registration form */}
+        {/* Right Side */}
         <div className="w-1/2 p-8">
-          <h2 className="text-3xl font-bold text-blue-800 mb-4">
-            Welcome to KRIS
-          </h2>
+          <h2 className="text-3xl font-bold text-blue-800 mb-4">Welcome to KRIS</h2>
           <p className="mb-8 text-gray-600">Register your account</p>
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 gap-6">
               <div className="mb-6">
-                <label
-                  htmlFor="first-name"
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                >
+                <label htmlFor="first-name" className="block text-gray-700 text-sm font-bold mb-2">
                   First Name
                 </label>
                 <input
@@ -129,10 +143,7 @@ const UserRegister = () => {
                 />
               </div>
               <div className="mb-6">
-                <label
-                  htmlFor="last-name"
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                >
+                <label htmlFor="last-name" className="block text-gray-700 text-sm font-bold mb-2">
                   Last Name
                 </label>
                 <input
@@ -149,10 +160,7 @@ const UserRegister = () => {
 
             <div className="grid grid-cols-2 gap-6">
               <div className="mb-6">
-                <label
-                  htmlFor="email"
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                >
+                <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
                   E-mail Address
                 </label>
                 <input
@@ -166,10 +174,7 @@ const UserRegister = () => {
                 />
               </div>
               <div className="mb-6">
-                <label
-                  htmlFor="phone"
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                >
+                <label htmlFor="phone" className="block text-gray-700 text-sm font-bold mb-2">
                   Phone Number
                 </label>
                 <input
@@ -186,10 +191,7 @@ const UserRegister = () => {
 
             <div className="grid grid-cols-2 gap-6">
               <div className="mb-6">
-                <label
-                  htmlFor="password"
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                >
+                <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
                   Password
                 </label>
                 <input
@@ -203,10 +205,7 @@ const UserRegister = () => {
                 />
               </div>
               <div className="mb-6">
-                <label
-                  htmlFor="confirm-password"
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                >
+                <label htmlFor="confirm-password" className="block text-gray-700 text-sm font-bold mb-2">
                   Confirm Password
                 </label>
                 <input
@@ -247,7 +246,11 @@ const UserRegister = () => {
                 />
                 <span className="ml-2 text-gray-600">
                   I agree to all the{" "}
-                  <a href="#" className="text-blue-500 hover:underline">
+                  <a
+                    href="#"
+                    onClick={(e) => e.preventDefault()}
+                    className="text-blue-500 hover:underline"
+                  >
                     Terms, Privacy Policy
                   </a>
                 </span>
@@ -258,16 +261,20 @@ const UserRegister = () => {
               type="submit"
               className="w-full bg-blue-800 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300"
             >
-              Create Account
+              Register Now
             </button>
-
-            <p className="mt-6 text-gray-600 text-center">
-              Already have an account?{" "}
-              <a href="#" className="text-blue-500 font-bold hover:underline">
-                Log In
-              </a>
-            </p>
           </form>
+
+          <p className="mt-4 text-gray-600 text-center">
+            Already have an account?{" "}
+            <a
+              href="#"
+              onClick={(e) => e.preventDefault()}
+              className="text-blue-500 hover:underline"
+            >
+              Log In
+            </a>
+          </p>
         </div>
       </div>
     </div>
