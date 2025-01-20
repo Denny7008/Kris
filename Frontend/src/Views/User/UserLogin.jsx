@@ -1,16 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
 import handshake from "../../assets/handshake.png";
-import logo from "../../assets/kris logo 3.svg"
-import { Link } from "react-router-dom";
+import logo from "../../assets/kris logo 3.svg";
+
 const UserLogin = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:5000/user/login", {
+        email,
+        password,
+      });
+      console.log("Login successful:", response.data);
+      navigate("/userlogin/dashboard", { replace: true });
+    } catch (error) {
+      console.error("Login error:", error.response?.data || error.message);
+      setError(
+        error.response?.data?.message || "An error occurred during login."
+      );
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg flex max-w-4xl w-full">
         {/* Left side - Login form */}
         <div className="w-1/2 p-8">
-          <h2 className="text-xl font-bold text-blue-800 mb-4"><img src={logo} alt="" /></h2>
+          <h2 className="text-xl font-bold text-blue-800 mb-4">
+            <img src={logo} alt="KRIS Logo" />
+          </h2>
           <p className="mb-8 text-gray-600">Login to your account.</p>
-          <form>
+          <form onSubmit={handleLogin}>
+            {error && <p className="text-red-500 mb-4">{error}</p>}
             <div className="mb-6">
               <label
                 htmlFor="email"
@@ -21,6 +48,8 @@ const UserLogin = () => {
               <input
                 type="email"
                 id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                 placeholder="Enter your email"
               />
@@ -35,6 +64,8 @@ const UserLogin = () => {
               <input
                 type="password"
                 id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                 placeholder="Enter your password"
               />
@@ -60,7 +91,10 @@ const UserLogin = () => {
           </form>
           <p className="mt-6 text-gray-600 text-center">
             Don’t have an account yet?{" "}
-            <Link to='/user/register' className="text-blue-500 font-bold hover:underline">
+            <Link
+              to="/user/register"
+              className="text-blue-500 font-bold hover:underline"
+            >
               Join KRIS today.
             </Link>
           </p>
@@ -68,7 +102,7 @@ const UserLogin = () => {
         {/* Right side - Image & Info */}
         <div className="w-1/2 relative bg-blue-900 text-white p-8 flex items-center justify-center">
           <div className="absolute inset-0 bg-opacity-70">
-            <img className="h-full" src={handshake} alt="" />
+            <img className="h-full" src={handshake} alt="Handshake" />
           </div>
           <div className="relative z-10">
             <h3 className="text-3xl font-bold">

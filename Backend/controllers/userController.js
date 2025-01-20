@@ -1,18 +1,27 @@
-import User from '../models/User.js'; // Assuming you have a User model
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { validationResult } from 'express-validator'; // For validation middleware
+import User from "../models/User.js"; // Assuming you have a User model
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { validationResult } from "express-validator"; // For validation middleware
 
 // Register Controller
 export const registerUser = async (req, res) => {
-  const { firstName, lastName, email, phone, password, confirmPassword, receiveNewsletters, agreeTerms } = req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    password,
+    confirmPassword,
+    receiveNewsletters,
+    agreeTerms,
+  } = req.body;
 
-  // Check if the passwords match
+  // Check if passwords match
   if (password !== confirmPassword) {
     return res.status(400).json({ message: "Passwords do not match" });
   }
   console.log("Password:", password);
- console.log("Confirm Password:", confirmPassword);
+  console.log("Confirm Password:", confirmPassword);
 
   // Validate user input
   const errors = validationResult(req);
@@ -28,7 +37,9 @@ export const registerUser = async (req, res) => {
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 12); // Hashing with a salt of 12 rounds
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds); // Hash password
+    console.log("Generated hashed password:", hashedPassword);
 
     // Create new user (excluding confirmPassword)
     const newUser = new User({
@@ -36,22 +47,21 @@ export const registerUser = async (req, res) => {
       lastName,
       email,
       phone,
-      password: hashedPassword, // Save hashed password only
+      password: hashedPassword,
       receiveNewsletters,
       agreeTerms,
     });
 
-    // Save the new user to the database
+    // Save user to database
     await newUser.save();
 
     // Generate JWT token
     const token = jwt.sign(
       { userId: newUser._id }, // Payload
-      process.env.JWT_SECRET,   // Secret key (store in .env file)
-      { expiresIn: '1h' }      // Token expiration time
+      process.env.JWT_SECRET, // Secret key
+      { expiresIn: "1h" } // Expiration time
     );
 
-    // Send response with the token and user data (excluding the password)
     res.status(201).json({
       message: "User registered successfully",
       user: {
@@ -65,49 +75,51 @@ export const registerUser = async (req, res) => {
       token,
     });
   } catch (error) {
-    console.error('Error during registration:', error);
+    console.error("Error during registration:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-
-// Login Controller (Example)
+// Login Controller
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
+
   try {
-    // Find user by email
-    const user = await User.findOne({ email });
+    const normalizedEmail = email.toLowerCase();
+
+    // Find the user
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+    console.log("Stored hashed password:", user.password);
+
+    // Compare the entered password with the stored hash
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log("Password valid:", isPasswordValid);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
+    // Generate JWT
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-
-    // Send response with the token
     res.status(200).json({
       message: "Login successful",
       token,
       user: {
         id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
         email: user.email,
       },
     });
   } catch (error) {
-    console.error('Error during login:', error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error during login:", error.message);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
+

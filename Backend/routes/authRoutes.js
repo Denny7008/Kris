@@ -16,7 +16,7 @@ router.post(
 );
 
 // Login route
-router.post('/login', loginUser);
+router.post('/user/login', loginUser);
 
 // You can add more routes here like forgot password, reset password, etc.
 

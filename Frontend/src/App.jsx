@@ -117,7 +117,8 @@ function App() {
         <Route path="/leavehistory" element={<LeaveHistory />} />
 
         {/* user routes */}
-        <Route path="/" element={<UserLogin />} />
+        <Route path="/user/login" element={<UserLogin />} />
+        
         <Route path="/userdash" element={<Usernavbar />} />
         <Route path="/user/register" element={<UserRegister />} />
 
@@ -191,8 +192,12 @@ function App() {
         <Route path="/userlogin/dashboard/leaveapply" element={<ApplyforLeave />}>
 
           <Route path ="annualleave" element={<AnnualLeave/>}/>
-          
+
          </Route>
+
+      
+        <Route path="/dashboard" element={<Dashboard />} />
+  
        
 
 
