@@ -123,3 +123,88 @@ export const loginUser = async (req, res) => {
   }
 };
 
+
+
+
+
+
+
+// update  user data
+export const editProfile = async (req, res) => {
+  try {
+    const { userId } = req.params; // User ID from URL params
+    const {
+      firstName,
+      lastName,
+      jobTitle,
+      gender,
+      department,
+      startDate,
+      category,
+    } = req.body; // Data sent from the form
+
+    // Validate required fields
+    if (!firstName || !lastName || !email || !phone) {
+      return res.status(400).json({
+        message: "First name, last name, email, and phone are required.",
+      });
+    }
+
+    // Find the user and update their profile
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        firstName,
+        lastName,
+        jobTitle,
+        gender,
+        department,
+        startDate,
+        category,
+      },
+      { new: true, runValidators: true } // Return the updated user and validate fields
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Respond with the updated user data
+    res.status(200).json({
+      message: "Profile updated successfully.",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+
+
+
+
+
+
+
+
+// get all employee data
+export const getAllUsers = async (req, res) => {
+  try {
+    // Fetch all users from the database
+    const users = await User.find(); // You can use `.find({})` for additional filtering if needed
+
+    // Check if any users exist
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users found." });
+    }
+
+    // Respond with the user data
+    res.status(200).json({
+      message: "Users retrieved successfully.",
+      users, // Send the list of users
+    });
+  } catch (error) {
+    console.error("Error retrieving users:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};

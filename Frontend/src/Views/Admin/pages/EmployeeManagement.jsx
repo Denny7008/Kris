@@ -1,63 +1,34 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ViewProfile from '../pages/ViewProfile';
 import EditProfile from '../pages/EditProfile';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const EmployeeManagement = () => {
+  const navigate = useNavigate();
+  const [employees, setEmployees] = useState([]);
   const [actionDropdown, setActionDropdown] = useState(null);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [activeView, setActiveView] = useState('table');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const employees = [
-    {
-      name: "John Steven Doe",
-      dept: "Design",
-      jobTitle: "UI UX Designer",
-      startDate: "28/04/2022",
-      category: "Full time",
-      gender: "Male",
-    },
-    {
-      name: "Barry Jhay",
-      dept: "IT",
-      jobTitle: "Backend Engineer",
-      startDate: "28/04/2022",
-      category: "Remote",
-      gender: "Male",
-    },
-    {
-      name: "Tiwa Cavage",
-      dept: "Design",
-      jobTitle: "UI UX Designer",
-      startDate: "28/04/2022",
-      category: "Full time",
-      gender: "Female",
-    },
-    {
-      name: "James IDK",
-      dept: "Design",
-      jobTitle: "UI UX Designer",
-      startDate: "28/04/2022",
-      category: "Full time",
-      gender: "Male",
-    },
-    {
-      name: "Vanessa Chidi",
-      dept: "Design",
-      jobTitle: "UI UX Designer",
-      startDate: "28/04/2022",
-      category: "Full time",
-      gender: "Female",
-    },
-    {
-      name: "Don Gorgon",
-      dept: "Design",
-      jobTitle: "UI UX Designer",
-      startDate: "28/04/2022",
-      category: "Full time",
-      gender: "Male",
-    },
-  ];
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/users');
+        console.log("Fetched Employees:", response.data);
+        setEmployees(response.data.users); // Set the fetched data to state
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching employee data:", error);
+        setError('Unable to load employee data');
+        setLoading(false);
+      }
+    };
+
+    fetchEmployees();
+  }, []);
 
   const handleActionClick = (index) => {
     setActionDropdown(index === actionDropdown ? null : index);
@@ -73,25 +44,58 @@ const EmployeeManagement = () => {
     setSelectedEmployee(employee);
     setActiveView('edit');
     setActionDropdown(null);
+    navigate(`/edit-profile/${employee.id}`);
   };
 
-  const handleSaveProfile = (updatedEmployee) => {
-    // Here you would typically update the employee data in your backend
-    console.log('Saving updated employee:', updatedEmployee);
-    setActiveView('table');
-    setSelectedEmployee(null);
+  const handleSaveProfile = async (updatedEmployee) => {
+    try {
+      const response = await fetch(`http://localhost:5000/users/${updatedEmployee.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedEmployee),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save updated employee');
+      }
+
+      setEmployees((prevEmployees) =>
+        prevEmployees.map((emp) =>
+          emp.id === updatedEmployee.id ? updatedEmployee : emp
+        )
+      );
+
+      setActiveView('table');
+      setSelectedEmployee(null);
+    } catch (error) {
+      console.error(error);
+      alert('Failed to save employee profile');
+    }
   };
 
   const renderContent = () => {
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+    if (error) {
+      return <div className="text-red-500">{error}</div>;
+    }
+    if (!Array.isArray(employees)) {
+      return <div className="text-red-500">Invalid employee data format</div>;
+    }
+
     switch (activeView) {
       case 'view':
         return selectedEmployee && <ViewProfile employee={selectedEmployee} />;
       case 'edit':
-        return selectedEmployee && (
-          <EditProfile 
-            employee={selectedEmployee} 
-            onSave={handleSaveProfile}
-          />
+        return (
+          selectedEmployee && (
+            <EditProfile
+              employee={selectedEmployee}
+              onSave={handleSaveProfile}
+            />
+          )
         );
       default:
         return (
@@ -120,9 +124,9 @@ const EmployeeManagement = () => {
                 </thead>
                 <tbody>
                   {employees.map((employee, index) => (
-                    <tr key={index} className="border-b hover:bg-gray-100">
-                      <td className="p-4">{employee.name}</td>
-                      <td className="p-4">{employee.dept}</td>
+                    <tr key={employee._id} className="border-b hover:bg-gray-100">
+                      <td className="p-4">{employee.firstName}</td>
+                      <td className="p-4">{employee.department}</td>
                       <td className="p-4">{employee.jobTitle}</td>
                       <td className="p-4">{employee.startDate}</td>
                       <td className="p-4">{employee.category}</td>
@@ -169,21 +173,7 @@ const EmployeeManagement = () => {
   return (
     <div className="flex min-h-screen bg-[#E3EDF9]">
       <div className="flex-1">
-        <div className="p-6">
-          {/* <div className="mb-6">
-            <h1 className="text-2xl font-semibold">Employee Management</h1>
-            {activeView !== 'table' && (
-              <div className="flex items-center mt-2 text-sm text-gray-600">
-                <span className="cursor-pointer hover:text-blue-600" onClick={() => setActiveView('table')}>
-                  Employee Management
-                </span>
-                <span className="mx-2">/</span>
-                <span>{activeView === 'view' ? 'View Profile' : 'Edit Profile'}</span>
-              </div>
-            )}
-          </div> */}
-          {renderContent()}
-        </div>
+        <div className="p-6">{renderContent()}</div>
       </div>
     </div>
   );

@@ -40,6 +40,24 @@ const UserSchema = new mongoose.Schema({
     enum: ["user", "admin"], // Define roles
     default: "user",        // Default role is 'user'
   },
+  jobTitle:{
+    type:String,
+  },
+  gender:{
+    type: String,
+    enum: ["Male", "Female"] // Define genders      
+  },
+  department:{
+    type: String,
+  },
+  startDate:{
+    type: Date,
+  },
+  category:{
+    type: String,
+    enum: ["Full-time", "Part-time"] // Define job categories
+  }
+
 }, { timestamps: true });
 
 
