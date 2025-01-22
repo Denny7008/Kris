@@ -1,6 +1,7 @@
 import express from 'express';
 import { registerUser, loginUser } from '../controllers/userController.js';
 import { body } from 'express-validator'; // For input validation
+import { loginAdmin, registerAdmin } from '../controllers/adminController.js';
 
 const router = express.Router();
 
@@ -18,6 +19,10 @@ router.post(
 // Login route
 router.post('/user/login', loginUser);
 
-// You can add more routes here like forgot password, reset password, etc.
+
+// ADMIN ROUTES
+
+router.post("/admin/register", registerAdmin);
+router.post("/admin/login", loginAdmin);
 
 export default router;

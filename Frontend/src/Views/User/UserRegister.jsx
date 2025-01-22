@@ -4,6 +4,7 @@ import logo from "../../assets/kris logo 2.svg";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const UserRegister = () => {
   const [formData, setFormData] = useState({
@@ -53,6 +54,7 @@ const UserRegister = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Loging in...");
 
     if (!validateForm()) {
       return;
@@ -267,13 +269,12 @@ const UserRegister = () => {
 
           <p className="mt-4 text-gray-600 text-center">
             Already have an account?{" "}
-            <a
-              href="#"
-              onClick={(e) => e.preventDefault()}
+            <Link
+              to="/user/login"
               className="text-blue-500 hover:underline"
             >
               Log In
-            </a>
+            </Link>
           </p>
         </div>
       </div>

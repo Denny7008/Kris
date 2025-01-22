@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import cors from "cors";
 import bodyParser from "body-parser";
 import connectDB from "./config/db.js";
-import mongoose from 'mongoose';
 import authRoutes from './routes/authRoutes.js';  
 
 // Load environment variables
@@ -20,7 +19,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 // Use the authentication routes (register, login, etc.)
-app.use(authRoutes);  
+app.use(authRoutes);    
 
 // 404 Route
 app.use((req, res, next) => {
