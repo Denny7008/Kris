@@ -132,53 +132,48 @@ export const loginUser = async (req, res) => {
 // update  user data
 export const editProfile = async (req, res) => {
   try {
-    const { userId } = req.params; // User ID from URL params
-    const {
-      firstName,
-      lastName,
-      jobTitle,
-      gender,
-      department,
-      startDate,
-      category,
-    } = req.body; // Data sent from the form
+    const { userId } = req.params;
+    console.log("Received userId:", userId);
+    const updateData = req.body;
 
-    // Validate required fields
-    if (!firstName || !lastName || !email || !phone) {
-      return res.status(400).json({
-        message: "First name, last name, email, and phone are required.",
-      });
-    }
-
-    // Find the user and update their profile
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      {
-        firstName,
-        lastName,
-        jobTitle,
-        gender,
-        department,
-        startDate,
-        category,
-      },
-      { new: true, runValidators: true } // Return the updated user and validate fields
-    );
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!updatedUser) {
+      console.log("User not found in the database.");
       return res.status(404).json({ message: "User not found." });
     }
 
-    // Respond with the updated user data
     res.status(200).json({
       message: "Profile updated successfully.",
       user: updatedUser,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error in editProfile controller:", error);
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 };
+
+
+// get user by id
+export const getUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
 
 
 

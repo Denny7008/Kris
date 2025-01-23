@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser, loginUser, editProfile, getAllUsers } from '../controllers/userController.js';
+import { registerUser, loginUser, editProfile, getAllUsers, getUser } from '../controllers/userController.js';
 import { body } from 'express-validator'; // For input validation
 import { loginAdmin, registerAdmin } from '../controllers/adminController.js';
 
@@ -26,6 +26,9 @@ router.get("/users", getAllUsers);
 router.post("/admin/register", registerAdmin);
 router.post("/admin/login", loginAdmin);
 
-router.post("/users/:userId/edit-profile", editProfile);
+router.put("/users/:userId", editProfile);
+
+// Add this route to your backend
+router.get("/users/:id", getUser);
 
 export default router;

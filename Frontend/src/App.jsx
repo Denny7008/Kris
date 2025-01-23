@@ -62,6 +62,7 @@ import Navbar from "./Views/User/Usernavbar";
 import Testexp from "./Views/User/Testexp";
 import NotFound from "./Components/NotFound";
 import LeaveDashboard from "./Views/User/ApplyforLeave";
+import EditProfile from "./Views/Admin/pages/EditProfile";
 
 function App() {
   return (
@@ -232,6 +233,23 @@ function App() {
         <Route path="/performance" element={<PerformanceManagement />} />
         <Route path="/targetsetup" element={<TargetSetup />} />
         <Route path="/managetargets" element={<ManageTargets />} />
+
+
+
+
+
+
+
+
+        <Route path="/admin/login/AdminDashboard/EmployeeManagement" element={<EmployeeManagement />} />
+        <Route path="/admin/login/AdminDashboard/EmployeeManagement/edit/:id" element={<EditProfile />} />
+
+
+
+
+
+
+
       </Routes>
     </>
   );

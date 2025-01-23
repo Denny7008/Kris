@@ -8,7 +8,7 @@ const EditProfile = () => {
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  console.log("Fetched ID:", id);
   // Fetch employee data when the component loads
   useEffect(() => {
     const fetchEmployee = async () => {
@@ -35,7 +35,7 @@ const EditProfile = () => {
     e.preventDefault();
     try {
       await axios.put(`http://localhost:5000/users/${id}`, formData); // Save updated data
-      navigate('/'); // Redirect to employee list
+      navigate('/admin/login/AdminDashboard/EmployeeManagement'); // Redirect to employee list
     } catch (err) {
       console.error("Error saving employee:", err);
       alert("Failed to save changes");

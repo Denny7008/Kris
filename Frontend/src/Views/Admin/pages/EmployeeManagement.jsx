@@ -44,7 +44,7 @@ const EmployeeManagement = () => {
     setSelectedEmployee(employee);
     setActiveView('edit');
     setActionDropdown(null);
-    navigate(`/edit-profile/${employee.id}`);
+    navigate(`/admin/login/AdminDashboard/EmployeeManagement/edit/${employee._id}`);
   };
 
   const handleSaveProfile = async (updatedEmployee) => {
