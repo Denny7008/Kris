@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const EditProfile = ({ employee, onSave }) => {
   const [formData, setFormData] = useState({
     firstName: employee.firstName,
+    lastName: employee.lastName,
     department: employee.department,
     jobTitle: employee.jobTitle,
     startDate: employee.startDate,
@@ -60,12 +61,24 @@ const EditProfile = ({ employee, onSave }) => {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Full Name
+                First Name
               </label>
               <input
                 type="text"
                 name="firstName"
                 value={formData.firstName}
+                onChange={handleChange}
+                className="mt-1 py-2 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Last Name
+              </label>
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
                 onChange={handleChange}
                 className="mt-1 py-2 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               />

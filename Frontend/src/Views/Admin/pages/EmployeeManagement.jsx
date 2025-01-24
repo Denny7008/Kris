@@ -127,7 +127,7 @@ const EmployeeManagement = () => {
                 <tbody>
                   {employees.map((employee, index) => (
                     <tr key={employee._id} className="border-b hover:bg-gray-100">
-                      <td className="p-4">{employee.firstName}</td>
+                      <td className="p-4">{`${employee.firstName} ${employee.lastName}`}</td>
                       <td className="p-4">{employee.department}</td>
                       <td className="p-4">{employee.jobTitle}</td>
                       <td className="p-4">{employee.startDate}</td>
