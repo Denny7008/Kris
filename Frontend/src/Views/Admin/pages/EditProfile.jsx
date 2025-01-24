@@ -1,129 +1,143 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const EditProfile = () => {
-  const { id } = useParams(); // Get the employee ID from the route
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  console.log("Fetched ID:", id);
-  // Fetch employee data when the component loads
-  useEffect(() => {
-    const fetchEmployee = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/users/${id}`);
-        setFormData(response.data); // Assuming the API returns the employee data
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching employee:", err);
-        setError("Failed to load employee data");
-        setLoading(false);
-      }
-    };
-
-    fetchEmployee();
-  }, [id]);
+const EditProfile = ({ employee, onSave }) => {
+  const [formData, setFormData] = useState({
+    firstName: employee.firstName,
+    department: employee.department,
+    jobTitle: employee.jobTitle,
+    startDate: employee.startDate,
+    category: employee.category,
+    gender: employee.gender,
+    // Add other fields as necessary
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      await axios.put(`http://localhost:5000/users/${id}`, formData); // Save updated data
-      navigate('/admin/login/AdminDashboard/EmployeeManagement'); // Redirect to employee list
-    } catch (err) {
-      console.error("Error saving employee:", err);
-      alert("Failed to save changes");
-    }
+    // Include the employee ID in the updated data
+    onSave({ ...formData, _id: employee._id });
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div className="text-red-500">{error}</div>;
+
+  const formatDate = (dateString) => {
+    if (!dateString) {
+      return ''; // Return an empty string if the dateString is invalid
+    }
+  
+    const date = new Date(dateString);
+    
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+      return ''; // Return an empty string if the date is invalid
+    }
+  
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero if needed
+    const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if needed
+  
+    return `${year}-${month}-${day}`; // Returns date in YYYY-MM-DD format
+  };
+
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1); // Go back to the previous page
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Edit Employee Profile</h2>
-      <div className="grid grid-cols-2 gap-6">
+    <form onSubmit={handleSubmit} className="bg-white p-10 rounded-lg shadow-md">
+      <h2 className="text-xl font-semibold mb-6">Edit Employee Profile</h2>
+      <div className="grid grid-cols-2 gap-10">
         <div>
-          <h3 className="text-gray-600 mb-4">Personal Information</h3>
           <div className="space-y-4">
-            {/* Full Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Full Name</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Full Name
+              </label>
               <input
                 type="text"
-                name="name"
-                value={formData.name || ''}
+                name="firstName"
+                value={formData.firstName}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 py-2 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
-            {/* Gender */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Gender</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Gender
+              </label>
               <select
                 name="gender"
-                value={formData.gender || ''}
+                value={formData.gender || ""}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block border py-2 px-3 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               >
+                <option value="" disabled selected>
+                  Select Gender
+                </option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
             </div>
-            {/* Tarikh */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">tarikh</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Start Date
+              </label>
               <input
-                name="tarikh"
+                name="startDate"
                 type="date"
-                value={formData.tarikh || ''}
+                value={formatDate(formData.startDate)}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 border py-2 px-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
           </div>
         </div>
         <div>
-          <h3 className="text-gray-600 mb-4">Employment Information</h3>
           <div className="space-y-4">
-            {/* Department */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Department</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Department
+              </label>
               <input
                 type="text"
-                name="dept"
-                value={formData.dept || ''}
+                name="department"
+                value={formData.department || ""}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 border py-2 px-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
-            {/* Job Title */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Job Title</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Job Title
+              </label>
               <input
                 type="text"
                 name="jobTitle"
-                value={formData.jobTitle || ''}
+                value={formData.jobTitle || ""}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 border py-2 px-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
-            {/* Category */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Category</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Category
+              </label>
               <select
                 name="category"
-                value={formData.category || ''}
+                value={formData.category || ""}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 border block py-2 px-3 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               >
-                <option value="Full time">Full time</option>
+                <option value="Full-time">Full Time</option>
                 <option value="Remote">Remote</option>
               </select>
             </div>
@@ -133,8 +147,9 @@ const EditProfile = () => {
       <div className="mt-6 flex justify-end space-x-3">
         <button
           type="button"
-          onClick={() => navigate('/')} // Go back to employee list
+          // onClick={() => navigate("/")}
           className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+        onClick={handleBack}
         >
           Cancel
         </button>
@@ -145,6 +160,7 @@ const EditProfile = () => {
           Save Changes
         </button>
       </div>
+      {/* <button type="submit">Save</button> */}
     </form>
   );
 };

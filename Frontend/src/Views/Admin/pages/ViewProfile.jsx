@@ -169,6 +169,7 @@ const EmployeeProfile = () => {
     "Job Details",
     "Financial Details",
   ];
+  
 
   // Component map
   const contentComponents = {

@@ -44,27 +44,29 @@ const EmployeeManagement = () => {
     setSelectedEmployee(employee);
     setActiveView('edit');
     setActionDropdown(null);
-    navigate(`/admin/login/AdminDashboard/EmployeeManagement/edit/${employee._id}`);
   };
 
   const handleSaveProfile = async (updatedEmployee) => {
     try {
-      const response = await fetch(`http://localhost:5000/users/${updatedEmployee.id}`, {
+      // Use the employee's ID to update the correct record
+      const response = await fetch(`http://localhost:5000/users/${updatedEmployee._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedEmployee),
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to save updated employee');
       }
-
+  
+      // Update the local state with the updated employee data
       setEmployees((prevEmployees) =>
         prevEmployees.map((emp) =>
-          emp.id === updatedEmployee.id ? updatedEmployee : emp
+          emp._id === updatedEmployee._id ? updatedEmployee : emp
         )
       );
-
+  
+      // Reset the view to the employee table
       setActiveView('table');
       setSelectedEmployee(null);
     } catch (error) {
@@ -180,3 +182,17 @@ const EmployeeManagement = () => {
 };
 
 export default EmployeeManagement;
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

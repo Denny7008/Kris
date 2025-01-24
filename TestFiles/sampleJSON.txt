@@ -10,3 +10,11 @@
   "receiveNewsletters": true,
   "agreeTerms": true
 }
+
+"firstName": "Dinesh",
+  "lastName": "Raju",
+  "jobTitle": "Dancing",
+  "gender": "Female",
+  "department": "",
+  "startDate": "2002-02-02",
+  "category": "Part-time"

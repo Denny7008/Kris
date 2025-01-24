@@ -55,7 +55,7 @@ const UserSchema = new mongoose.Schema({
   },
   category:{
     type: String,
-    enum: ["Full-time", "Part-time"] // Define job categories
+    enum: ["Full-time", "Remote"] // Define job categories
   }
 
 }, { timestamps: true });

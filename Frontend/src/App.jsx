@@ -91,6 +91,9 @@ function App() {
 
           {/* Nested Subroutes */}
           <Route path="JobPanels" element={<JobPanels />} />
+          <Route path="Test" element={<Test />} />
+          <Route path="edit" element={<EditProfile />} />
+          {/* <Route path="/admin/login/AdminDashboard/EmployeeManagement/edit" element={<EditProfile />} /> */}
           <Route path="LeaveManagement" element={<LeaveManagement />} />
           <Route path="EmployeeManagement" element={<EmployeeManagement />} />
           <Route path="ContactDetails" element={<ContactDetails />} />
@@ -155,7 +158,7 @@ function App() {
 
         <Route path="/targetsetup" element={<TargetSetup />} />
 
-        <Route path="/test" element={<Test />} />
+        
 
         {/* <Route path="/annualleave" element={<AnnualLeave />} /> */}
         <Route path="/sickleave" element={<Sickleave />} />
@@ -242,7 +245,8 @@ function App() {
 
 
         <Route path="/admin/login/AdminDashboard/EmployeeManagement" element={<EmployeeManagement />} />
-        <Route path="/admin/login/AdminDashboard/EmployeeManagement/edit/:id" element={<EditProfile />} />
+        {/* <Route path="/admin/login/AdminDashboard/EmployeeManagement/edit/:id" element={<EditProfile />} /> */}
+        
 
 
 
