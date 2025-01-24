@@ -21,30 +21,33 @@ const EditProfile = ({ employee, onSave }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Include the employee ID in the updated data
-    onSave({ ...formData, _id: employee._id });
-  };
-
-
   const formatDate = (dateString) => {
     if (!dateString) {
       return ''; // Return an empty string if the dateString is invalid
     }
-  
+
     const date = new Date(dateString);
-    
+
     // Check if the date is valid
     if (isNaN(date.getTime())) {
       return ''; // Return an empty string if the date is invalid
     }
-  
+
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero if needed
     const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if needed
-  
+
     return `${year}-${month}-${day}`; // Returns date in YYYY-MM-DD format
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Format the startDate to YYYY-MM-DD
+    const formattedStartDate = formatDate(formData.startDate);
+
+    // Include the employee ID and formatted startDate in the updated data
+    onSave({ ...formData, startDate: formattedStartDate, _id: employee._id });
   };
 
   const navigate = useNavigate();
@@ -160,9 +163,8 @@ const EditProfile = ({ employee, onSave }) => {
       <div className="mt-6 flex justify-end space-x-3">
         <button
           type="button"
-          // onClick={() => navigate("/")}
+          onClick={handleBack}
           className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-        onClick={handleBack}
         >
           Cancel
         </button>
@@ -173,7 +175,6 @@ const EditProfile = ({ employee, onSave }) => {
           Save Changes
         </button>
       </div>
-      {/* <button type="submit">Save</button> */}
     </form>
   );
 };
