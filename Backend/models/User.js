@@ -50,8 +50,9 @@ const UserSchema = new mongoose.Schema({
   department:{
     type: String,
   },
-  startDate:{
-    type: Date,
+  startDate: {
+    type: String,
+    match: /^\d{4}-\d{2}-\d{2}$/, // Ensure the date is in YYYY-MM-DD format
   },
   category:{
     type: String,
