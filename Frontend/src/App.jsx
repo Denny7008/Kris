@@ -121,7 +121,7 @@ function App() {
         <Route path="/leavehistory" element={<LeaveHistory />} />
 
         {/* user routes */}
-        <Route path="/user/login" element={<UserLogin />} />
+        <Route path="/" element={<UserLogin />} />
         
         <Route path="/userdash" element={<Usernavbar />} />
         <Route path="/user/register" element={<UserRegister />} />
@@ -193,11 +193,26 @@ function App() {
 
 
         
-        <Route path="/userlogin/dashboard/leaveapply" element={<ApplyforLeave />}>
+        {/* <Route path="/userlogin/dashboard/leaveapply" element={<ApplyforLeave />}> */}
+        {/* <Route path="/userlogin/dashboard/leaveapply" element={<LeaveDashboard />}>
+        <Route path=":leaveType" element={<LeaveTypeComponent />} />
 
-          <Route path ="annualleave" element={<AnnualLeave/>}/>
+         </Route> */}
 
-         </Route>
+         <Route path="/userlogin/dashboard/leaveapply" element={<LeaveDashboard />}>
+          {/* Nested Routes */}
+          <Route path="annualleave" element={<AnnualLeave />} />
+
+        </Route>
+
+         {/* <Route path="/leavedashboard" element={<LeaveDashboard />}>
+          <Route path=":leaveType" element={<LeaveTypeComponent />} />
+        </Route> */}
+
+
+
+
+         <Route path ="/annualleave" element={<AnnualLeave/>}/>
 
       
         <Route path="/dashboard" element={<Dashboard />} />

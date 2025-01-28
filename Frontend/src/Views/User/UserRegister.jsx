@@ -270,7 +270,7 @@ const UserRegister = () => {
           <p className="mt-4 text-gray-600 text-center">
             Already have an account?{" "}
             <Link
-              to="/user/login"
+              to="/"
               className="text-blue-500 hover:underline"
             >
               Log In
