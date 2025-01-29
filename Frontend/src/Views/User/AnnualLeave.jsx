@@ -179,7 +179,7 @@ const AnnualLeave = () => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/createleave-applications",
+        "http://localhost:5000/create-leave-application",
         data
       );
       if (response.status === 200) {

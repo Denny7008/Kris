@@ -12,8 +12,13 @@ export const getAllLeaveApplications = async (req, res) => {
 };
 
 export const createLeaveApplication = async (req, res) => {
-  const { name, duration, startDate, endDate, resumptionDate, type, reason } = req.body;
+  const { duration, startDate, endDate, resumptionDate, type, reason } = req.body;
 
+  const name = req.body.name || req.user?.fullName; 
+  if (!name) {
+    return res.status(400).json({ message: 'Name is required' });
+  }
+  
   try {
     const newApplication = new LeaveApplication({
       name,

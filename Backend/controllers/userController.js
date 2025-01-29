@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator"; // For validation middleware
 
-// Register Controller
+// REGISTER THE USER CONTROLLER
 export const registerUser = async (req, res) => {
   const {
     firstName,
@@ -80,7 +80,11 @@ export const registerUser = async (req, res) => {
   }
 };
 
-// Login Controller
+
+
+
+
+// USER LOGIN CONTROLLLER
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -90,15 +94,12 @@ export const loginUser = async (req, res) => {
 
   try {
     const normalizedEmail = email.toLowerCase();
-
-    // Find the user
     const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
-    console.log("Stored hashed password:", user.password);
+    // console.log("Stored hashed password:", user.password);
 
-    // Compare the entered password with the stored hash
     const isPasswordValid = await bcrypt.compare(password, user.password);
     console.log("Password valid:", isPasswordValid);
 
@@ -106,7 +107,6 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // Generate JWT
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     res.status(200).json({
@@ -125,11 +125,23 @@ export const loginUser = async (req, res) => {
 
 
 
+// USER LOGOUT CONTROLLER 
+export const logoutUser = async (req, res) => {
+  try {
+    // If using JWT, you can implement token blacklisting (optional)
+    res.clearCookie("token"); // If using cookies for authentication
+    return res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    res.status(500).json({ error: "Server error during logout" });
+  }
+};
 
 
 
 
-// update  user data
+
+
+// UPDATE USER PROFILE
 export const editProfile = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -157,7 +169,10 @@ export const editProfile = async (req, res) => {
 };
 
 
-// get user by id
+
+
+
+//GET USER BY ID
 export const getUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -175,6 +190,20 @@ export const getUser = async (req, res) => {
 };
 
 
+// GET USER PROFILE
+export const userProfile = async (req, res) => {
+  try {
+    const userId = req.session.userId; // Assuming session-based auth
+    if (!userId) return res.status(401).json({ message: "Not authenticated" });
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({ fullName: user.fullName, email: user.email });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 
 
@@ -182,7 +211,9 @@ export const getUser = async (req, res) => {
 
 
 
-// get all employee data
+
+
+// GET EMPLOYEE ALL DATA
 export const getAllUsers = async (req, res) => {
   try {
     // Fetch all users from the database

@@ -63,10 +63,13 @@ import Testexp from "./Views/User/Testexp";
 import NotFound from "./Components/NotFound";
 import LeaveDashboard from "./Views/User/ApplyforLeave";
 import EditProfile from "./Views/Admin/pages/EditProfile";
+import { ToastContainer } from 'react-toastify';  // Correct named imports
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <>
+    <ToastContainer position="bottom-right" />
       <Routes>
         <Route path="/admin/login" element={<Adminlogin />} />
         <Route path="/navbar" element={<AdminSideNavbar />} />

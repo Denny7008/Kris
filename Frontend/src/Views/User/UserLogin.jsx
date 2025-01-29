@@ -10,6 +10,24 @@ const UserLogin = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.post("http://localhost:5000/user/login", {
+  //       email,
+  //       password,
+  //     });
+  //     console.log("Login successful:", response.data);
+  //     navigate("/userlogin/dashboard", { replace: true });
+  //   } catch (error) {
+  //     console.error("Login error:", error.response?.data || error.message);
+  //     setError(
+  //       error.response?.data?.message || "An error occurred during login."
+  //     );
+  //   }
+  // };
+
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -17,15 +35,23 @@ const UserLogin = () => {
         email,
         password,
       });
+      
       console.log("Login successful:", response.data);
+  
+      // Store the token in localStorage or sessionStorage
+      localStorage.setItem('authToken', response.data.token);  // Or use sessionStorage
+  
+      // Optionally, you could also store user data if needed
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+  
+      // Redirect the user to the dashboard
       navigate("/userlogin/dashboard", { replace: true });
     } catch (error) {
       console.error("Login error:", error.response?.data || error.message);
-      setError(
-        error.response?.data?.message || "An error occurred during login."
-      );
+      setError(error.response?.data?.message || "An error occurred during login.");
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

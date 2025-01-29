@@ -1,6 +1,23 @@
 import React from "react";
 import logo from "../../assets/kris logo 3.png";
+import axios from "axios";
+import { toast } from "react-toastify";
 const Navbar = () => {
+
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:5000/user/logout");
+      localStorage.removeItem("token");
+        window.location.href = "/"; 
+    } catch (error) {
+      console.error("Error logging out:", error);
+      toast.error("Failed to log out. Please try again.");
+    }
+  };
+  
+
+
   return (
     <nav className="bg-white shadow p-4 flex justify-between items-center">
       {/* Logo Section */}
@@ -17,6 +34,10 @@ const Navbar = () => {
         <a href="#" className="hover:text-blue-500">Payroll</a>
         <a href="#" className="hover:text-blue-500">Company</a>
         <a href="#" className="hover:text-blue-500">Extras</a>
+        <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded">
+  Logout
+</button>
+
       </div>
 
       {/* Notification and Profile Icons */}
