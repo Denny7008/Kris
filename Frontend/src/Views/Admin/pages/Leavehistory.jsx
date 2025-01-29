@@ -181,3 +181,20 @@ const LeaveHistory = () => {
 };
 
 export default LeaveHistory;
+
+
+
+
+
+
+// const fetchLeaveApplications = async () => {
+//   try {
+//     const response = await fetch('/api/leave');
+//     const data = await response.json();
+//     setApplications(data);
+//   } catch (error) {
+//     console.error('Error fetching leave applications:', error);
+//   }
+// };
+
+// Call this function inside useEffect to load data when the component mounts inside use effect
