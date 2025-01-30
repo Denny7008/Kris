@@ -400,14 +400,19 @@ const LeaveDashboard = () => {
 
       try {
         setError(null); // Reset error state before fetching new data
-        const response = await axios.get("http://localhost:5000/get-leave-history", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://localhost:5000/get-leave-history",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setLeaveHistory(response.data);
       } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch leave history");
+        setError(
+          err.response?.data?.message || "Failed to fetch leave history"
+        );
       }
     };
 
@@ -422,13 +427,17 @@ const LeaveDashboard = () => {
     setModalData(null);
   };
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
   const [isModalVisible, setModalVisible] = useState(false);
 
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-
 
   const onSubmit = async (data) => {
     if (!modalData) {
@@ -444,11 +453,14 @@ const LeaveDashboard = () => {
       }
 
       // Fetch user data using the token
-      const userResponse = await axios.get("http://localhost:5000/get-user-data", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const userResponse = await axios.get(
+        "http://localhost:5000/get-user-data",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const userName = userResponse.data.name;
       if (!userName) {
@@ -551,15 +563,16 @@ const LeaveDashboard = () => {
                         ? new Date(leave.endDate).toLocaleDateString()
                         : "N/A"}
                     </td>
-                    <td className="p-4">
-                      <button className="px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                        {leave.type || "N/A"}
-                      </button>
-                    </td>
+                    <td className="p-4">{leave.type || "N/A"}</td>
                     <td className="p-4">{leave.reason || "N/A"}</td>
-                    <td className="p-4">
-                      <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                        Actions
+                    <td>
+                      <button
+                        className={`px-2 py-1 text-black rounded-lg cursor-default 
+    ${leave.status === "Pending" ? "bg-yellow-500" : ""} 
+    ${leave.status === "Approved" ? "bg-green-500 text-white" : ""} 
+    ${leave.status === "Declined" ? "bg-red-500" : ""}`}
+                      >
+                        {leave.status || "N/A"}
                       </button>
                     </td>
                   </tr>

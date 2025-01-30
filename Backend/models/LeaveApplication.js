@@ -10,9 +10,10 @@ const leaveApplicationSchema = new mongoose.Schema({
   resumptionDate:{type: Date, required: true},
   type: { type: String, required: true },
   reason: { type: String, required: true },
+  status: { type: String, enum: ['Pending', 'Approved', 'Declined'], default: 'Pending' }, 
 });
 
-const LeaveApplication = mongoose.model('LeaveApplication', leaveApplicationSchema);
+// const LeaveApplication = mongoose.model('LeaveApplication', leaveApplicationSchema);
 
 
 

@@ -114,3 +114,38 @@ export const getLeaveHistory = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+
+// UPDATE LEAVE APPLICATION STATUS
+export const updateLeaveStatus = async (req, res) => {
+  const { status } = req.body;
+  try {
+    const application = await LeaveApplication.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true } // Return the updated document
+    );
+
+    if (!application) {
+      return res.status(404).json({ message: "Leave application not found" });
+    }
+
+    res.status(200).json({ message: "Leave application updated successfully", application });
+  } catch (error) {
+    console.error("Error updating leave application status:", error);
+    res.status(500).json({ message: "Error updating leave application status" });
+  }
+};
+
+
+
+// GET APRROVED LEAVE APPLICATION
+export const getApprovedLeaveApplications = async (req, res) => {
+  try {
+    const approvedApplications = await LeaveApplication.find({ status: "Approved" });
+    res.status(200).json(approvedApplications);
+  } catch (error) {
+    console.error("Error in getApprovedLeaveApplications controller:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
