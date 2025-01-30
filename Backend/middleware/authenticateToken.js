@@ -15,6 +15,7 @@ const authenticateToken = async (req, res, next) => {
 
     // Attach the decoded user data to the request object (req.user)
     const user = await User.findById(decoded.userId);
+    
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }

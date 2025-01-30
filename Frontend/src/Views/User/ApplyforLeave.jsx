@@ -74,7 +74,7 @@
 //       console.error("Error: No leave type selected.");
 //       return;
 //     }
-  
+
 //     try {
 //       const formData = new FormData();
 //       formData.append("leaveType", modalData.type);
@@ -83,11 +83,11 @@
 //       formData.append("resumptionDate", data.resumptionDate);
 //       formData.append("reason", data.reason);
 //       formData.append("reliefOfficer", data.reliefOfficer);
-  
+
 //       if (data.handoverDocument && data.handoverDocument.length > 0) {
 //         formData.append("handoverDocument", data.handoverDocument[0]);
 //       }
-  
+
 //       const response = await axios.post(
 //         "http://localhost:5000/create-leave-application",
 //         formData,
@@ -95,7 +95,7 @@
 //           headers: { "Content-Type": "multipart/form-data" },
 //         }
 //       );
-  
+
 //       if (response.status === 200) {
 //         setModalVisible(true);
 //         reset();
@@ -104,7 +104,6 @@
 //       console.error("Error submitting leave application:", error.response?.data || error.message);
 //     }
 //   };
-  
 
 //   return (
 //     <div className="bg-[#E3EDF9] py-4">
@@ -246,13 +245,13 @@
 //                     </div>
 //                     <div>
 //                       <label className="block text-gray-700 font-medium mb-1">
-//                         Duration 
+//                         Duration
 //                       </label>
 //                       <input
 //                         type="number"
 //                         {...register("duration", {
 //                           required: "Duration is required",
-                        
+
 //                         })}
 //                         className="w-full bg-[#E3EDF9] p-2 border-gray-300 rounded-lg shadow-sm"
 //                       />
@@ -374,16 +373,16 @@
 
 // export default LeaveDashboard;
 
-
-
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import SuccessModal from "./SucessPop"; // Import the Modal component
 import axios from "axios";
 
 const LeaveDashboard = () => {
   const [modalData, setModalData] = useState(null);
+  const [leaveHistory, setLeaveHistory] = useState([]);
+  const [error, setError] = useState(null);
+  const token = localStorage.getItem("authToken");
 
   const leaveTypes = [
     { type: "Annual Leave", route: "/leavedashboard/annualleave" },
@@ -392,40 +391,28 @@ const LeaveDashboard = () => {
     { type: "Compassionate Leave", route: "/compassionate-leave" },
   ];
 
-  const leaveData = [
-    {
-      name: "John Steven Doe",
-      duration: 5,
-      startDate: "22/04/2022",
-      endDate: "26/04/2022",
-      type: "Sick",
-      reason: "Personal",
-    },
-    {
-      name: "John Steven Doe",
-      duration: 7,
-      startDate: "22/04/2022",
-      endDate: "30/04/2022",
-      type: "Exam",
-      reason: "Examination",
-    },
-    {
-      name: "John Steven Doe",
-      duration: 120,
-      startDate: "22/04/2022",
-      endDate: "28/06/2022",
-      type: "Maternity",
-      reason: "Child Care",
-    },
-    {
-      name: "John Steven Doe",
-      duration: 5,
-      startDate: "22/04/2022",
-      endDate: "26/04/2022",
-      type: "Sick",
-      reason: "Personal",
-    },
-  ];
+  useEffect(() => {
+    const fetchLeaveHistory = async () => {
+      if (!token) {
+        setError("No authentication token found. Please log in.");
+        return;
+      }
+
+      try {
+        setError(null); // Reset error state before fetching new data
+        const response = await axios.get("http://localhost:5000/get-leave-history", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setLeaveHistory(response.data);
+      } catch (err) {
+        setError(err.response?.data?.message || "Failed to fetch leave history");
+      }
+    };
+
+    fetchLeaveHistory();
+  }, [token]);
 
   const openModal = (leave) => {
     setModalData(leave);
@@ -435,18 +422,13 @@ const LeaveDashboard = () => {
     setModalData(null);
   };
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
-
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const [isModalVisible, setModalVisible] = useState(false);
 
   const handleCloseModal = () => {
-    setModalVisible(false); // Hide the modal
+    setModalVisible(false);
   };
+
 
   const onSubmit = async (data) => {
     if (!modalData) {
@@ -455,27 +437,27 @@ const LeaveDashboard = () => {
     }
 
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem("authToken");
       if (!token) {
         console.error("Error: No token found. Please log in.");
         return;
       }
 
-       // Fetch user data using the token
-    const userResponse = await axios.get("http://localhost:5000/get-user-data", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    console.log(userResponse);
-    const userName = userResponse.data.name;
-    if (!userName) {
-      console.error("Error: User name is missing.");
-      return; // Prevent form submission if the name is missing
-    }
+      // Fetch user data using the token
+      const userResponse = await axios.get("http://localhost:5000/get-user-data", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const userName = userResponse.data.name;
+      if (!userName) {
+        console.error("Error: User name is missing.");
+        return;
+      }
 
       const payload = {
-        name: userName, 
+        name: userName,
         duration: data.duration,
         startDate: data.startDate,
         endDate: data.endDate,
@@ -490,16 +472,22 @@ const LeaveDashboard = () => {
         "http://localhost:5000/create-leave-application",
         payload,
         {
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ FIXED: Token must be included
+          },
         }
       );
 
-      if (response.status === 200) {
-        setModalVisible(true); // Show success modal
-        reset(); // Reset the form
+      if (response.status === 201) {
+        setModalVisible(true);
+        reset();
       }
     } catch (error) {
-      console.error("Error submitting leave application:", error.response?.data || error.message);
+      console.error(
+        "Error submitting leave application:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -531,6 +519,7 @@ const LeaveDashboard = () => {
 
         <div className="bg-white shadow rounded-lg p-6 h-[60vh]">
           <h2 className="text-xl font-semibold mb-4">Leave History</h2>
+
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-200 text-left">
@@ -544,28 +533,44 @@ const LeaveDashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {leaveData.map((leave, index) => (
-                <tr
-                  key={index}
-                  className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}
-                >
-                  <td className="p-4">{leave.name}</td>
-                  <td className="p-4">{leave.duration}</td>
-                  <td className="p-4">{leave.startDate}</td>
-                  <td className="p-4">{leave.endDate}</td>
-                  <td className="p-4">
-                    <button className="px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                      {leave.type}
-                    </button>
-                  </td>
-                  <td className="p-4">{leave.reason}</td>
-                  <td className="p-4">
-                    <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                      Actions
-                    </button>
+              {leaveHistory.length > 0 ? (
+                leaveHistory.map((leave, index) => (
+                  <tr
+                    key={index}
+                    className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}
+                  >
+                    <td className="p-4">{leave.name || "N/A"}</td>
+                    <td className="p-4">{leave.duration || "N/A"}</td>
+                    <td className="p-4">
+                      {leave.startDate
+                        ? new Date(leave.startDate).toLocaleDateString()
+                        : "N/A"}
+                    </td>
+                    <td className="p-4">
+                      {leave.endDate
+                        ? new Date(leave.endDate).toLocaleDateString()
+                        : "N/A"}
+                    </td>
+                    <td className="p-4">
+                      <button className="px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                        {leave.type || "N/A"}
+                      </button>
+                    </td>
+                    <td className="p-4">{leave.reason || "N/A"}</td>
+                    <td className="p-4">
+                      <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                        Actions
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="7" className="p-4 text-center text-gray-500">
+                    No leave records found.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -714,9 +719,7 @@ const LeaveDashboard = () => {
                 </div>
               </div>
 
-              {isModalVisible && (
-                <SuccessModal onClose={handleCloseModal} />
-              )}
+              {isModalVisible && <SuccessModal onClose={handleCloseModal} />}
             </div>
           </div>
         </div>
@@ -726,6 +729,3 @@ const LeaveDashboard = () => {
 };
 
 export default LeaveDashboard;
-
-
-

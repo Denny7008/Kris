@@ -1,6 +1,6 @@
 import express from 'express';
 import { registerUser, loginUser, editProfile, getAllUsers, getUser, userProfile, logoutUser } from '../controllers/userController.js';
-import { getAllLeaveApplications, createLeaveApplication, updateLeaveApplicationStatus,} from '../controllers/leaveController.js';
+import { getAllLeaveApplications, createLeaveApplication, updateLeaveApplicationStatus, getLeaveHistory} from '../controllers/leaveController.js';
 import { body } from 'express-validator'; // For input validation
 import { loginAdmin, registerAdmin } from '../controllers/adminController.js';
 import { authenticateToken, getUserDataFromToken } from '../middleware/authenticateToken.js';
@@ -32,8 +32,12 @@ router.get("/users/user-profile", userProfile);   // Get user profile
 
 // LEAVE APPLICATION ROUTES
 router.get('/leave-applications', getAllLeaveApplications);  // Route to get all leave applications (Admin side)
-router.post('/create-leave-application', createLeaveApplication);  // Route to create a new leave application (User side)
+router.post('/create-leave-application',  authenticateToken, createLeaveApplication);  // Route to create a new leave application (User side)
 router.put('/leave-applications/:id', updateLeaveApplicationStatus);  // Route to approve/decline leave application (Admin side)
+
+
+router.get("/get-leave-history", authenticateToken, getLeaveHistory); 
+
 
 
 router.get('/get-user-data', authenticateToken, async (req, res) => {
