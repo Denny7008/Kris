@@ -65,6 +65,7 @@ import LeaveDashboard from "./Views/User/ApplyforLeave";
 import EditProfile from "./Views/Admin/pages/EditProfile";
 import { ToastContainer } from 'react-toastify';  // Correct named imports
 import 'react-toastify/dist/ReactToastify.css';
+import LeaveRecallForm from "./Views/Admin/pages/LeaveRecallForm";
 
 function App() {
   return (
@@ -221,11 +222,11 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
   
        
+        <Route path="/leaverecallform" element={<LeaveRecallForm/>} />
 
 
 
-
-
+      
 
 
 
