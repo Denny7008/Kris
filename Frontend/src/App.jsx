@@ -66,6 +66,9 @@ import EditProfile from "./Views/Admin/pages/EditProfile";
 import { ToastContainer } from 'react-toastify';  // Correct named imports
 import 'react-toastify/dist/ReactToastify.css';
 import LeaveRecallForm from "./Views/Admin/pages/LeaveRecallForm";
+import LeaveInitiateNotification from "./Views/User/LeaveInitiateNotification";
+import Navbarr from "../../TestFiles/UserTest";
+import TestNav from "../../TestFiles/UserTest";
 
 function App() {
   return (
@@ -265,6 +268,10 @@ function App() {
 
         <Route path="/admin/login/AdminDashboard/EmployeeManagement" element={<EmployeeManagement />} />
         {/* <Route path="/admin/login/AdminDashboard/EmployeeManagement/edit/:id" element={<EditProfile />} /> */}
+
+
+        <Route path="/noti" element={<LeaveInitiateNotification/>}/>
+        <Route path="/testnav" element={<TestNav/>}/>
         
 
 

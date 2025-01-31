@@ -4,6 +4,7 @@ import { getAllLeaveApplications, createLeaveApplication, updateLeaveApplication
 import { body } from 'express-validator'; // For input validation
 import { loginAdmin, registerAdmin } from '../controllers/adminController.js';
 import { authenticateToken, getUserDataFromToken } from '../middleware/authenticateToken.js';
+import { createNotification, getUnreadNotifications, markNotificationsAsRead } from '../controllers/notificationController.js';
 
 const router = express.Router();
 
@@ -62,6 +63,15 @@ router.get('/get-user-data', authenticateToken, async (req, res) => {
     res.status(500).json({ message: 'Error retrieving user data', error: error.message });
   }
 });
+
+
+
+
+// NOTIFICATIONS
+
+router.post("/notifications", createNotification);   // Create a notification
+router.get("/notifications/:userId", getUnreadNotifications);    // Fetch unread notifications for a user
+router.put("/read/:userId", markNotificationsAsRead);   // Mark notifications as read
 
 
 

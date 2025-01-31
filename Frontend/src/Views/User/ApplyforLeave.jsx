@@ -87,6 +87,7 @@ const LeaveDashboard = () => {
           },
         }
       );
+      console.log(userResponse);
 
       const userName = userResponse.data.name;
       if (!userName) {
