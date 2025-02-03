@@ -6,6 +6,14 @@ import { loginAdmin, registerAdmin } from '../controllers/adminController.js';
 import { authenticateToken, getUserDataFromToken } from '../middleware/authenticateToken.js';
 import { createNotification, getUnreadNotifications, markNotificationsAsRead } from '../controllers/notificationController.js';
 
+
+import {
+  createMessageNotification,
+  getUserMessageNotifications,
+  markMessageAsRead,
+  deleteMessageNotification,
+} from "../controllers/MessageContoller.js";
+
 const router = express.Router();
 
 
@@ -71,8 +79,22 @@ router.get('/get-user-data', authenticateToken, async (req, res) => {
 
 router.post("/notifications", createNotification);   // Create a notification
 router.get("/notifications/:userId", getUnreadNotifications);    // Fetch unread notifications for a user
-router.put("/read/:userId", markNotificationsAsRead);   // Mark notifications as read
+router.put("/notifications/read/:userId", markNotificationsAsRead);   // Mark notifications as read
 
 
+
+// Message Notification
+
+// 📌 Create a new message notification
+router.post("/messages", createMessageNotification);
+
+// 📌 Get all messages for a user
+router.get("/messages/:userId", getUserMessageNotifications);
+
+// 📌 Mark a specific message as read
+router.put("/messages/read/:messageId", markMessageAsRead);
+
+// 📌 Delete a specific message notification (fixed route path)
+router.delete("/messages/:messageId", deleteMessageNotification);
 
 export default router;

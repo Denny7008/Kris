@@ -45,26 +45,33 @@ export const getAllLeaveApplications = async (req, res) => {
 
 export const createLeaveApplication = async (req, res) => {
   try {
-    const userIdFromRequest = req.user._id;  // This assumes `req.user` is populated by an auth middleware
+    const userIdFromRequest = req.user._id;
+
+    // Function to strip the time component and store only date
+    const stripTime = (dateString) => {
+      const date = new Date(dateString);
+      return date.toISOString().split('T')[0]; // Convert to YYYY-MM-DD format
+    };
 
     const leaveApplication = new LeaveApplication({
       userId: userIdFromRequest,
-      name: req.body.name,  // You could get these from `req.body` as well
+      name: req.body.name,
       duration: req.body.duration,
-      startDate: req.body.startDate,
-      endDate: req.body.endDate,
-      resumptionDate: req.body.resumptionDate,
+      startDate: stripTime(req.body.startDate), // Apply function
+      endDate: stripTime(req.body.endDate), // Apply function
+      resumptionDate: stripTime(req.body.resumptionDate), // Apply function
       type: req.body.type,
       reason: req.body.reason,
     });
 
     await leaveApplication.save();
-    res.status(201).json({ message: 'Leave application created successfully' });
+    res.status(201).json({ message: "Leave application created successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error creating leave application', error });
+    res.status(500).json({ message: "Error creating leave application", error });
   }
 };
+
 
 
 

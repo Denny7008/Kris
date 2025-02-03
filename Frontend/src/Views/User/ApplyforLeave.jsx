@@ -1,14 +1,24 @@
-
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import SuccessModal from "./SucessPop"; // Import the Modal component
 import axios from "axios";
+
 
 const LeaveDashboard = () => {
   const [modalData, setModalData] = useState(null);
   const [leaveHistory, setLeaveHistory] = useState([]);
   const [error, setError] = useState(null);
   const token = localStorage.getItem("authToken");
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "";
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
 
   const leaveTypes = [
     { type: "Annual Leave", route: "/leavedashboard/annualleave" },
@@ -98,9 +108,9 @@ const LeaveDashboard = () => {
       const payload = {
         name: userName,
         duration: data.duration,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        resumptionDate: data.resumptionDate,
+        startDate: formatDate(data.startDate), // ✅ Use formatDate
+        endDate: formatDate(data.endDate), // ✅ Use formatDate
+        resumptionDate: formatDate(data.resumptionDate), // ✅ Use formatDate
         type: modalData.type,
         reason: data.reason,
       };
@@ -156,7 +166,7 @@ const LeaveDashboard = () => {
           ))}
         </div>
 
-        <div className="bg-white shadow rounded-lg p-6 h-[60vh]">
+        <div className="bg-white shadow rounded-lg p-6 h-[60vh] overflow-y-auto">
           <h2 className="text-xl font-semibold mb-4">Leave History</h2>
 
           <table className="w-full border-collapse">
@@ -180,16 +190,8 @@ const LeaveDashboard = () => {
                   >
                     <td className="p-4">{leave.name || "N/A"}</td>
                     <td className="p-4">{leave.duration || "N/A"}</td>
-                    <td className="p-4">
-                      {leave.startDate
-                        ? new Date(leave.startDate).toLocaleDateString()
-                        : "N/A"}
-                    </td>
-                    <td className="p-4">
-                      {leave.endDate
-                        ? new Date(leave.endDate).toLocaleDateString()
-                        : "N/A"}
-                    </td>
+                    <td className="p-4">{formatDate(leave.startDate)}</td>
+                    <td className="p-4">{formatDate(leave.endDate)}</td>
                     <td className="p-4">{leave.type || "N/A"}</td>
                     <td className="p-4">{leave.reason || "N/A"}</td>
                     <td>
