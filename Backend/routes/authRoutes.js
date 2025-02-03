@@ -63,6 +63,7 @@ router.get('/get-user-data', authenticateToken, async (req, res) => {
     const userData = {
       name: `${user.firstName} ${user.lastName}`, // Concatenate firstName and lastName
       email: user.email, // You can add any other fields you need here
+      jobTitle: user.jobTitle
     };
 
     res.json(userData);

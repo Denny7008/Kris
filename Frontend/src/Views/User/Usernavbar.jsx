@@ -5,16 +5,19 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import logo from "../../assets/kris logo 3.png";
 import HRlogo from "../../assets/hr.jpg";
+import Profile from "../../assets/profile.jpg";
 
 const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
   const [messages, setMessages] = useState([]);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isMailDropdownOpen, setMailDropdownOpen] = useState(false);
+  const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [userId, setUserId] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser).id : null;
   });
+
 
   useEffect(() => {
     if (!userId) return;
@@ -42,6 +45,7 @@ const Navbar = () => {
 
     fetchData();
   }, [userId]);
+
 
   const handleLogout = async () => {
     try {
@@ -89,12 +93,6 @@ const Navbar = () => {
         <a href="#" className="hover:text-blue-500">Payroll</a>
         <a href="#" className="hover:text-blue-500">Company</a>
         <a href="#" className="hover:text-blue-500">Extras</a>
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2 rounded"
-        >
-          Logout
-        </button>
       </div>
 
       <div className="flex items-center space-x-6">
@@ -207,11 +205,24 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Profile Icon */}
+        {/* Profile Dropdown */}
         <div className="relative">
-          <span className="material-icons text-yellow-500 text-3xl">
-            account_circle
-          </span>
+          <button onClick={() => setProfileDropdownOpen(!isProfileDropdownOpen)}>
+            <div className="h-12 w-12 rounded-full bg-red-600 overflow-hidden">
+            <img className="" src={Profile} alt="" />
+            </div>
+          </button>
+          {isProfileDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-60 bg-white shadow-lg rounded-lg p-4 z-50">
+              <p className="text-lg font-semibold text-center">DINESH LWDA</p>
+              <button
+                onClick={handleLogout}
+                className="mt-4 w-full bg-red-500 text-white px-4 py-2 rounded"
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </nav>
@@ -219,3 +230,12 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+
+
+
+
+
+
+

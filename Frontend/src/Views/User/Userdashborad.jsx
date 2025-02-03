@@ -1,15 +1,76 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link, Outlet } from "react-router-dom";
 
 
-const Userdashborad = () => {
+const Userdashborad =  () => {
+
+  const [userName, setUserName] = useState(""); // State to store user name
+  const [jobTitle, setJobTitle] = useState(""); // State to store user name
+  const [error, setError] = useState(null); // Error state
+
+  const token = localStorage.getItem("authToken");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!token) {
+        setError("No authentication token found. Please log in.");
+        return;
+      }
+
+      try {
+        // Fetch user data using the token
+        const userResponse = await axios.get(
+          "http://localhost:5000/get-user-data",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log(userResponse);
+
+        const fetchedUserName = userResponse.data.name;
+        console.log(fetchedUserName);
+
+        const fetchedJobTitle = userResponse.data.jobTitle;
+        
+        if (!fetchedJobTitle) {
+          console.error("Error: User name is missing.");
+          return;
+        }
+        setJobTitle(fetchedJobTitle);
+
+        if (!fetchedUserName) {
+          console.error("Error: User name is missing.");
+          return;
+        }
+
+        setUserName(fetchedUserName); // Set user name in state
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [token]);
+  
+
+
+
+  
+      
+
+
+
   return (
     <div className="bg-[#E3EDF9] min-h-screen p-6">
         {/* Header Section */}
         <div className="bg-blue-500 text-white rounded-lg p-6 mb-6 shadow-lg flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold">John Doe</h1>
-            <p className="text-lg">UI / UX Designer & UX Writer</p>
+            <h1 className="text-2xl font-bold">{userName || "User"}</h1>
+            <p className="text-lg">{jobTitle || "JobTitle"}</p>
           </div>
           <button className="bg-yellow-400 text-black px-4 py-2 rounded-lg hover:bg-yellow-500">
             Edit Profile
