@@ -82,6 +82,92 @@ export const registerUser = async (req, res) => {
 
 
 
+// [ BULK REGISTER-USER-API]
+export const bulkRegisterUsers = async (req, res) => {
+  const users = req.body;
+
+  // Validate each user object in the array
+  const errors = [];
+  for (const user of users) {
+    const { firstName, lastName, email, phone, password, confirmPassword, receiveNewsletters, agreeTerms } = user;
+
+    // Check if passwords match for each user
+    if (password !== confirmPassword) {
+      errors.push({ email, message: "Passwords do not match" });
+      continue; // Skip this user if passwords don't match
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      errors.push({ email, message: "User already exists" });
+      continue; // Skip this user if they already exist
+    }
+  }
+
+  // If there are any errors, respond with the error messages
+  if (errors.length > 0) {
+    return res.status(400).json({ errors });
+  }
+
+  try {
+    // Process each user and create them
+    const createdUsers = [];
+    for (const user of users) {
+      const { firstName, lastName, email, phone, password, receiveNewsletters, agreeTerms } = user;
+
+      // Hash the password for each user
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+      // Create new user (excluding confirmPassword)
+      const newUser = new User({
+        firstName,
+        lastName,
+        email,
+        phone,
+        password: hashedPassword,
+        receiveNewsletters,
+        agreeTerms,
+      });
+
+      // Save user to the database
+      await newUser.save();
+
+      // Add the new user to the createdUsers array
+      createdUsers.push({
+        id: newUser._id,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+        phone: newUser.phone,
+        receiveNewsletters: newUser.receiveNewsletters,
+      });
+    }
+
+    // Generate JWT tokens for the created users
+    const tokens = createdUsers.map(user => 
+      jwt.sign(
+        { userId: user.id }, // Payload
+        process.env.JWT_SECRET, // Secret key
+        { expiresIn: "1h" } // Expiration time
+      )
+    );
+
+    res.status(201).json({
+      message: "Users registered successfully",
+      users: createdUsers,
+      tokens,
+    });
+  } catch (error) {
+    console.error("Error during bulk registration:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+
 
 
 // USER LOGIN CONTROLLLER

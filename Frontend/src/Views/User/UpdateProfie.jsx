@@ -47,3 +47,13 @@ const Updateprofile = () => {
 };
 
 export default Updateprofile;
+
+
+
+
+
+
+
+
+
+

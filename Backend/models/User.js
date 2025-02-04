@@ -45,7 +45,8 @@ const UserSchema = new mongoose.Schema({
   },
   gender:{
     type: String,
-    enum: ["Male", "Female"] // Define genders      
+    enum: ["Male", "Female"],
+    default: "Male"     
   },
   department:{
     type: String,
@@ -56,8 +57,13 @@ const UserSchema = new mongoose.Schema({
   },
   category:{
     type: String,
-    enum: ["Full-time", "Remote"] // Define job categories
-  }
+    enum: ["Full-time", "Remote"],
+    default: "Full-time" // Define job categories
+  },
+  profilePic: {
+    type: String,
+    default: "https://via.placeholder.com/100", // Default profile image
+  },
 
 }, { timestamps: true });
 

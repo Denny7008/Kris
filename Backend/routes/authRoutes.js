@@ -1,5 +1,6 @@
 import express from 'express';
-import { registerUser, loginUser, editProfile, getAllUsers, getUser, userProfile, logoutUser } from '../controllers/userController.js';
+import multer from 'multer';
+import { registerUser, loginUser, editProfile, getAllUsers, getUser, userProfile, logoutUser, bulkRegisterUsers } from '../controllers/userController.js';
 import { getAllLeaveApplications, createLeaveApplication, updateLeaveApplicationStatus, getLeaveHistory, updateLeaveStatus, getApprovedLeaveApplications} from '../controllers/leaveController.js';
 import { body } from 'express-validator'; // For input validation
 import { loginAdmin, registerAdmin } from '../controllers/adminController.js';
@@ -13,6 +14,7 @@ import {
   markMessageAsRead,
   deleteMessageNotification,
 } from "../controllers/MessageContoller.js";
+import { uploadMiddleware, uploadProfilePicture } from '../controllers/uploadController.js';
 
 const router = express.Router();
 
@@ -22,7 +24,12 @@ router.post('/user/register',[
     body('email').isEmail().withMessage('Enter a valid email'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
     ],
-  registerUser); // Register User 
+  registerUser); // Register BULK User 
+router.post('/user/bulk-register',[
+    body('email').isEmail().withMessage('Enter a valid email'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+    ],
+  bulkRegisterUsers); // Register User 
 router.post("/admin/register", registerAdmin);
 router.post("/admin/login", loginAdmin);
 
@@ -63,7 +70,11 @@ router.get('/get-user-data', authenticateToken, async (req, res) => {
     const userData = {
       name: `${user.firstName} ${user.lastName}`, // Concatenate firstName and lastName
       email: user.email, // You can add any other fields you need here
-      jobTitle: user.jobTitle
+      jobTitle: user.jobTitle,
+      department: user.department,
+      category: user.category,
+      gender: user.gender,
+      // Add other fields as necessary
     };
 
     res.json(userData);
@@ -97,5 +108,19 @@ router.put("/messages/read/:messageId", markMessageAsRead);
 
 // 📌 Delete a specific message notification (fixed route path)
 router.delete("/messages/:messageId", deleteMessageNotification);
+
+
+
+
+
+
+
+
+
+// Cloudinary 
+// Multer configuration to handle incoming file data
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+router.post('/upload-profile', uploadMiddleware, uploadProfilePicture);// Define the route for image upload
 
 export default router;

@@ -41,7 +41,9 @@ const getUserDataFromToken = (user) => {
     return {
       name: fullName, // Adjust based on the fields you want to return
       email: user.email,
-      jobTitle: user.jobTitle
+      jobTitle: user.jobTitle,
+      jobDescription: user.jobDescription,
+      profilePic: user.profilePic, 
       // Add any other user data fields you need
     };
   };

@@ -28,26 +28,27 @@ const Userdashborad =  () => {
             },
           }
         );
-
         console.log(userResponse);
 
         const fetchedUserName = userResponse.data.name;
         console.log(fetchedUserName);
 
-        const fetchedJobTitle = userResponse.data.jobTitle;
-        
-        if (!fetchedJobTitle) {
-          console.error("Error: User name is missing.");
-          return;
-        }
-        setJobTitle(fetchedJobTitle);
-
         if (!fetchedUserName) {
           console.error("Error: User name is missing.");
           return;
         }
+        setUserName(fetchedUserName); 
 
-        setUserName(fetchedUserName); // Set user name in state
+        const fetchedJobTitle = userResponse.data.jobTitle;
+        console.log(fetchedJobTitle);
+        
+        if (!fetchedJobTitle) {
+          console.error("Error: Job Title is missing.");
+          return;
+        }
+        setJobTitle(fetchedJobTitle);
+
+        
       } catch (error) {
         console.error("Error fetching user data:", error);
       }

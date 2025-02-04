@@ -17,7 +17,7 @@ const Navbar = () => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser).id : null;
   });
-
+const [userName, setUserName] = useState(""); 
 
   useEffect(() => {
     if (!userId) return;
@@ -78,6 +78,43 @@ const Navbar = () => {
       toast.error("Failed to mark messages as read.");
     }
   };
+
+
+  const token = localStorage.getItem("authToken");
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!token) {
+        setError("No authentication token found. Please log in.");
+        return;
+      }
+
+      try {
+        // Fetch user data using the token
+        const userResponse = await axios.get(
+          "http://localhost:5000/get-user-data",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(userResponse);
+
+        const fetchedUserName = userResponse.data.name;
+        console.log(fetchedUserName);
+
+        if (!fetchedUserName) {
+          console.error("Error: User name is missing.");
+          return;
+        }
+        setUserName(fetchedUserName); 
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [token]);
 
   return (
     <nav className="bg-white shadow h-20 px-10 flex justify-between items-center">
@@ -214,7 +251,7 @@ const Navbar = () => {
           </button>
           {isProfileDropdownOpen && (
             <div className="absolute right-0 mt-2 w-60 bg-white shadow-lg rounded-lg p-4 z-50">
-              <p className="text-lg font-semibold text-center">DINESH LWDA</p>
+              <p className="text-lg font-semibold text-center">{userName || "User not found"}</p>
               <button
                 onClick={handleLogout}
                 className="mt-4 w-full bg-red-500 text-white px-4 py-2 rounded"
