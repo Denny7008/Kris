@@ -1,93 +1,74 @@
-import cloudinary from '../config/cloudinaryConfig.js';
-import multer from 'multer';
-import { v4 as uuidv4 } from 'uuid';
+import multer from "multer";
+import fs from "fs";
+import User from "../models/User.js"; // Adjust path as needed
+import mongoose from "mongoose";
 
-// Configure Multer to store files in memory
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+// Set up multer for storing files temporarily
+const upload = multer({ dest: "uploads/" });
 
-// Middleware to handle single file upload
-export const uploadMiddleware = upload.single('file');
-
-// Controller for handling image upload
-// export const uploadProfilePicture = async (req, res) => {
-//   try {
-//     if (!req.file) {
-//       return res.status(400).json({ message: 'No file uploaded' });
-//     }
-
-//     // Upload file buffer to Cloudinary
-//     const result = await new Promise((resolve, reject) => {
-//       const uploadStream = cloudinary.uploader.upload_stream(
-//         { resource_type: 'auto', public_id: uuidv4() },
-//         (error, result) => (error ? reject(error) : resolve(result))
-//       );
-//       uploadStream.end(req.file.buffer);
-//     });
-
-//     // Send response with uploaded image URL
-//     res.status(200).json({ message: 'Profile picture uploaded successfully', imageUrl: result.secure_url });
-//   } catch (error) {
-//     console.error('Cloudinary upload error:', error);
-//     res.status(500).json({ message: 'Error uploading to Cloudinary', error: error.message });
-//   }
-// };
-
-
-// export const uploadProfilePicture = async (req, res) => {
-//   try {
-//     if (!req.file) {
-//       return res.status(400).json({ message: 'No file uploaded' });
-//     }
-
-//     // Upload file buffer to Cloudinary
-//     const result = await new Promise((resolve, reject) => {
-//       const uploadStream = cloudinary.uploader.upload_stream(
-//         { resource_type: 'auto', public_id: uuidv4() },
-//         (error, result) => (error ? reject(error) : resolve(result))
-//       );
-//       uploadStream.end(req.file.buffer);
-//     });
-
-//     // Send response with uploaded image URL
-//     res.status(200).json({ message: 'Profile picture uploaded successfully', imageUrl: result.secure_url });
-//   } catch (error) {
-//     console.error('Cloudinary upload error:', error);
-//     res.status(500).json({ message: 'Error uploading to Cloudinary', error: error.message });
-//   }
-// };
-
-
-export const uploadProfilePicture = async (req, res) => {
+export const uploadProfileImage = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded' });
+    const { userId } = req.params;
+
+    // Validate ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid userId." });
     }
 
-    // Upload file buffer to Cloudinary
-    const result = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        { resource_type: 'auto', public_id: uuidv4() },
-        (error, result) => (error ? reject(error) : resolve(result))
-      );
-      uploadStream.end(req.file.buffer);
-    });
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded." });
+    }
 
-    // Find the user and update the profile picture URL
-    const userId = req.user._id;  // Assuming userId is available from JWT token
+    // Read the image file and convert it to a buffer
+    const imageData = fs.readFileSync(req.file.path);
+    const contentType = req.file.mimetype; // Get file type (image/png, image/jpeg, etc.)
+
+    // Update the user's profile with the new image
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { profilePic: result.secure_url },  // Save the image URL in the profilePic field
+      { profilePic: { data: imageData, contentType } },
       { new: true }
     );
 
-    res.status(200).json({
-      message: 'Profile picture uploaded successfully',
-      imageUrl: result.secure_url,
-      profilePic: updatedUser.profilePic, // Return the updated profilePic URL
+    // Delete the temp file after storing in MongoDB
+    fs.unlinkSync(req.file.path);
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json({ message: "Image uploaded successfully." });
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+
+// to get the user profile image
+
+export const getProfileImage = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Validate ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid userId." });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user || !user.profilePic || !user.profilePic.data) {
+      return res.status(404).json({ message: "Image not found." });
+    }
+
+    // Convert Buffer to Base64
+    const base64Image = user.profilePic.data.toString("base64");
+
+    res.json({
+      imageUrl: `data:${user.profilePic.contentType};base64,${base64Image}`,
     });
   } catch (error) {
-    console.error('Cloudinary upload error:', error);
-    res.status(500).json({ message: 'Error uploading to Cloudinary', error: error.message });
+    console.error("Error retrieving image:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
   }
 };

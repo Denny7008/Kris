@@ -255,6 +255,37 @@ export const editProfile = async (req, res) => {
 };
 
 
+// updation for profile pic
+
+export const edittProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; // Extract user ID from JWT token
+    console.log("Received userId from token:", userId);
+
+    const updateData = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedUser) {
+      console.log("User not found in the database.");
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json({
+      message: "Profile updated successfully.",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error in editProfile controller:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+
+
+
 
 
 

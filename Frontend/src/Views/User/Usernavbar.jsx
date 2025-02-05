@@ -39,7 +39,7 @@ const [userName, setUserName] = useState("");
         setMessages(messagesRes.data.notifications || []);
       } catch (error) {
         console.error("Error fetching data:", error);
-        toast.error("An error occurred while fetching data.");
+        //toast.error("An error occurred while fetching data.");
       }
     };
 
@@ -66,7 +66,8 @@ const [userName, setUserName] = useState("");
         prev.map((notif) => ({ ...notif, isRead: true }))
       );
     } catch (error) {
-      toast.error("Failed to mark notifications as read.");
+      //toast.error("Failed to mark notifications as read.");
+      console.log(error);
     }
   };
 

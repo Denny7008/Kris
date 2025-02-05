@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { registerUser, loginUser, editProfile, getAllUsers, getUser, userProfile, logoutUser, bulkRegisterUsers } from '../controllers/userController.js';
+import { registerUser, loginUser, editProfile, getAllUsers, getUser, userProfile, logoutUser, bulkRegisterUsers, } from '../controllers/userController.js';
 import { getAllLeaveApplications, createLeaveApplication, updateLeaveApplicationStatus, getLeaveHistory, updateLeaveStatus, getApprovedLeaveApplications} from '../controllers/leaveController.js';
 import { body } from 'express-validator'; // For input validation
 import { loginAdmin, registerAdmin } from '../controllers/adminController.js';
@@ -14,10 +14,13 @@ import {
   markMessageAsRead,
   deleteMessageNotification,
 } from "../controllers/MessageContoller.js";
-import { uploadMiddleware, uploadProfilePicture } from '../controllers/uploadController.js';
+import {  getProfileImage, uploadProfileImage, } from '../controllers/uploadController.js';
+import upload from "../middleware/uploadMiddleware.js";
 
 const router = express.Router();
 
+//const storage = multer.memoryStorage();
+//const upload = multer({ storage });
 
 // ADMIN ROUTES
 router.post('/user/register',[
@@ -30,6 +33,7 @@ router.post('/user/bulk-register',[
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
     ],
   bulkRegisterUsers); // Register User 
+  
 router.post("/admin/register", registerAdmin);
 router.post("/admin/login", loginAdmin);
 
@@ -38,9 +42,15 @@ router.post("/admin/login", loginAdmin);
 router.post('/user/login', loginUser);      // User Login
 router.post('/user/logout', logoutUser);      // User Logout
 router.get("/users", getAllUsers);         // Get all users
+
 router.put("/users/:userId", editProfile);   // Update user profile by userId
 router.get("/users/:id", getUser);   // Get the user by id
 router.get("/users/user-profile", userProfile);   // Get user profile 
+
+
+// Define routes
+router.post("/upload-profile/:userId", authenticateToken, upload.single('file'), uploadProfileImage);
+router.get("/profile-image/:userId", getProfileImage);
 
 
 
@@ -119,8 +129,8 @@ router.delete("/messages/:messageId", deleteMessageNotification);
 
 // Cloudinary 
 // Multer configuration to handle incoming file data
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
-router.post('/upload-profile', uploadMiddleware, uploadProfilePicture);// Define the route for image upload
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage });
+// router.post('/upload-profile', uploadMiddleware, uploadProfilePicture);// Define the route for image upload
 
 export default router;

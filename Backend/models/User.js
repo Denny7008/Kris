@@ -61,8 +61,9 @@ const UserSchema = new mongoose.Schema({
     default: "Full-time" // Define job categories
   },
   profilePic: {
-    type: String,
-    default: "https://via.placeholder.com/100", // Default profile image
+    data: Buffer,
+    contentType: String,
+  // Default profile image
   },
 
 }, { timestamps: true });

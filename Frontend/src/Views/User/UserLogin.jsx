@@ -10,22 +10,6 @@ const UserLogin = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.post("http://localhost:5000/user/login", {
-  //       email,
-  //       password,
-  //     });
-  //     console.log("Login successful:", response.data);
-  //     navigate("/userlogin/dashboard", { replace: true });
-  //   } catch (error) {
-  //     console.error("Login error:", error.response?.data || error.message);
-  //     setError(
-  //       error.response?.data?.message || "An error occurred during login."
-  //     );
-  //   }
-  // };
 
 
   const handleLogin = async (e) => {
@@ -44,6 +28,9 @@ const UserLogin = () => {
       // Optionally, you could also store user data if needed
       localStorage.setItem('user', JSON.stringify(response.data.user));
   
+       // ✅ Store user ID separately for easy access in other components
+      localStorage.setItem("userId", response.data.user.id);
+
       // Redirect the user to the dashboard
       navigate("/userlogin/dashboard", { replace: true });
     } catch (error) {
