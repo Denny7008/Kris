@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import logo from "../../assets/kris logo 3.png";
 import HRlogo from "../../assets/hr.jpg";
 import Profile from "../../assets/profile.jpg";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
@@ -18,6 +19,10 @@ const Navbar = () => {
     return storedUser ? JSON.parse(storedUser).id : null;
   });
 const [userName, setUserName] = useState(""); 
+const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg");
+
+
+
 
   useEffect(() => {
     if (!userId) return;
@@ -81,8 +86,21 @@ const [userName, setUserName] = useState("");
   };
 
 
+  const fetchProfileImage = async () => {
+    if (!userId) return;
+
+    try {
+      const response = await axios.get(`http://localhost:5000/profile-image/${userId}`);
+      setProfilePic(response.data.imageUrl); // Set the Base64 image
+    } catch (error) {
+      console.error("Error fetching profile image:", error.response?.data || error.message);
+    }
+  };
+
+
   const token = localStorage.getItem("authToken");
   useEffect(() => {
+    
     const fetchUserData = async () => {
       if (!token) {
         setError("No authentication token found. Please log in.");
@@ -99,6 +117,7 @@ const [userName, setUserName] = useState("");
             },
           }
         );
+        fetchProfileImage();
         console.log(userResponse);
 
         const fetchedUserName = userResponse.data.name;
@@ -117,6 +136,8 @@ const [userName, setUserName] = useState("");
     fetchUserData();
   }, [token]);
 
+ 
+
   return (
     <nav className="bg-white shadow h-20 px-10 flex justify-between items-center">
       <div className="flex items-center">
@@ -126,11 +147,11 @@ const [userName, setUserName] = useState("");
       </div>
 
       <div className="flex space-x-8 text-gray-700 text-lg items-center">
-        <a href="#" className="hover:text-blue-500">Dashboard</a>
-        <a href="#" className="hover:text-blue-500">Requests</a>
-        <a href="#" className="hover:text-blue-500">Payroll</a>
-        <a href="#" className="hover:text-blue-500">Company</a>
-        <a href="#" className="hover:text-blue-500">Extras</a>
+        <Link to="/userlogin/dashboard/userpanel" className="hover:text-blue-500">Dashboard</Link>
+        <Link to="#" className="hover:text-blue-500">Requests</Link>
+        <Link to="#" className="hover:text-blue-500">Payroll</Link>
+        <Link to="#" className="hover:text-blue-500">Company</Link>
+        <Link to="#" className="hover:text-blue-500">Extras</Link>
       </div>
 
       <div className="flex items-center space-x-6">
@@ -247,7 +268,7 @@ const [userName, setUserName] = useState("");
         <div className="relative">
           <button onClick={() => setProfileDropdownOpen(!isProfileDropdownOpen)}>
             <div className="h-12 w-12 rounded-full bg-red-600 overflow-hidden">
-            <img className="" src={Profile} alt="" />
+            <img className="rounded-full h-full w-full object-cover" src={profilePic} alt="" />
             </div>
           </button>
           {isProfileDropdownOpen && (
