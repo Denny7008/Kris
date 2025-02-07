@@ -69,6 +69,11 @@ const UserSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 
+UserSchema.pre("save", function (next) {
+  this.userName = `${this.firstName} ${this.lastName}`;
+  next();
+});
+
 // Method to compare passwords
 UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);

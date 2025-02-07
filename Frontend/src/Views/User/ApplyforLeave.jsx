@@ -140,6 +140,11 @@ const LeaveDashboard = () => {
     }
   };
 
+
+  
+
+
+
   return (
     <div className="bg-[#E3EDF9] py-4">
       <div className="p-4 ml-6 mr-6 bg-white text-2xl hover:text-blue-500">
@@ -222,8 +227,8 @@ const LeaveDashboard = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="rounded-lg shadow-lg  h-[90%] w-[40%] overflow-y-auto relative scrollbar-hidden">
             <div className="bg-[#E3EDF9]">
-              <div className="min-h-screen  bg-[#E3EDF9] flex items-center justify-center">
-                <div className="bg-white shadow-lg rounded-lg p-8 w-[50vw]">
+              <div className="min-h-screen  bg-white flex items-center justify-center">
+                <div className="bg-white rounded-lg p-8 w-[50vw]">
                   <h1 className="text-2xl font-bold text-gray-800 mb-4 flex items-center justify-center">
                     <span className="material-icons mr-2">book</span>
                     Leave Application
@@ -232,12 +237,12 @@ const LeaveDashboard = () => {
                     Fill the required fields below to apply for {modalData.type}
                     .
                   </p>
-                  <button
+                  <div
                     onClick={closeModal}
-                    className="absolute top-10 text-5xl right-10 text-black hover:text-red-500 p-2 rounded-lg hover:bg-red-100 transition-all ease-in-out"
+                    className="absolute top-10 text-5xl right-10 text-black hover:text-red-500 p-2 rounded-full hover:bg-red-100 transition-all ease-in-out"
                   >
                     &times;
-                  </button>
+                  </div>
 
                   <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                     <div>

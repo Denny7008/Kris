@@ -64,23 +64,65 @@ export const getUserMessageNotifications = async (req, res) => {
   };
 
 // 📌 Mark Message as Read
-export const markMessageAsRead = async (req, res) => {
-  try {
-    const { messageId } = req.params;
-    const message = await Message.findById(messageId);
+// export const markMessageAsRead = async (req, res) => {
+//   try {
+//     const { messageId } = req.params;
+//     const message = await Message.findById(messageId);
 
-    if (!message) {
-      return res.status(404).json({ error: "Message not found" });
+//     if (!message) {
+//       return res.status(404).json({ error: "Message not found" });
+//     }
+
+//     message.isRead = true;
+//     await message.save();
+
+//     res.status(200).json({ success: true, message: "Message marked as read", notification: message });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
+// export const markMessagesAsRead = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+
+//     // Mark all messages for the user as read
+//     await Message.updateMany({ userId }, { isRead: true });
+
+//     res.status(200).json({ success: true, message: "All messages marked as read" });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
+
+export const markMessagesAsRead = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Ensure only unread messages are marked as read
+    const updatedMessages = await Message.updateMany(
+      { userId, isRead: false }, // Only target unread messages
+      { $set: { isRead: true } }
+    );
+
+    if (updatedMessages.nModified === 0) {
+      return res.status(200).json({ success: false, message: "No unread messages to mark as read" });
     }
 
-    message.isRead = true;
-    await message.save();
-
-    res.status(200).json({ success: true, message: "Message marked as read", notification: message });
+    // Optional: Return the updated messages or the count of modified documents
+    res.status(200).json({
+      success: true,
+      message: "All unread messages marked as read",
+      updatedCount: updatedMessages.nModified, // Returns how many documents were updated
+    });
   } catch (error) {
+    console.error("Error marking messages as read:", error);
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 // 📌 DELETE a Message Notification
 export const deleteMessageNotification = async (req, res) => {

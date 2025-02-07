@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
 import rec1 from "../../../assets/Rectangle 34.png";
 import rec2 from "../../../assets/Rectangle 36.png";
 import rec3 from "../../../assets/Rectangle 38.png";
@@ -7,6 +8,21 @@ import gina from "../../../assets/Ellipse 13.png";
 import loe from "../../../assets/Ellipse 14.png";
 
 const JobPanels = () => {
+
+  const [employeeCount, setEmployeeCount] = useState(0);
+
+  useEffect(() => {
+    // Fetch employee count from the API
+    axios.get('http://localhost:5000/users/employee-count')
+      .then(response => {
+        setEmployeeCount(response.data.employeesCount);
+      })
+      .catch(error => {
+        console.error("There was an error fetching the employee count!", error);
+      });
+  }, []); // Empty dependency array to run the effect once when the component mounts
+
+
 
 
       const jobs = [
@@ -111,7 +127,7 @@ const JobPanels = () => {
           <div className="bg-yellow-600 flex items-center justify-between text-white w-36 p-4 rounded-lg">
             <span className="material-icons text-4xl">person</span>
             <div>
-              <p className="text-2xl font-bold">200</p>
+              <p className="text-2xl font-bold">{employeeCount}</p>
               <p className="text-sm">Employees</p>
             </div>
           </div> 

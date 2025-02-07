@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { registerUser, loginUser, editProfile, getAllUsers, getUser, userProfile, logoutUser, bulkRegisterUsers, } from '../controllers/userController.js';
+import { registerUser, loginUser, editProfile, getAllUsers, getUser, userProfile, logoutUser, bulkRegisterUsers, getAllUsersWithoutProfilePic, noOfEmployees, } from '../controllers/userController.js';
 import { getAllLeaveApplications, createLeaveApplication, updateLeaveApplicationStatus, getLeaveHistory, updateLeaveStatus, getApprovedLeaveApplications} from '../controllers/leaveController.js';
 import { body } from 'express-validator'; // For input validation
 import { loginAdmin, registerAdmin } from '../controllers/adminController.js';
@@ -11,11 +11,13 @@ import { createNotification, getUnreadNotifications, markNotificationsAsRead } f
 import {
   createMessageNotification,
   getUserMessageNotifications,
-  markMessageAsRead,
+  // markMessageAsRead,
   deleteMessageNotification,
+  markMessagesAsRead,
 } from "../controllers/MessageContoller.js";
 import {  getProfileImage, uploadProfileImage, } from '../controllers/uploadController.js';
 import upload from "../middleware/uploadMiddleware.js";
+import { createKPI, deleteKPI, getKPIsByUser, updateKPI } from '../controllers/kpiController.js';
 
 const router = express.Router();
 
@@ -42,6 +44,8 @@ router.post("/admin/login", loginAdmin);
 router.post('/user/login', loginUser);      // User Login
 router.post('/user/logout', logoutUser);      // User Logout
 router.get("/users", getAllUsers);         // Get all users
+router.get("/users/get-allusers", getAllUsersWithoutProfilePic);
+router.get("/users/employee-count", noOfEmployees); // Get number of employees
 
 router.put("/users/:userId", editProfile);   // Update user profile by userId
 router.get("/users/:id", getUser);   // Get the user by id
@@ -114,7 +118,7 @@ router.post("/messages", createMessageNotification);
 router.get("/messages/:userId", getUserMessageNotifications);
 
 // 📌 Mark a specific message as read
-router.put("/messages/read/:messageId", markMessageAsRead);
+router.put("/messages/read/:messageId", markMessagesAsRead);
 
 // 📌 Delete a specific message notification (fixed route path)
 router.delete("/messages/:messageId", deleteMessageNotification);
@@ -125,12 +129,12 @@ router.delete("/messages/:messageId", deleteMessageNotification);
 
 
 
+// KPI ROUTES
 
 
-// Cloudinary 
-// Multer configuration to handle incoming file data
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage });
-// router.post('/upload-profile', uploadMiddleware, uploadProfilePicture);// Define the route for image upload
+router.post("/kpi/create", createKPI); // Route to create a KPI
+router.get("/kpi/user/:userId", getKPIsByUser);  // Route to get all KPIs for a user
+router.put("/kpi/update/:kpiId", updateKPI);  // Route to update a KPI
+router.delete("/kpi/delete/:kpiId", deleteKPI);  // Route to delete a KPI
 
 export default router;

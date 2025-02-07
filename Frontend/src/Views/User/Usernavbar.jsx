@@ -136,6 +136,23 @@ const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system
     fetchUserData();
   }, [token]);
 
+
+  useEffect(() => {
+    if (!userId) return;
+  
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/messages/${userId}`);
+        setMessages(response.data.notifications || []);
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    };
+  
+    fetchMessages();
+  }, [userId]); // Make sure this effect runs when the userId changes (e.g., on login)
+  
+
  
 
   return (
@@ -215,7 +232,7 @@ const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system
         </div>
 
         {/* Messages */}
-        <div className="relative">
+       {/*<div className="relative">
           <button onClick={() => setMailDropdownOpen(!isMailDropdownOpen)}>
             <span className="material-icons text-green-500 text-3xl">mail</span>
             {Array.isArray(messages) && messages.some((msg) => !msg.isRead) && (
@@ -262,7 +279,60 @@ const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system
               </ul>
             </div>
           )}
-        </div>
+        </div>*/}
+
+        {/* Messages */}
+        
+<div className="relative">
+  <button onClick={() => setMailDropdownOpen(!isMailDropdownOpen)}>
+    <span className="material-icons text-green-500 text-3xl">mail</span>
+    {Array.isArray(messages) && messages.some((msg) => !msg.isRead) && (
+      <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full px-1">
+        {messages.filter((msg) => !msg.isRead).length}
+      </span>
+    )}
+  </button>
+
+  {isMailDropdownOpen && (
+    <div className="absolute right-0 mt-2 w-80 bg-white shadow-lg rounded-lg p-4 z-50">
+      <div className="flex justify-between items-center border-b pb-2">
+        <h3 className="text-lg font-semibold">Messages</h3>
+        <button
+          onClick={markMessagesAsRead}
+          className="text-blue-500 text-sm"
+        >
+          Mark all as read
+        </button>
+      </div>
+      <ul className="max-h-72 overflow-y-auto">
+        {Array.isArray(messages) && messages.length > 0 ? (
+          messages.some((msg) => !msg.isRead) ? (
+            messages.map((msg) => (
+              <li key={msg._id} className="py-3 border-b last:border-none">
+                <p
+                  className={`text-sm ${
+                    msg.isRead ? "text-gray-400" : "text-black font-medium"
+                  }`}
+                >
+                  {msg.message}
+                </p>
+              </li>
+            ))
+          ) : (
+            <p className="text-sm text-gray-500 py-4 text-center">
+              No new messages
+            </p>
+          )
+        ) : (
+          <p className="text-sm text-gray-500 py-4 text-center">
+            No new messages
+          </p>
+        )}
+      </ul>
+    </div>
+  )}
+</div>
+
 
         {/* Profile Dropdown */}
         <div className="relative">
