@@ -14,16 +14,22 @@ const TargetSetup = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [userList, setUserList] = useState([]); // List of all users
   const [filteredUsers, setFilteredUsers] = useState([]); // Filtered employees for dropdown
+  const [showDropdown, setShowDropdown] = useState(false);
 
   // Fetch employees from the backend
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/users/get-allusers"); // Replace with your backend endpoint
+        const response = await axios.get(
+          "http://localhost:5000/users/get-allusers"
+        ); // Replace with your backend endpoint
         setUserList(response.data);
         console.log(response.data);
       } catch (error) {
-        console.error("Error fetching Users:", error.response?.data || error.message);
+        console.error(
+          "Error fetching Users:",
+          error.response?.data || error.message
+        );
         console.log(error);
       }
     };
@@ -40,19 +46,21 @@ const TargetSetup = () => {
     // Filter users based on input
     if (name === "users") {
       const filtered = userList.filter((user) =>
-        `${user.firstName} ${user.lastName}`.toLowerCase().includes(value.toLowerCase())
+        `${user.firstName} ${user.lastName}`
+          .toLowerCase()
+          .includes(value.toLowerCase())
       );
       setFilteredUsers(filtered);
     }
   };
-
 
   // Validate form
   const validateForm = () => {
     const newErrors = {};
     if (!formData.title) newErrors.title = "Title is required.";
     if (!formData.kpiWeight) newErrors.kpiWeight = "KPI weight is required.";
-    if (!formData.description) newErrors.description = "Description is required.";
+    if (!formData.description)
+      newErrors.description = "Description is required.";
     if (!formData.employees) newErrors.employees = "Employees are required.";
     if (!formData.startDate) newErrors.startDate = "Start date is required.";
     if (!formData.endDate) newErrors.endDate = "End date is required.";
@@ -69,7 +77,10 @@ const TargetSetup = () => {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post("http://localhost:5000/kpi/create", formData); // Replace with your backend endpoint
+      const response = await axios.post(
+        "http://localhost:5000/kpi/create",
+        formData
+      ); // Replace with your backend endpoint
       setSuccessMessage("Target created successfully!");
       setFormData({
         title: "",
@@ -79,9 +90,12 @@ const TargetSetup = () => {
         startDate: "",
         endDate: "",
       }); // Reset form
-      console.log("KPI CREATED SUCCESSFULLY",response);
+      console.log("KPI CREATED SUCCESSFULLY", response);
     } catch (error) {
-      console.error("Error creating target:", error.response?.data || error.message);
+      console.error(
+        "Error creating target:",
+        error.response?.data || error.message
+      );
       console.log(error.response);
       setSuccessMessage("Failed to create target. Please try again.");
     }
@@ -106,7 +120,9 @@ const TargetSetup = () => {
       <form className="grid grid-cols-2 gap-6" onSubmit={handleSubmit}>
         {/* Title */}
         <div>
-          <label className="block text-gray-700 text-sm font-medium mb-2">Title</label>
+          <label className="block text-gray-700 text-sm font-medium mb-2">
+            Title
+          </label>
           <input
             type="text"
             name="title"
@@ -115,12 +131,16 @@ const TargetSetup = () => {
             placeholder="Enter title"
             className="w-full p-3 border border-gray-300 rounded-lg bg-[#F8FAFC] focus:outline-none"
           />
-          {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
+          {errors.title && (
+            <p className="text-red-500 text-sm">{errors.title}</p>
+          )}
         </div>
 
         {/* KPI Weight */}
         <div>
-          <label className="block text-gray-700 text-sm font-medium mb-2">KPI Weight</label>
+          <label className="block text-gray-700 text-sm font-medium mb-2">
+            KPI Weight
+          </label>
           <select
             name="kpiWeight"
             value={formData.kpiWeight}
@@ -132,12 +152,16 @@ const TargetSetup = () => {
             <option value="20">20%</option>
             <option value="30">30%</option>
           </select>
-          {errors.kpiWeight && <p className="text-red-500 text-sm">{errors.kpiWeight}</p>}
+          {errors.kpiWeight && (
+            <p className="text-red-500 text-sm">{errors.kpiWeight}</p>
+          )}
         </div>
 
         {/* Description */}
         <div className="col-span-2">
-          <label className="block text-gray-700 text-sm font-medium mb-2">Description</label>
+          <label className="block text-gray-700 text-sm font-medium mb-2">
+            Description
+          </label>
           <textarea
             name="description"
             value={formData.description}
@@ -146,35 +170,30 @@ const TargetSetup = () => {
             rows={3}
             className="w-full p-3 border border-gray-300 rounded-lg bg-[#F8FAFC] focus:outline-none"
           ></textarea>
-          {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
+          {errors.description && (
+            <p className="text-red-500 text-sm">{errors.description}</p>
+          )}
         </div>
 
         {/* Employees */}
         <div className="relative">
-          <label className="block text-gray-700 text-sm font-medium mb-2">Employees</label>
           <input
             type="text"
             name="employees"
             value={formData.employees}
             onChange={handleChange}
-            placeholder="Enter employee names"
+            placeholder="Search employee..."
             className="w-full p-3 border border-gray-300 rounded-lg bg-[#F8FAFC] focus:outline-none"
           />
-          {errors.users && <p className="text-red-500 text-sm">{errors.users}</p>}
-
-          {/* Filtered Employee List */}
-          {filteredUsers.length > 0 && (
-            <div className="absolute bg-white border border-gray-300 rounded-lg mt-1 z-10 max-h-40 overflow-y-auto w-full">
+          {errors.employees && (
+            <p className="text-red-500 text-sm">{errors.employees}</p>
+          )}
+          {showDropdown && filteredUsers.length > 0 && (
+            <div className="absolute left-0 w-full bg-white border border-gray-300 rounded-lg mt-1 z-10 max-h-40 overflow-y-auto shadow-lg">
               {filteredUsers.map((user) => (
                 <div
                   key={user._id}
-                  onClick={() => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      users: `${user.firstName} ${user.lastName}`,
-                    }));
-                    setFilteredUsers([]); // Clear dropdown after selection
-                  }}
+                  onClick={() => handleSelectUser(user)}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                 >
                   {user.firstName} {user.lastName}
@@ -186,7 +205,9 @@ const TargetSetup = () => {
 
         {/* Start Date */}
         <div>
-          <label className="block text-gray-700 text-sm font-medium mb-2">Start Date</label>
+          <label className="block text-gray-700 text-sm font-medium mb-2">
+            Start Date
+          </label>
           <input
             type="date"
             name="startDate"
@@ -194,12 +215,16 @@ const TargetSetup = () => {
             onChange={handleChange}
             className="w-full p-3 border border-gray-300 rounded-lg bg-[#F8FAFC] focus:outline-none"
           />
-          {errors.startDate && <p className="text-red-500 text-sm">{errors.startDate}</p>}
+          {errors.startDate && (
+            <p className="text-red-500 text-sm">{errors.startDate}</p>
+          )}
         </div>
 
         {/* End Date */}
         <div>
-          <label className="block text-gray-700 text-sm font-medium mb-2">End Date</label>
+          <label className="block text-gray-700 text-sm font-medium mb-2">
+            End Date
+          </label>
           <input
             type="date"
             name="endDate"
@@ -207,7 +232,9 @@ const TargetSetup = () => {
             onChange={handleChange}
             className="w-full p-3 border border-gray-300 rounded-lg bg-[#F8FAFC] focus:outline-none"
           />
-          {errors.endDate && <p className="text-red-500 text-sm">{errors.endDate}</p>}
+          {errors.endDate && (
+            <p className="text-red-500 text-sm">{errors.endDate}</p>
+          )}
         </div>
 
         {/* Buttons */}
@@ -229,13 +256,14 @@ const TargetSetup = () => {
       </form>
 
       {/* Success Message */}
-      {successMessage && <p className="mt-4 text-green-600">{successMessage}</p>}
+      {successMessage && (
+        <p className="mt-4 text-green-600">{successMessage}</p>
+      )}
     </div>
   );
 };
 
 export default TargetSetup;
-
 
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";
@@ -474,6 +502,7 @@ export default TargetSetup;
 // };
 
 // export default TargetSetup;
+
 
 
 

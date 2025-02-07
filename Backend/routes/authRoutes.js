@@ -17,7 +17,7 @@ import {
 } from "../controllers/MessageContoller.js";
 import {  getProfileImage, uploadProfileImage, } from '../controllers/uploadController.js';
 import upload from "../middleware/uploadMiddleware.js";
-import { createKPI, deleteKPI, getKPIsByUser, updateKPI } from '../controllers/kpiController.js';
+import { createKPI, deleteKPI, getAllKPIs, updateKPI } from '../controllers/kpiController.js';
 
 const router = express.Router();
 
@@ -133,7 +133,8 @@ router.delete("/messages/:messageId", deleteMessageNotification);
 
 
 router.post("/kpi/create", createKPI); // Route to create a KPI
-router.get("/kpi/user/:userId", getKPIsByUser);  // Route to get all KPIs for a user
+router.get("/kpi/user", getAllKPIs);  // Route to get all KPIs for a user
+
 router.put("/kpi/update/:kpiId", updateKPI);  // Route to update a KPI
 router.delete("/kpi/delete/:kpiId", deleteKPI);  // Route to delete a KPI
 

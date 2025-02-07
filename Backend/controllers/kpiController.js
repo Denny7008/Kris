@@ -32,16 +32,20 @@ export const createKPI = async (req, res) => {
 
 
 // Get all KPIs for a specific user
-export const getKPIsByUser = async (req, res) => {
-  const { userId } = req.params;
-
+export const getAllKPIs = async (req, res) => {
   try {
-    const kpis = await KPI.find({ user: userId });
-    res.status(200).json(kpis);
+    const targets = await KPI.find().populate("user", "firstName lastName"); // Fetch both fields
+
+    console.log("Fetched KPIs:", targets); // Debugging line
+
+    res.status(200).json(targets);
   } catch (error) {
+    console.error("Error fetching KPIs:", error);
     res.status(500).json({ message: "Failed to fetch KPIs", error: error.message });
   }
 };
+
+
 
 // Update a KPI
 export const updateKPI = async (req, res) => {
