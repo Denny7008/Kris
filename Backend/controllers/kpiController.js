@@ -1,16 +1,34 @@
 import KPI from "../models/KPI.js";
 import User from "../models/User.js";
 
-// Create a new KPI
+
+// CREATE KPI
 export const createKPI = async (req, res) => {
+  console.log("Request Body:", req.body); // Log the entire request body
+
   const { userName, title, description, kpiWeight, startDate, endDate, status } = req.body;
 
+
   try {
-    // Find user by name
-    const user = await User.findOne({ name: userName });
+    if (!userName) {
+      return res.status(400).json({ message: "userName is required" });
+    }
+  
+
+    // Split userName into firstName and lastName
+    const [firstName, ...lastNameParts] = userName.split(" ");
+    const lastName = lastNameParts.join(" ");
+
+    console.log("Searching for user:", { firstName, lastName });
+
+    // Find user by firstName and lastName
+    const user = await User.findOne({ firstName, lastName });
     if (!user) {
+      console.log("No user found for:", userName);
       return res.status(404).json({ message: "User not found" });
     }
+
+    console.log("User found:", user);
 
     // Create a new KPI
     const newKPI = new KPI({
@@ -25,10 +43,13 @@ export const createKPI = async (req, res) => {
 
     await newKPI.save();
     res.status(201).json({ message: "KPI created successfully", kpi: newKPI });
+    console.log("KPI saved:", newKPI);
   } catch (error) {
+    console.error("Error creating KPI:", error.message);
     res.status(500).json({ message: "Failed to create KPI", error: error.message });
   }
 };
+
 
 
 // Get all KPIs for a specific user
