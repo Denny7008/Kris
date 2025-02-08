@@ -83,7 +83,7 @@ const LeaveHistory = () => {
   };
 
   return (
-    <div className="flex bg-blue-900 w-[80vw] h-[550px] rounded-lg shadow-xl">
+    <div className="flex bg-blue-900 w-[80vw] rounded-lg shadow-xl">
       <div className="p-8">
         <h2 className="text-2xl font-bold mb-4">Leave History</h2>
 
