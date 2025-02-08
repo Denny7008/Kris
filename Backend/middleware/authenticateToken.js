@@ -24,6 +24,8 @@ const authenticateToken = async (req, res, next) => {
     req.user = user;
 
     next(); // Call the next middleware or route handler
+    console.log("User fetched from DB:", user);
+
   } catch (error) {
     console.error('Token verification error:', error);
     return res.status(403).json({ message: 'Invalid or expired token' });

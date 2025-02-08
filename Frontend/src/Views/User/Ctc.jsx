@@ -179,7 +179,14 @@ const Ctc = () => {
   useEffect(() => {
     const fetchContactDetails = async () => {
       try {
-        const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
+        const token = localStorage.getItem("authToken");
+        console.log("Token before request:", token); // Debugging: Check if token exists
+  
+        if (!token) {
+          setMessage("No token found. Please log in again.");
+          return;
+        }
+  
         const { data } = await axios.get("http://localhost:5000/get-user-data", {
           headers: {
             Authorization: `Bearer ${token}`, // Include token in request
@@ -196,12 +203,13 @@ const Ctc = () => {
         });
       } catch (error) {
         console.error("Error fetching contact details:", error);
-        setMessage("Failed to fetch contact details. Please login again.");
+        setMessage("Failed to fetch contact details. Please log in again.");
       }
     };
   
     fetchContactDetails();
   }, []);
+  
   
 
   // Function to handle input changes
@@ -213,7 +221,30 @@ const Ctc = () => {
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
-      const { data } = await axios.put("http://localhost:5000/users/update-contact", formValues);
+      const token = localStorage.getItem("authToken"); // Retrieve token from localStorage
+      const userId = localStorage.getItem("userId"); // Retrieve user ID stored after login
+  
+      if (!token) {
+        setMessage("Unauthorized: No token found. Please login again.");
+        return;
+      }
+  
+      if (!userId) {
+        setMessage("User ID not found. Please login again.");
+        return;
+      }
+  
+      const { data } = await axios.put(
+        `http://localhost:5000/users/update-contact/${userId}`, // ✅ Ensure correct userId is used
+        formValues,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ Include token for authentication
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
       setMessage("Contact details updated successfully!");
       setIsEditable(false);
     } catch (error) {
@@ -221,6 +252,7 @@ const Ctc = () => {
       setMessage("Failed to update contact details.");
     }
   };
+  
 
   return (
     <div>

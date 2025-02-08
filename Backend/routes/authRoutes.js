@@ -51,7 +51,7 @@ router.put("/users/:userId", editProfile);   // Update user profile by userId
 router.get("/users/:id", getUser);   // Get the user by id
 router.get("/users/user-profile", userProfile);   // Get user profile 
 
-router.put("/users/update-contact", authenticateToken, updateContactDetails);  // Update logged-in user's contact details
+router.put("/users/update-contact/:id", authenticateToken, updateContactDetails);  // Update logged-in user's contact details
 
 
 // Define routes
@@ -90,6 +90,11 @@ router.get('/get-user-data', authenticateToken, async (req, res) => {
       department: user.department,
       category: user.category,
       gender: user.gender,
+      phone: user.phone,
+      phone2: user.phone2,
+      state: user.state,
+      city: user.city,
+      address: user.address,
       // Add other fields as necessary
     };
 

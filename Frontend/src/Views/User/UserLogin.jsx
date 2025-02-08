@@ -23,7 +23,7 @@ const UserLogin = () => {
       console.log("Login successful:", response.data);
   
       // Store the token in localStorage or sessionStorage
-      localStorage.setItem('authToken', response.data.token);  // Or use sessionStorage
+      localStorage.setItem('authToken', response.data.token); // Or use sessionStorage
   
       // Optionally, you could also store user data if needed
       localStorage.setItem('user', JSON.stringify(response.data.user));
