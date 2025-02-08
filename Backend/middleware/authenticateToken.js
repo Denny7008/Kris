@@ -30,6 +30,12 @@ const authenticateToken = async (req, res, next) => {
   }
 };
 
+
+
+
+
+
+
 // Function to get user data from token (can be used in the route handler)
 const getUserDataFromToken = (user) => {
     if (!user) {

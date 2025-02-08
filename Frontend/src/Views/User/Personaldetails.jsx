@@ -15,14 +15,14 @@ const Personaldetails = () => {
   const token = localStorage.getItem("authToken");
   const userId = localStorage.getItem("userId");
 
-  console.log("User ID from Local Storage:", userId);
-  console.log("Auth Token from Local Storage:", token);
+  // console.log("User ID from Local Storage:", userId);
+  // console.log("Auth Token from Local Storage:", token);
 
   
 
   // Handle image selection
   const handleImageChange = async (e) => {
-    console.log("User ID before upload:", userId);
+    // console.log("User ID before upload:", userId);
     
     if (!userId) {
       alert("User ID is missing. Cannot upload image.");

@@ -323,6 +323,36 @@ export const userProfile = async (req, res) => {
 };
 
 
+// UPDATING USER CONTACT DETAILS
+export const updateContactDetails = async (req, res) => {
+  try {
+    const { phone, phone2, email, state, city, address } = req.body;
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.phone = phone || user.phone;
+    user.phone2 = phone2 || user.phone2;
+    user.email = email || user.email;
+    user.state = state || user.state;
+    user.city = city || user.city;
+    user.address = address || user.address;
+
+    await user.save();
+
+    res.json({ message: "Contact details updated successfully", user });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
+  }
+};
+
+
+
+
+
+
 
 
 

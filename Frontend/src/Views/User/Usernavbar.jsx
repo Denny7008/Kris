@@ -31,11 +31,11 @@ const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system
       try {
         const [notificationsRes, messagesRes] = await Promise.all([
           axios.get(`http://localhost:5000/notifications/${userId}`),
-          axios.get(`http://localhost:5000/messages/${userId}`)
+          // axios.get(`http://localhost:5000/messages/${userId}`)
         ]);
 
-        console.log("Notifications API Response:", notificationsRes.data);
-        console.log("Messages API Response:", messagesRes.data);
+        // console.log("Notifications API Response:", notificationsRes.data);
+        // console.log("Messages API Response:", messagesRes.data);
 
         // Fix for notifications API returning an array directly
         setNotifications(Array.isArray(notificationsRes.data) ? notificationsRes.data : []);
@@ -43,7 +43,7 @@ const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system
         // Fix for messages API incorrectly returning `notifications` key
         setMessages(messagesRes.data.notifications || []);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        // console.error("Error fetching data:", error);
         //toast.error("An error occurred while fetching data.");
       }
     };
@@ -72,7 +72,7 @@ const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system
       );
     } catch (error) {
       //toast.error("Failed to mark notifications as read.");
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -118,10 +118,10 @@ const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system
           }
         );
         fetchProfileImage();
-        console.log(userResponse);
+        // console.log(userResponse);
 
         const fetchedUserName = userResponse.data.name;
-        console.log(fetchedUserName);
+        // console.log(fetchedUserName);
 
         if (!fetchedUserName) {
           console.error("Error: User name is missing.");
@@ -129,7 +129,7 @@ const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system
         }
         setUserName(fetchedUserName); 
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        // console.error("Error fetching user data:", error);
       }
     };
 
@@ -145,7 +145,7 @@ const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system
         const response = await axios.get(`http://localhost:5000/messages/${userId}`);
         setMessages(response.data.notifications || []);
       } catch (error) {
-        console.error("Error fetching messages:", error);
+        // console.error("Error fetching messages:", error);
       }
     };
   

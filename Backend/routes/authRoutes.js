@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { registerUser, loginUser, editProfile, getAllUsers, getUser, userProfile, logoutUser, bulkRegisterUsers, getAllUsersWithoutProfilePic, noOfEmployees, } from '../controllers/userController.js';
+import { registerUser, loginUser, editProfile, getAllUsers, getUser, userProfile, logoutUser, bulkRegisterUsers, getAllUsersWithoutProfilePic, noOfEmployees, updateContactDetails, } from '../controllers/userController.js';
 import { getAllLeaveApplications, createLeaveApplication, updateLeaveApplicationStatus, getLeaveHistory, updateLeaveStatus, getApprovedLeaveApplications} from '../controllers/leaveController.js';
 import { body } from 'express-validator'; // For input validation
 import { loginAdmin, registerAdmin } from '../controllers/adminController.js';
@@ -50,6 +50,8 @@ router.get("/users/employee-count", noOfEmployees); // Get number of employees
 router.put("/users/:userId", editProfile);   // Update user profile by userId
 router.get("/users/:id", getUser);   // Get the user by id
 router.get("/users/user-profile", userProfile);   // Get user profile 
+
+router.put("/users/update-contact", authenticateToken, updateContactDetails);  // Update logged-in user's contact details
 
 
 // Define routes
