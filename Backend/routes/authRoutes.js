@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { registerUser, loginUser, editProfile, getAllUsers, getUser, userProfile, logoutUser, bulkRegisterUsers, getAllUsersWithoutProfilePic, noOfEmployees, updateContactDetails, } from '../controllers/userController.js';
+import { registerUser, loginUser, editProfile, getAllUsers, getUser, userProfile, logoutUser, bulkRegisterUsers, getAllUsersWithoutProfilePic, noOfEmployees, updateContactDetails, updateNextOfKin, } from '../controllers/userController.js';
 import { getAllLeaveApplications, createLeaveApplication, updateLeaveApplicationStatus, getLeaveHistory, updateLeaveStatus, getApprovedLeaveApplications} from '../controllers/leaveController.js';
 import { body } from 'express-validator'; // For input validation
 import { loginAdmin, registerAdmin } from '../controllers/adminController.js';
@@ -53,6 +53,8 @@ router.get("/users/user-profile", userProfile);   // Get user profile
 
 router.put("/users/update-contact/:id", authenticateToken, updateContactDetails);  // Update logged-in user's contact details
 
+router.put("/users/update-next-of-kin/:id", authenticateToken,updateNextOfKin);
+
 
 // Define routes
 router.post("/upload-profile/:userId", authenticateToken, upload.single('file'), uploadProfileImage);
@@ -95,6 +97,16 @@ router.get('/get-user-data', authenticateToken, async (req, res) => {
       state: user.state,
       city: user.city,
       address: user.address,
+      nextDetails: user.nextDetails
+        ? {
+            kinName: user.nextDetails.kinName || "",
+            occupation: user.nextDetails.occupation || "",
+            phone: user.nextDetails.phone || "",
+            relationship: user.nextDetails.relationship || "",
+            address: user.nextDetails.address || "",
+          }
+        : null,
+
       // Add other fields as necessary
     };
 

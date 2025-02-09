@@ -350,6 +350,65 @@ export const updateContactDetails = async (req, res) => {
 
 
 
+// UPDATING NEXT TO KIN DETAILS
+
+// export const updateNextOfKin = async (req, res) => {
+//   try {
+//     const { kinName, occupation, phone, relationship, address } = req.body;
+//     const user = await User.findById(req.user._id);
+//     console.log(req.body);
+//     console.log(user);
+
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     user.nextOfKin = {
+//       kinName: kinName || user.nextOfKin.kinName,
+//       occupation: occupation || user.nextOfKin.occupation,
+//       phone: phone || user.nextOfKin.phone,
+//       relationship: relationship || user.nextOfKin.relationship,
+//       address: address || user.nextOfKin.address,
+//     };
+
+//     await user.save();
+
+//     res.json({ message: "Next of Kin details updated successfully", nextOfKin: user.nextOfKin });
+//   } catch (error) {
+//     res.status(500).json({ message: "Server Error", error });
+//     cons
+//   }
+// };
+
+
+export const updateNextOfKin = async (req, res) => {
+  try {
+    const { user } = req.user._id;
+    const { nextDetails } = req.body; // Extract nextDetails from request
+
+    if (!nextDetails) {
+      return res.status(400).json({ message: "nextDetails object is required" });
+    }
+
+    // Update the user record
+    const updatedUser = await User.findByIdAndUpdate(
+      user,
+      { nextDetails },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "Next of Kin updated successfully", user: updatedUser });
+  } catch (error) {
+    console.error("Error updating next-of-kin:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
 
 
 

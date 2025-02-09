@@ -76,7 +76,15 @@ const UserSchema = new mongoose.Schema(
     address: {
       type: String,
     },
+    nextDetails: {
+      kinName: { type: String, required: true },
+      occupation: { type: String, required: true },
+      phone: { type: String, required: true },
+      relationship: { type: String, required: true },
+      address: { type: String, required: true },
+    },
   },
+  
   { timestamps: true }
 );
 
