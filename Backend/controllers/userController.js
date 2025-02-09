@@ -350,40 +350,37 @@ export const updateContactDetails = async (req, res) => {
 
 
 
-// UPDATING NEXT TO KIN DETAILS
+// UPDATE GUARANTOR DETAILS
+export const updateGuarantor = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const { guarantorDetails } = req.body; // Extract nextDetails from request
 
-// export const updateNextOfKin = async (req, res) => {
-//   try {
-//     const { kinName, occupation, phone, relationship, address } = req.body;
-//     const user = await User.findById(req.user._id);
-//     console.log(req.body);
-//     console.log(user);
+    if (!guarantorDetails) {
+      return res.status(400).json({ message: "guarantorDetails object is required" });
+    }
 
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
+    // Update the user record
+    const updatedUser = await User.findByIdAndUpdate(
+      user,
+      { guarantorDetails },
+      { new: true, runValidators: true }
+    );
 
-//     user.nextOfKin = {
-//       kinName: kinName || user.nextOfKin.kinName,
-//       occupation: occupation || user.nextOfKin.occupation,
-//       phone: phone || user.nextOfKin.phone,
-//       relationship: relationship || user.nextOfKin.relationship,
-//       address: address || user.nextOfKin.address,
-//     };
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-//     await user.save();
-
-//     res.json({ message: "Next of Kin details updated successfully", nextOfKin: user.nextOfKin });
-//   } catch (error) {
-//     res.status(500).json({ message: "Server Error", error });
-//     cons
-//   }
-// };
-
+    res.status(200).json({ message: "Next of guarantorDetails updated successfully", user: updatedUser });
+  } catch (error) {
+    console.error("Error updating guarantorDetails:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+}; 
 
 export const updateNextOfKin = async (req, res) => {
   try {
-    const { user } = req.user._id;
+    const user = await User.findById(req.user._id);
     const { nextDetails } = req.body; // Extract nextDetails from request
 
     if (!nextDetails) {

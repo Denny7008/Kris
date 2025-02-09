@@ -33,13 +33,13 @@ const NextDetails = () => {
           },
         });
 
-        setFormValues({
-          kinName: data.kinName || "",
-          occupation: data.occupation || "",
-          phone: data.phone || "",
-          relationship: data.relationship || "",
-          address: data.address || "",
-        });
+          setFormValues(data.nextDetails || {
+            kinName: data.kinName || "",
+            occupation: data.occupation || "",
+            phone: data.phone || "",
+            relationship: data.relationship || "",
+            address: data.address || "",
+          });
       } catch (error) {
         console.error("Error fetching next-of-kin details:", error);
         setMessage("Failed to fetch next-of-kin details. Please log in again.");
@@ -48,6 +48,8 @@ const NextDetails = () => {
 
     fetchNextDetails();
   }, []);
+
+  
 
   // Function to handle input changes
   const handleChange = (e) => {

@@ -26,11 +26,17 @@ const UserSchema = new mongoose.Schema(
     phone: {
       type: String,
       required: [true, "Primary phone number is required"],
-      match: [/^[0-9]{10,15}$/, "Please enter a valid phone number with 10-15 digits"],
+      match: [
+        /^[0-9]{10,15}$/,
+        "Please enter a valid phone number with 10-15 digits",
+      ],
     },
     phone2: {
       type: String,
-      match: [/^[0-9]{10,15}$/, "Please enter a valid phone number with 10-15 digits"],
+      match: [
+        /^[0-9]{10,15}$/,
+        "Please enter a valid phone number with 10-15 digits",
+      ],
     },
     password: {
       type: String,
@@ -83,8 +89,20 @@ const UserSchema = new mongoose.Schema(
       relationship: { type: String, required: true },
       address: { type: String, required: true },
     },
+    guarantorDetails: {
+      name: { type: String, required: true },
+      position: { type: String, required: true },
+      phone: {
+        type: String,
+        required: [true, "Primary phone number is required"],
+        match: [
+          /^[0-9]{10,15}$/,
+          "Please enter a valid phone number with 10-15 digits",
+        ],
+      },
+    },
   },
-  
+
   { timestamps: true }
 );
 

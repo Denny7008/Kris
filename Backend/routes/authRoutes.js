@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { registerUser, loginUser, editProfile, getAllUsers, getUser, userProfile, logoutUser, bulkRegisterUsers, getAllUsersWithoutProfilePic, noOfEmployees, updateContactDetails, updateNextOfKin, } from '../controllers/userController.js';
+import { registerUser, loginUser, editProfile, getAllUsers, getUser, userProfile, logoutUser, bulkRegisterUsers, getAllUsersWithoutProfilePic, noOfEmployees, updateContactDetails, updateNextOfKin, updateGuarantor, } from '../controllers/userController.js';
 import { getAllLeaveApplications, createLeaveApplication, updateLeaveApplicationStatus, getLeaveHistory, updateLeaveStatus, getApprovedLeaveApplications} from '../controllers/leaveController.js';
 import { body } from 'express-validator'; // For input validation
 import { loginAdmin, registerAdmin } from '../controllers/adminController.js';
@@ -54,6 +54,7 @@ router.get("/users/user-profile", userProfile);   // Get user profile
 router.put("/users/update-contact/:id", authenticateToken, updateContactDetails);  // Update logged-in user's contact details
 
 router.put("/users/update-next-of-kin/:id", authenticateToken,updateNextOfKin);
+router.put("/users/update-guarantor/:id", authenticateToken,updateGuarantor);
 
 
 // Define routes
@@ -106,6 +107,11 @@ router.get('/get-user-data', authenticateToken, async (req, res) => {
             address: user.nextDetails.address || "",
           }
         : null,
+        guarantorDetails: user.guarantorDetails ? {
+          name: user.guarantorDetails.name || "",
+          position: user.guarantorDetails.position || "",
+          phone: user.guarantorDetails.phone || "",
+        } : null,
 
       // Add other fields as necessary
     };
