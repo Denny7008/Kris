@@ -101,6 +101,21 @@ const UserSchema = new mongoose.Schema(
         ],
       },
     },
+    familyDetails: [
+      {
+        name: { type: String, required: true },
+        relationship: { type: String, required: true },
+        phone: {
+          type: String,
+          required: true,
+          match: [
+            /^[0-9]{10,15}$/,
+            "Please enter a valid phone number with 10-15 digits",
+          ],
+        },
+        address: { type: String, required: true },
+      },
+    ],
   },
 
   { timestamps: true }

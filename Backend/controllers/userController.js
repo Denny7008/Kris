@@ -378,6 +378,7 @@ export const updateGuarantor = async (req, res) => {
   }
 }; 
 
+//UPDATE KIN DETAILS
 export const updateNextOfKin = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
@@ -404,6 +405,64 @@ export const updateNextOfKin = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+// UPDATE FAMILY DETAILS
+export const updateFamilyDetails = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const { familyDetails } = req.body; // Extract familyDetails from request
+
+    if (!Array.isArray(familyDetails) || familyDetails.length === 0) {
+      return res.status(400).json({ message: "familyDetails must be a non-empty array" });
+    }
+
+    // Update the user record with new family details
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id, // Use user._id instead of the whole user object
+      { familyDetails }, // Set new family details
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "Family details updated successfully", user: updatedUser });
+  } catch (error) {
+    console.error("Error updating family details:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const addFamilyMember = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const { name, relationship, phone, address } = req.body;
+
+    if (!name || !relationship || !phone || !address) {
+      return res.status(400).json({ message: "All fields (name, relationship, phone, address) are required" });
+    }
+
+    // Create new family member object
+    const newFamilyMember = { name, relationship, phone, address };
+
+    // Push new family member to the existing array
+    user.familyDetails.push(newFamilyMember);
+
+    // Save the updated user document
+    await user.save();
+
+    res.status(200).json({
+      message: "Family member added successfully",
+      user,
+    });
+  } catch (error) {
+    console.error("Error adding family member:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 
 
