@@ -408,57 +408,62 @@ export const updateNextOfKin = async (req, res) => {
 
 
 // UPDATE FAMILY DETAILS
-// export const updateFamilyDetails = async (req, res) => {
-//   try {
-//     const user = await User.findById(req.user._id);
-//     const { familyDetails } = req.body; // Extract familyDetails from request
-
-//     if (!Array.isArray(familyDetails) || familyDetails.length === 0) {
-//       return res.status(400).json({ message: "familyDetails must be a non-empty array" });
-//     }
-
-//     // Update the user record with new family details
-//     const updatedUser = await User.findByIdAndUpdate(
-//       user._id, // Use user._id instead of the whole user object
-//       { familyDetails }, // Set new family details
-//       { new: true, runValidators: true }
-//     );
-
-//     if (!updatedUser) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     res.status(200).json({ message: "Family details updated successfully", user: updatedUser });
-//   } catch (error) {
-//     console.error("Error updating family details:", error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
-
-
 export const updateFamilyDetails = async (req, res) => {
   try {
-    const { _id, name, relationship, age, occupation } = req.body;
+    const { _id, name, relationship, phone, address } = req.body;
     const user = await User.findById(req.user.id);
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Find the specific family member by ID and update only that entry
-    const index = user.familyDetails.findIndex((member) => member._id.toString() === _id);
+    const index = user.familyDetails.findIndex(
+      (member) => member._id.toString() === _id
+    );
     if (index === -1) return res.status(404).json({ message: "Family member not found" });
 
-    // Update only the specific family member
-    user.familyDetails[index] = { _id, name, relationship, age, occupation };
-    await user.save();
+    // Update only the specific family member (not replacing the whole array)
+    user.familyDetails[index] = { _id, name, relationship, phone, address };
+
+    await user.save(); // Save changes
 
     res.json({
       message: "Family details updated successfully",
-      familyDetails: user.familyDetails,
+      familyDetails: user.familyDetails, // Return updated array
     });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
+
+
+
+// export const updateFamilyDetails = async (req, res) => {
+//   try {
+//     const { _id, name, relationship, phone, address } = req.body;
+//     const user = await User.findById(req.user.id);
+
+//     if (!user) return res.status(404).json({ message: "User not found" });
+
+//     const index = user.familyDetails.findIndex((member) => member._id.toString() === _id);
+//     if (index === -1) return res.status(404).json({ message: "Family member not found" });
+
+//     user.familyDetails[index] = { ...user.familyDetails[index], name, relationship, phone, address };
+
+//     await user.save();
+
+//     // Send updated data to frontend
+//     res.json({
+//       message: "Family details updated successfully",
+//       familyDetails: user.familyDetails, // Send latest array
+//     });
+//   } catch (error) {
+//     res.status(500).json({ message: "Server Error", error: error.message });
+//   }
+// };
+
+
+
+
 
 
 export const addFamilyMember = async (req, res) => {

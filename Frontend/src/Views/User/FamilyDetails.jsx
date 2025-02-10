@@ -37,29 +37,43 @@ const FamilyDetails = () => {
     setCurrentMember((prev) => ({ ...prev, [name]: value }));
   };
 
- 
-
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("authToken");
   
       if (currentMember._id) {
-        // Updating existing entry
-        await axios.put(`http://localhost:5000/users/update/${currentMember._id}`, currentMember, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        // Updating existing family member
+        await axios.put(
+          `http://localhost:5000/users/update/${currentMember._id}`,
+          currentMember,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
   
+        // Update the state directly instead of refetching everything
         setFamily((prevFamily) =>
-          prevFamily.map((member) => (member._id === currentMember._id ? currentMember : member))
+          prevFamily.map((member) =>
+            member._id.toString() === currentMember._id.toString()
+              ? { ...member, ...currentMember }
+              : member
+          )
         );
       } else {
-        // Adding a new entry, ensure it has a unique _id
-        const response = await axios.post(`http://localhost:5000/users/add/${currentMember._id}`, currentMember, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        // Adding a new family member
+        const response = await axios.post(
+          `http://localhost:5000/users/add`,
+          currentMember,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
   
         const newMember = response.data.user.familyDetails.at(-1);
-        setFamily((prevFamily) => [...prevFamily, { ...newMember, _id: newMember._id || Date.now().toString() }]);
+        setFamily((prevFamily) => [
+          ...prevFamily,
+          { ...newMember, _id: newMember._id || Date.now().toString() },
+        ]);
       }
   
       setShowForm(false);
@@ -69,19 +83,21 @@ const FamilyDetails = () => {
     }
   };
   
-
-
+  
+  
   return (
     <div className="flex-1 rounded-lg bg-[#E3EDF9] p-6">
       <div className="max-w-2xl bg-white rounded-lg p-6 space-y-6 shadow-lg">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Family Details</h2>
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          Family Details
+        </h2>
 
         {!showForm ? (
           <>
             <div className="space-y-4">
-              {family.map((member) => (
+              {family.map((member, index) => (
                 <div
-                  key={member._id}
+                  key={member._id ? member._id.toString() : `temp-${index}`} // ✅ Ensure unique keys
                   className="bg-[#F6F9FC] p-4 rounded-lg shadow flex justify-between items-center"
                 >
                   <div>
@@ -118,10 +134,12 @@ const FamilyDetails = () => {
         ) : (
           <div className="bg-[#F6F9FC] p-6 rounded-lg shadow">
             <h3 className="text-lg font-medium mb-4">
-              {currentMember?._id ? "Update Family Member" : "Add Family Member"}
+              {currentMember?._id
+                ? "Update Family Member"
+                : "Add Family Member"}
             </h3>
             <div className="space-y-3">
-              {['name', 'relationship', 'phone', 'address'].map((field) => (
+              {["name", "relationship", "phone", "address"].map((field) => (
                 <div key={field}>
                   <label className="block text-sm font-medium text-gray-700">
                     {field.charAt(0).toUpperCase() + field.slice(1)}
@@ -159,4 +177,3 @@ const FamilyDetails = () => {
 };
 
 export default FamilyDetails;
-

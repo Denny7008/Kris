@@ -109,7 +109,7 @@ router.put("/users/update-guarantor/:id", authenticateToken, updateGuarantor);
 
 // Add a new family member
 
-router.post("/users/add/:id", authenticateToken, addFamilyMember);
+router.post("/users/add/", authenticateToken, addFamilyMember);
 // Update family details
 router.put("/users/update/:id", authenticateToken, updateFamilyDetails);
 
