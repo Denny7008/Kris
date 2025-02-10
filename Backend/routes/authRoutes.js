@@ -55,6 +55,7 @@ import {
   getAllKPIs,
   updateKPI,
 } from "../controllers/kpiController.js";
+import { addFinancialDetails, deleteFinancialDetails, getFinancialDetails, updateFinancialDetails } from "../controllers/financialController.js";
 
 const router = express.Router();
 
@@ -184,6 +185,14 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
             address: familyMember.address || "",
           }))
         : [],
+        bankDetails: Array.isArray(user.bankDetails)
+        ? user.bankDetails.map((user) => ({
+            accountName: user.accountName || "",
+            accountNumber: user.accountNumber || "",
+            bankName: user.bankName || "",
+            accountType: user.accountType || "",
+          }))
+        : null,
       // Add other fields as necessary
     };
 
@@ -195,6 +204,17 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
       .json({ message: "Error retrieving user data", error: error.message });
   }
 });
+
+
+
+
+// FINANICAL DETAILS
+router.get("/", authenticateToken, getFinancialDetails);
+router.post("/users/add-bankinfo/:id", authenticateToken, addFinancialDetails);
+router.put("/users/add-bankinfo/update/:id", authenticateToken, updateFinancialDetails);
+router.delete("/users/add-bankinfo/delete", authenticateToken, deleteFinancialDetails);
+
+
 
 // NOTIFICATIONS
 
@@ -223,5 +243,8 @@ router.get("/kpi/user", getAllKPIs); // Route to get all KPIs for a user
 
 router.put("/kpi/update/:kpiId", updateKPI); // Route to update a KPI
 router.delete("/kpi/delete/:kpiId", deleteKPI); // Route to delete a KPI
+
+
+
 
 export default router;

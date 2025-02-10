@@ -116,6 +116,16 @@ const UserSchema = new mongoose.Schema(
         address: { type: String, required: true },
       },
     ],
+    bankDetails: [{
+      accountName: { type: String, required: true },
+      accountNumber: { type: String, required: true },
+      bankName: { type: String, required: true },
+      accountType: {
+        type: String,
+        enum: ["Savings", "Current"],
+        default: "Savings",
+      },
+    }],
   },
 
   { timestamps: true }

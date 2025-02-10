@@ -408,32 +408,58 @@ export const updateNextOfKin = async (req, res) => {
 
 
 // UPDATE FAMILY DETAILS
+// export const updateFamilyDetails = async (req, res) => {
+//   try {
+//     const user = await User.findById(req.user._id);
+//     const { familyDetails } = req.body; // Extract familyDetails from request
+
+//     if (!Array.isArray(familyDetails) || familyDetails.length === 0) {
+//       return res.status(400).json({ message: "familyDetails must be a non-empty array" });
+//     }
+
+//     // Update the user record with new family details
+//     const updatedUser = await User.findByIdAndUpdate(
+//       user._id, // Use user._id instead of the whole user object
+//       { familyDetails }, // Set new family details
+//       { new: true, runValidators: true }
+//     );
+
+//     if (!updatedUser) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     res.status(200).json({ message: "Family details updated successfully", user: updatedUser });
+//   } catch (error) {
+//     console.error("Error updating family details:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
+
+
 export const updateFamilyDetails = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
-    const { familyDetails } = req.body; // Extract familyDetails from request
+    const { _id, name, relationship, age, occupation } = req.body;
+    const user = await User.findById(req.user.id);
 
-    if (!Array.isArray(familyDetails) || familyDetails.length === 0) {
-      return res.status(400).json({ message: "familyDetails must be a non-empty array" });
-    }
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Update the user record with new family details
-    const updatedUser = await User.findByIdAndUpdate(
-      user._id, // Use user._id instead of the whole user object
-      { familyDetails }, // Set new family details
-      { new: true, runValidators: true }
-    );
+    // Find the specific family member by ID and update only that entry
+    const index = user.familyDetails.findIndex((member) => member._id.toString() === _id);
+    if (index === -1) return res.status(404).json({ message: "Family member not found" });
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    // Update only the specific family member
+    user.familyDetails[index] = { _id, name, relationship, age, occupation };
+    await user.save();
 
-    res.status(200).json({ message: "Family details updated successfully", user: updatedUser });
+    res.json({
+      message: "Family details updated successfully",
+      familyDetails: user.familyDetails,
+    });
   } catch (error) {
-    console.error("Error updating family details:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
+
 
 export const addFamilyMember = async (req, res) => {
   try {
