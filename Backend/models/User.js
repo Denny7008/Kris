@@ -101,21 +101,30 @@ const UserSchema = new mongoose.Schema(
         ],
       },
     },
-    familyDetails: [
-      {
-        name: { type: String, required: true },
-        relationship: { type: String, required: true },
-        phone: {
-          type: String,
-          required: true,
-          match: [
-            /^[0-9]{10,15}$/,
-            "Please enter a valid phone number with 10-15 digits",
-          ],
+    familyDetails: {
+      type: [
+        {
+          name: { type: String, required: true },
+          relationship: { type: String, required: true },
+          phone: {
+            type: String,
+            required: true,
+            match: [
+              /^[0-9]{10,15}$/,
+              "Please enter a valid phone number with 10-15 digits",
+            ],
+          },
+          address: { type: String, required: true },
         },
-        address: { type: String, required: true },
+      ],
+      validate: {
+        validator: function (value) {
+          return value.length <= 3;
+        },
+        message: "You can add up to 3 family members only",
       },
-    ],
+    },
+    
     bankDetails: [{
       accountName: { type: String, required: true },
       accountNumber: { type: String, required: true },

@@ -108,10 +108,9 @@ router.put("/users/update-next-of-kin/:id", authenticateToken, updateNextOfKin);
 router.put("/users/update-guarantor/:id", authenticateToken, updateGuarantor);
 
 // Add a new family member
-
 router.post("/users/add/", authenticateToken, addFamilyMember);
 // Update family details
-router.put("/users/update/:id", authenticateToken, updateFamilyDetails);
+router.put("/users/update/:id/family/:familyId", authenticateToken, updateFamilyDetails);
 
 
 
@@ -177,8 +176,9 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
           }
         : null,
 
-      familyDetails: Array.isArray(user.familyDetails)
+        familyDetails: Array.isArray(user.familyDetails)
         ? user.familyDetails.map((familyMember) => ({
+            _id: familyMember._id?.toString() || "", // ✅ Ensure _id is included and converted to string
             name: familyMember.name || "",
             relationship: familyMember.relationship || "",
             phone: familyMember.phone || "",

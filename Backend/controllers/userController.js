@@ -408,71 +408,62 @@ export const updateNextOfKin = async (req, res) => {
 
 
 // UPDATE FAMILY DETAILS
+
+
+
 export const updateFamilyDetails = async (req, res) => {
   try {
-    const { _id, name, relationship, phone, address } = req.body;
-    const user = await User.findById(req.user.id);
+    const { id, familyId } = req.params; // Ensure params are correctly received
+    const updateData = req.body;
 
-    if (!user) return res.status(404).json({ message: "User not found" });
+    console.log("Updating Family Member:", { userId: id, familyId, updateData });
 
-    // Find the specific family member by ID and update only that entry
-    const index = user.familyDetails.findIndex(
-      (member) => member._id.toString() === _id
-    );
-    if (index === -1) return res.status(404).json({ message: "Family member not found" });
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-    // Update only the specific family member (not replacing the whole array)
-    user.familyDetails[index] = { _id, name, relationship, phone, address };
+    const familyMemberIndex = user.familyDetails.findIndex(member => member._id.toString() === familyId);
+    if (familyMemberIndex === -1) {
+      return res.status(404).json({ message: "Family member not found" });
+    }
 
-    await user.save(); // Save changes
+    user.familyDetails[familyMemberIndex] = { ...user.familyDetails[familyMemberIndex], ...updateData };
 
-    res.json({
-      message: "Family details updated successfully",
-      familyDetails: user.familyDetails, // Return updated array
-    });
+    await user.save();
+
+    res.status(200).json({ message: "Family member updated successfully", updatedFamilyMember: user.familyDetails[familyMemberIndex] });
   } catch (error) {
-    res.status(500).json({ message: "Server Error", error: error.message });
+    console.error("Error updating family member:", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 };
 
 
 
-// export const updateFamilyDetails = async (req, res) => {
-//   try {
-//     const { _id, name, relationship, phone, address } = req.body;
-//     const user = await User.findById(req.user.id);
-
-//     if (!user) return res.status(404).json({ message: "User not found" });
-
-//     const index = user.familyDetails.findIndex((member) => member._id.toString() === _id);
-//     if (index === -1) return res.status(404).json({ message: "Family member not found" });
-
-//     user.familyDetails[index] = { ...user.familyDetails[index], name, relationship, phone, address };
-
-//     await user.save();
-
-//     // Send updated data to frontend
-//     res.json({
-//       message: "Family details updated successfully",
-//       familyDetails: user.familyDetails, // Send latest array
-//     });
-//   } catch (error) {
-//     res.status(500).json({ message: "Server Error", error: error.message });
-//   }
-// };
 
 
-
-
-
-
+// add family members
 export const addFamilyMember = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     const { name, relationship, phone, address } = req.body;
 
     if (!name || !relationship || !phone || !address) {
-      return res.status(400).json({ message: "All fields (name, relationship, phone, address) are required" });
+      return res.status(400).json({
+        message: "All fields (name, relationship, phone, address) are required",
+      });
+    }
+
+    // Check if the familyDetails array already has 3 members
+    if (user.familyDetails.length >= 3) {
+      return res.status(400).json({
+        message: "You can add up to 3 family members only.",
+      });
     }
 
     // Create new family member object
@@ -493,8 +484,6 @@ export const addFamilyMember = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-
 
 
 

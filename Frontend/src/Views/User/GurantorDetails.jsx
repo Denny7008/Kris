@@ -198,7 +198,7 @@ const GuarantorDetails = () => {
   }
 
   return (
-    <div className="flex-1 rounded-lg bg-[#E3EDF9] p-6">
+    <div className="flex-1 rounded-lg bg-[#E3EDF9] ">
       {message && <p className="text-red-600">{message}</p>} {/* Display messages */}
       {showUpdateForm ? (
         <UpdateGuarantorForm

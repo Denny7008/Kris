@@ -81,7 +81,7 @@ const FinancialDocs = () => {
 
 
   return (
-    <div className="flex-1 rounded-lg bg-[#E3EDF9] p-6">
+    <div className="flex-1 rounded-lg bg-[#E3EDF9] ">
       <div className="max-w-2xl bg-white rounded-lg p-6 space-y-6 shadow-lg">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Financial Details</h2>
 
