@@ -123,7 +123,7 @@ const UpdateProfessionalDetailsForm = ({ onSubmit }) => {
           </button>
         </div>
       </form>
-    </div>
+    </div> 
   );
 };
 

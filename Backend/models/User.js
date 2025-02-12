@@ -135,6 +135,29 @@ const UserSchema = new mongoose.Schema(
         default: "Savings",
       },
     }],
+    educationDetails: {
+      academicRecords: [
+        {
+          institute: { type: String, required: true },
+          course: { type: String, required: true },
+          department: { type: String, required: true },
+          location: { type: String, required: true },
+          startDate: { type: Date, required: true },
+          endDate: { type: Date, required: true },
+          description: { type: String },
+        },
+      ],
+      professionalDetails: [
+        {
+          institute: { type: String, required: true },
+          course: { type: String, required: true },
+          department: { type: String },
+          startDate: { type: Date, required: true },
+          endDate: { type: Date, required: true },
+          description: { type: String },
+        },
+      ],
+    },
   },
 
   { timestamps: true }

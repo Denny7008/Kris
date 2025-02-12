@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Custom Slim Scrollbar */
+::-webkit-scrollbar {
+    width: 6px; /* Slim width */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #1068ff; /* Darker thumb color */
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light track color */
+  }

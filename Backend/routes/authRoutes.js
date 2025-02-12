@@ -16,6 +16,10 @@ import {
   updateGuarantor,
   addFamilyMember,
   updateFamilyDetails,
+  getEducationQualifications,
+  createEducationQualification,
+  updateEducationQualification,
+  deleteEducationQualification,
 } from "../controllers/userController.js";
 import {
   getAllLeaveApplications,
@@ -55,7 +59,12 @@ import {
   getAllKPIs,
   updateKPI,
 } from "../controllers/kpiController.js";
-import { addFinancialDetails, deleteFinancialDetails, getFinancialDetails, updateFinancialDetails } from "../controllers/financialController.js";
+import {
+  addFinancialDetails,
+  deleteFinancialDetails,
+  getFinancialDetails,
+  updateFinancialDetails,
+} from "../controllers/financialController.js";
 
 const router = express.Router();
 
@@ -104,16 +113,23 @@ router.put(
   updateContactDetails
 ); // Update logged-in user's contact details
 
+// ⭐ [ FAMILY ROUTES ]
+
 router.put("/users/update-next-of-kin/:id", authenticateToken, updateNextOfKin);
 router.put("/users/update-guarantor/:id", authenticateToken, updateGuarantor);
+router.post("/users/add/", authenticateToken, addFamilyMember); // Add a new family member
+router.put(
+  "/users/update/:id/family/:familyId",
+  authenticateToken,
+  updateFamilyDetails
+); // Update family details
 
-// Add a new family member
-router.post("/users/add/", authenticateToken, addFamilyMember);
-// Update family details
-router.put("/users/update/:id/family/:familyId", authenticateToken, updateFamilyDetails);
+// ⭐ [ EDUCATION QUALIFICATION ROUTES ]
 
-
-
+router.get("/", getEducationQualifications); // Get all education qualifications
+router.post("/users/add-academic", authenticateToken, createEducationQualification); // Add education qualification (User ID needed in request body)
+router.put("/users/update/:id/academic/:qualificationId", authenticateToken, updateEducationQualification); // Update a specific education qualification
+router.delete("/:userId/:qualificationId", deleteEducationQualification); // Delete a specific education qualification
 
 // Define routes
 router.post(
@@ -176,7 +192,7 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
           }
         : null,
 
-        familyDetails: Array.isArray(user.familyDetails)
+      familyDetails: Array.isArray(user.familyDetails)
         ? user.familyDetails.map((familyMember) => ({
             _id: familyMember._id?.toString() || "", // ✅ Ensure _id is included and converted to string
             name: familyMember.name || "",
@@ -185,7 +201,7 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
             address: familyMember.address || "",
           }))
         : [],
-        bankDetails: Array.isArray(user.bankDetails)
+      bankDetails: Array.isArray(user.bankDetails)
         ? user.bankDetails.map((user) => ({
             accountName: user.accountName || "",
             accountNumber: user.accountNumber || "",
@@ -193,7 +209,29 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
             accountType: user.accountType || "",
           }))
         : null,
-      // Add other fields as necessary
+        educationDetails: {
+          academicRecords: Array.isArray(user.educationDetails?.academicRecords)
+            ? user.educationDetails.academicRecords.map((record) => ({
+                institute: record.institute || "",
+                course: record.course || "",
+                department: record.department || "",
+                location: record.location || "",
+                startDate: record.startDate || "",
+                endDate: record.endDate || "",
+                description: record.description || "",
+              }))
+            : [],
+          professionalDetails: Array.isArray(user.educationDetails?.professionalDetails)
+            ? user.educationDetails.professionalDetails.map((record) => ({
+                institute: record.institute || "",
+                course: record.course || "",
+                department: record.department || "",
+                startDate: record.startDate || "",
+                endDate: record.endDate || "",
+                description: record.description || "",
+              }))
+            : [],
+        },
     };
 
     res.json(userData);
@@ -205,16 +243,19 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
   }
 });
 
-
-
-
 // FINANICAL DETAILS
 router.get("/", authenticateToken, getFinancialDetails);
 router.post("/users/add-bankinfo/:id", authenticateToken, addFinancialDetails);
-router.put("/users/add-bankinfo/update/:id", authenticateToken, updateFinancialDetails);
-router.delete("/users/add-bankinfo/delete", authenticateToken, deleteFinancialDetails);
-
-
+router.put(
+  "/users/add-bankinfo/update/:id",
+  authenticateToken,
+  updateFinancialDetails
+);
+router.delete(
+  "/users/add-bankinfo/delete",
+  authenticateToken,
+  deleteFinancialDetails
+);
 
 // NOTIFICATIONS
 
@@ -243,8 +284,5 @@ router.get("/kpi/user", getAllKPIs); // Route to get all KPIs for a user
 
 router.put("/kpi/update/:kpiId", updateKPI); // Route to update a KPI
 router.delete("/kpi/delete/:kpiId", deleteKPI); // Route to delete a KPI
-
-
-
 
 export default router;

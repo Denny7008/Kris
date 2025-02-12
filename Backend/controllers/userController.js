@@ -80,8 +80,6 @@ export const registerUser = async (req, res) => {
   }
 };
 
-
-
 // [ BULK REGISTER-USER-API]
 export const bulkRegisterUsers = async (req, res) => {
   const users = req.body;
@@ -89,7 +87,16 @@ export const bulkRegisterUsers = async (req, res) => {
   // Validate each user object in the array
   const errors = [];
   for (const user of users) {
-    const { firstName, lastName, email, phone, password, confirmPassword, receiveNewsletters, agreeTerms } = user;
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      password,
+      confirmPassword,
+      receiveNewsletters,
+      agreeTerms,
+    } = user;
 
     // Check if passwords match for each user
     if (password !== confirmPassword) {
@@ -114,7 +121,15 @@ export const bulkRegisterUsers = async (req, res) => {
     // Process each user and create them
     const createdUsers = [];
     for (const user of users) {
-      const { firstName, lastName, email, phone, password, receiveNewsletters, agreeTerms } = user;
+      const {
+        firstName,
+        lastName,
+        email,
+        phone,
+        password,
+        receiveNewsletters,
+        agreeTerms,
+      } = user;
 
       // Hash the password for each user
       const saltRounds = 10;
@@ -146,7 +161,7 @@ export const bulkRegisterUsers = async (req, res) => {
     }
 
     // Generate JWT tokens for the created users
-    const tokens = createdUsers.map(user => 
+    const tokens = createdUsers.map((user) =>
       jwt.sign(
         { userId: user.id }, // Payload
         process.env.JWT_SECRET, // Secret key
@@ -164,11 +179,6 @@ export const bulkRegisterUsers = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-
-
-
-
 
 // USER LOGIN CONTROLLLER
 export const loginUser = async (req, res) => {
@@ -193,7 +203,9 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     res.status(200).json({
       message: "Login successful",
@@ -209,9 +221,7 @@ export const loginUser = async (req, res) => {
   }
 };
 
-
-
-// USER LOGOUT CONTROLLER 
+// USER LOGOUT CONTROLLER
 export const logoutUser = async (req, res) => {
   try {
     // If using JWT, you can implement token blacklisting (optional)
@@ -221,11 +231,6 @@ export const logoutUser = async (req, res) => {
     res.status(500).json({ error: "Server error during logout" });
   }
 };
-
-
-
-
-
 
 // UPDATE USER PROFILE
 export const editProfile = async (req, res) => {
@@ -253,7 +258,6 @@ export const editProfile = async (req, res) => {
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 };
-
 
 // updation for profile pic
 
@@ -284,11 +288,6 @@ export const edittProfile = async (req, res) => {
   }
 };
 
-
-
-
-
-
 //GET USER BY ID
 export const getUser = async (req, res) => {
   try {
@@ -306,7 +305,6 @@ export const getUser = async (req, res) => {
   }
 };
 
-
 // GET USER PROFILE
 export const userProfile = async (req, res) => {
   try {
@@ -321,7 +319,6 @@ export const userProfile = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 // UPDATING USER CONTACT DETAILS
 export const updateContactDetails = async (req, res) => {
@@ -348,8 +345,6 @@ export const updateContactDetails = async (req, res) => {
   }
 };
 
-
-
 // UPDATE GUARANTOR DETAILS
 export const updateGuarantor = async (req, res) => {
   try {
@@ -357,7 +352,9 @@ export const updateGuarantor = async (req, res) => {
     const { guarantorDetails } = req.body; // Extract nextDetails from request
 
     if (!guarantorDetails) {
-      return res.status(400).json({ message: "guarantorDetails object is required" });
+      return res
+        .status(400)
+        .json({ message: "guarantorDetails object is required" });
     }
 
     // Update the user record
@@ -371,12 +368,15 @@ export const updateGuarantor = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ message: "Next of guarantorDetails updated successfully", user: updatedUser });
+    res.status(200).json({
+      message: "Next of guarantorDetails updated successfully",
+      user: updatedUser,
+    });
   } catch (error) {
     console.error("Error updating guarantorDetails:", error);
     res.status(500).json({ message: "Server error" });
   }
-}; 
+};
 
 //UPDATE KIN DETAILS
 export const updateNextOfKin = async (req, res) => {
@@ -385,7 +385,9 @@ export const updateNextOfKin = async (req, res) => {
     const { nextDetails } = req.body; // Extract nextDetails from request
 
     if (!nextDetails) {
-      return res.status(400).json({ message: "nextDetails object is required" });
+      return res
+        .status(400)
+        .json({ message: "nextDetails object is required" });
     }
 
     // Update the user record
@@ -399,49 +401,58 @@ export const updateNextOfKin = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ message: "Next of Kin updated successfully", user: updatedUser });
+    res
+      .status(200)
+      .json({ message: "Next of Kin updated successfully", user: updatedUser });
   } catch (error) {
     console.error("Error updating next-of-kin:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-
 // UPDATE FAMILY DETAILS
-
-
 
 export const updateFamilyDetails = async (req, res) => {
   try {
     const { id, familyId } = req.params; // Ensure params are correctly received
     const updateData = req.body;
 
-    console.log("Updating Family Member:", { userId: id, familyId, updateData });
+    console.log("Updating Family Member:", {
+      userId: id,
+      familyId,
+      updateData,
+    });
 
     const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const familyMemberIndex = user.familyDetails.findIndex(member => member._id.toString() === familyId);
+    const familyMemberIndex = user.familyDetails.findIndex(
+      (member) => member._id.toString() === familyId
+    );
     if (familyMemberIndex === -1) {
       return res.status(404).json({ message: "Family member not found" });
     }
 
-    user.familyDetails[familyMemberIndex] = { ...user.familyDetails[familyMemberIndex], ...updateData };
+    user.familyDetails[familyMemberIndex] = {
+      ...user.familyDetails[familyMemberIndex],
+      ...updateData,
+    };
 
     await user.save();
 
-    res.status(200).json({ message: "Family member updated successfully", updatedFamilyMember: user.familyDetails[familyMemberIndex] });
+    res.status(200).json({
+      message: "Family member updated successfully",
+      updatedFamilyMember: user.familyDetails[familyMemberIndex],
+    });
   } catch (error) {
     console.error("Error updating family member:", error);
-    res.status(500).json({ message: "Internal Server Error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
-
-
-
-
 
 // add family members
 export const addFamilyMember = async (req, res) => {
@@ -485,16 +496,6 @@ export const addFamilyMember = async (req, res) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
-
 // GET EMPLOYEE ALL DATA
 export const getAllUsers = async (req, res) => {
   try {
@@ -517,13 +518,11 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-
-
 // GET ALL EMPLOYEE WITHOUT PROFILE PICTURE
 export const getAllUsersWithoutProfilePic = async (req, res) => {
   try {
     // Fetch all users excluding the profilePic field
-    const users = await User.find().select('-profilePic'); // Exclude profilePic field
+    const users = await User.find().select("-profilePic"); // Exclude profilePic field
 
     // Check if any users exist
     if (users.length === 0) {
@@ -541,8 +540,6 @@ export const getAllUsersWithoutProfilePic = async (req, res) => {
   }
 };
 
-
-
 // NUMBER OF USERS(EMPLOYEESS)
 
 export const noOfEmployees = async (req, res) => {
@@ -557,3 +554,120 @@ export const noOfEmployees = async (req, res) => {
   }
 };
 
+// EDUCATION QUALIFICATION
+
+// ✅ Get all users' education qualifications
+export const getEducationQualifications = async (req, res) => {
+  try {
+    const users = await User.find({}, "firstName lastName academicDetails");
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+// ✅ Add education qualification to a user
+export const createEducationQualification = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    const {
+      institute,
+      location,
+      course,
+      department,
+      startDate,
+      endDate,
+      description,
+    } = req.body;
+
+    if (
+      !institute ||
+      !course ||
+      !location ||
+      !description ||
+      !department ||
+      !startDate ||
+      !endDate
+    ) {
+      return res.status(400).json({
+        message: "All fields are required",
+      });
+    }
+
+    // // Check if the academicDetails array already has 3 members
+    // if (user.academicDetails.length >= 3) {
+    //   return res.status(400).json({
+    //     message: "You can add up to 3 academicDetails.",
+    //   });
+    // }
+
+    const newQualification = {
+      institute,
+      location,
+      course,
+      department,
+      startDate,
+      endDate,
+      description,
+    };
+    user.educationDetails.academicRecords.push(newQualification);
+
+    await user.save();
+    res.status(201).json({ user, message: "successfully" });
+  } catch (error) {
+    res.status(400).json({ message: "Error adding education record", error });
+  }
+};
+
+// ✅ Update a specific education qualification
+export const updateEducationQualification = async (req, res) => {
+  try {
+    const { id, qualificationId } = req.params;
+    const updateData = req.body;
+
+    console.log("Updating Family Member:", {
+      userId: id,
+      qualificationId,
+      updateData,
+    });
+
+    const user = await User.findById(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const qualificationIndex = user.academicDetails.academicRecords.findIndex(
+      (q) => q._id.toString() === qualificationId
+    );
+    if (qualificationIndex === -1)
+      return res.status(404).json({ message: "Qualification not found" });
+
+    user.academicDetails.academicRecords[qualificationIndex] = {
+      ...user.academicDetails.academicRecords[qualificationIndex],
+      ...updateData,
+    };
+
+    await user.save();
+      res.status(200).json(user.academicDetails.academicRecords, {message:"Qualification updated successfully!"});
+  } catch (error) {
+    res.status(400).json({ message: "Error updating record", error });
+  }
+};
+
+// ✅ Delete a specific education qualification
+export const deleteEducationQualification = async (req, res) => {
+  try {
+    const { userId, qualificationId } = req.params;
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.academicDetails = user.academicDetails.filter(
+      (q) => q._id.toString() !== qualificationId
+    );
+
+    await user.save();
+    res.status(200).json({ message: "Record deleted successfully" });
+  } catch (error) {
+    res.status(400).json({ message: "Error deleting record", error });
+  }
+};
