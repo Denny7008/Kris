@@ -20,6 +20,8 @@ import {
   createEducationQualification,
   updateEducationQualification,
   deleteEducationQualification,
+  createProfessionalQualification,
+  updateProfessionalQualification,
 } from "../controllers/userController.js";
 import {
   getAllLeaveApplications,
@@ -127,9 +129,13 @@ router.put(
 // ⭐ [ EDUCATION QUALIFICATION ROUTES ]
 
 router.get("/", getEducationQualifications); // Get all education qualifications
-router.post("/users/add-academic", authenticateToken, createEducationQualification); // Add education qualification (User ID needed in request body)
-router.put("/users/update/:id/academic/:qualificationId", authenticateToken, updateEducationQualification); // Update a specific education qualification
+router.post("/users/add-academic/:id", authenticateToken, createEducationQualification); // Add education qualification (User ID needed in request body)
+router.post("/users/add-professional/:id", authenticateToken, createProfessionalQualification); // Add education qualification (User ID needed in request body)
+router.put("/users/update/:id/academic/:recordId", authenticateToken, updateEducationQualification); // Update a specific education qualification
+router.put("/users/update/:id/professional/:recordId", authenticateToken, updateProfessionalQualification); // Update a specific education qualification
 router.delete("/:userId/:qualificationId", deleteEducationQualification); // Delete a specific education qualification
+
+
 
 // Define routes
 router.post(
@@ -212,6 +218,7 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
         educationDetails: {
           academicRecords: Array.isArray(user.educationDetails?.academicRecords)
             ? user.educationDetails.academicRecords.map((record) => ({
+                _id: record._id || "",
                 institute: record.institute || "",
                 course: record.course || "",
                 department: record.department || "",
@@ -223,8 +230,9 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
             : [],
           professionalDetails: Array.isArray(user.educationDetails?.professionalDetails)
             ? user.educationDetails.professionalDetails.map((record) => ({
+                _id: record._id || "",
+                title: record.title || "",
                 institute: record.institute || "",
-                course: record.course || "",
                 department: record.department || "",
                 startDate: record.startDate || "",
                 endDate: record.endDate || "",

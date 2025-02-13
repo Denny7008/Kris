@@ -623,35 +623,60 @@ export const createEducationQualification = async (req, res) => {
 // ✅ Update a specific education qualification
 export const updateEducationQualification = async (req, res) => {
   try {
-    const { id, qualificationId } = req.params;
+    const { id, recordId } = req.params;
     const updateData = req.body;
 
-    console.log("Updating Family Member:", {
-      userId: id,
-      qualificationId,
-      updateData,
-    });
+    console.log("Updating Education Qualification:", { userId: id, recordId, updateData });
 
-    const user = await User.findById(id);
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    const qualificationIndex = user.academicDetails.academicRecords.findIndex(
-      (q) => q._id.toString() === qualificationId
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: id, "academicDetails.academicRecords._id": recordId },
+      { $set: { "academicDetails.academicRecords.$": updateData } },
+      { new: true }
     );
-    if (qualificationIndex === -1)
-      return res.status(404).json({ message: "Qualification not found" });
 
-    user.academicDetails.academicRecords[qualificationIndex] = {
-      ...user.academicDetails.academicRecords[qualificationIndex],
-      ...updateData,
-    };
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User or education qualification not found" });
+    }
 
-    await user.save();
-      res.status(200).json(user.academicDetails.academicRecords, {message:"Qualification updated successfully!"});
+    res.status(200).json({
+      data: updatedUser.academicDetails.academicRecords,
+      message: "Education qualification updated successfully!",
+    });
   } catch (error) {
-    res.status(400).json({ message: "Error updating record", error });
+    console.error("Error updating education qualification:", error);
+    res.status(500).json({ message: "Error updating record", error: error.message });
   }
 };
+
+// update professional qualifications
+
+export const updateProfessionalQualification = async (req, res) => {
+  try {
+    const { id, recordId } = req.params;
+    const updateData = req.body;
+
+    console.log("Updating Professional Qualification:", { userId: id, recordId, updateData });
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: id, "academicDetails.professionalDetails._id": recordId },
+      { $set: { "academicDetails.professionalDetails.$": updateData } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User or professional qualification not found" });
+    }
+
+    res.status(200).json({
+      data: updatedUser.academicDetails.professionalDetails,
+      message: "Professional qualification updated successfully!",
+    });
+  } catch (error) {
+    console.error("Error updating professional qualification:", error);
+    res.status(500).json({ message: "Error updating record", error: error.message });
+  }
+};
+
 
 // ✅ Delete a specific education qualification
 export const deleteEducationQualification = async (req, res) => {
@@ -671,3 +696,47 @@ export const deleteEducationQualification = async (req, res) => {
     res.status(400).json({ message: "Error deleting record", error });
   }
 };
+
+
+// professional details
+export const createProfessionalQualification = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const {
+      title,
+      institute,
+      location,
+      startDate,
+      endDate,
+      description,
+    } = req.body;
+
+    if (!title || !institute || !location || !startDate || !endDate || !description) {
+      return res.status(400).json({
+        message: "All fields are required",
+      });
+    }
+
+    const newProfessionalQualification = {
+      title,
+      institute,
+      location,
+      startDate,
+      endDate,
+      description,
+    };
+
+    user.educationDetails.professionalDetails.push(newProfessionalQualification);
+
+    await user.save();
+    res.status(201).json({ user, message: "Professional qualification added successfully" });
+  } catch (error) {
+    res.status(400).json({ message: "Error adding professional qualification", error });
+  }
+};
+
+
+
+
