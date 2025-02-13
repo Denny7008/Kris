@@ -626,11 +626,15 @@ export const updateEducationQualification = async (req, res) => {
     const { id, recordId } = req.params;
     const updateData = req.body;
 
+    console.log("Received Params:", req.params);
+    console.log("Received Body:", req.body);
+
+
     console.log("Updating Education Qualification:", { userId: id, recordId, updateData });
 
     const updatedUser = await User.findOneAndUpdate(
-      { _id: id, "academicDetails.academicRecords._id": recordId },
-      { $set: { "academicDetails.academicRecords.$": updateData } },
+      { _id: id, "educationDetails.academicRecords._id": recordId },
+      { $set: { "educationDetails.academicRecords.$": updateData } },
       { new: true }
     );
 
@@ -658,8 +662,8 @@ export const updateProfessionalQualification = async (req, res) => {
     console.log("Updating Professional Qualification:", { userId: id, recordId, updateData });
 
     const updatedUser = await User.findOneAndUpdate(
-      { _id: id, "academicDetails.professionalDetails._id": recordId },
-      { $set: { "academicDetails.professionalDetails.$": updateData } },
+      { _id: id, "educationDetails.professionalDetails._id": recordId },
+      { $set: { "educationDetails.professionalDetails.$": updateData } },
       { new: true }
     );
 
