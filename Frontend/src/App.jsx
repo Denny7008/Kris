@@ -69,6 +69,7 @@ import LeaveRecallForm from "./Views/Admin/pages/LeaveRecallForm";
 import LeaveInitiateNotification from "./Views/User/LeaveInitiateNotification";
 import Navbarr from "../../TestFiles/UserTest";
 import TestNav from "../../TestFiles/UserTest";
+import PayrollDashboard from "./Views/Admin/pages/PayrollDashboard";
 
 function App() {
   return (
@@ -112,10 +113,9 @@ function App() {
 
           <Route path="FinancialDetails" element={<FinancialDetails />} />
           <Route path="ManageTargets" element={<ManageTargets />} />
-          <Route
-            path="PerformanceManagement"
-            element={<PerformanceManagement />}
-          />
+          <Route path="PerformanceManagement" element={<PerformanceManagement />} />
+          <Route path="payroll" element={<PayrollDashboard />}/>
+
         </Route>
 
         <Route path="JobDetails" index element={<ViewJobDetails />} replace />
@@ -258,6 +258,7 @@ function App() {
         <Route path="/performance" element={<PerformanceManagement />} />
         <Route path="/targetsetup" element={<TargetSetup />} />
         <Route path="/managetargets" element={<ManageTargets />} />
+        <Route path="/payroll" element={<PayrollDashboard />}/>
 
 
 

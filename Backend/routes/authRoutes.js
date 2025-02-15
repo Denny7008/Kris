@@ -293,4 +293,31 @@ router.get("/kpi/user", getAllKPIs); // Route to get all KPIs for a user
 router.put("/kpi/update/:kpiId", updateKPI); // Route to update a KPI
 router.delete("/kpi/delete/:kpiId", deleteKPI); // Route to delete a KPI
 
+
+
+
+
+
+
+
+
+// payroll razor pay
+
+router.post('/payroll/payout', async (req, res) => {
+  const { employeeId } = req.body;
+  const employee = await User.findById(employeeId);
+
+  if (!employee) {
+    return res.status(404).json({ error: "Employee not found" });
+  }
+
+  try {
+    const payoutResponse = await initiatePayout(employee);
+    res.status(200).json(payoutResponse);
+  } catch (error) {
+    console.error("Payroll Error: ", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default router;

@@ -128,6 +128,7 @@ const UserSchema = new mongoose.Schema(
     bankDetails: [{
       accountName: { type: String, required: true },
       accountNumber: { type: String, required: true },
+      ifscCode: { type: String, required: true },  // Added IFSC code
       bankName: { type: String, required: true },
       accountType: {
         type: String,
@@ -135,6 +136,7 @@ const UserSchema = new mongoose.Schema(
         default: "Savings",
       },
     }],
+    
     educationDetails: {
       academicRecords: [
         {

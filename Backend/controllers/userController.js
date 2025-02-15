@@ -80,6 +80,8 @@ export const registerUser = async (req, res) => {
   }
 };
 
+
+
 // [ BULK REGISTER-USER-API]
 export const bulkRegisterUsers = async (req, res) => {
   const users = req.body;

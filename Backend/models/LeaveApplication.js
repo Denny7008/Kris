@@ -16,5 +16,4 @@ const leaveApplicationSchema = new mongoose.Schema({
 
 
 
-
 export default mongoose.model("LeaveApplication", leaveApplicationSchema);
