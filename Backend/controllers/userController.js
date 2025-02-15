@@ -86,7 +86,7 @@ dotenv.config();
 //   }
 // };
 
-
+// email verfied registration
 const mailjetClient = mailjet.apiConnect(
   process.env.MAILJET_API_KEY,
   process.env.MAILJET_API_SECRET
