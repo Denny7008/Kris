@@ -70,6 +70,7 @@ import LeaveInitiateNotification from "./Views/User/LeaveInitiateNotification";
 import Navbarr from "../../TestFiles/UserTest";
 import TestNav from "../../TestFiles/UserTest";
 import PayrollDashboard from "./Views/Admin/pages/PayrollDashboard";
+import ForgotPassword from "./Views/User/ForgotPassword";
 
 function App() {
   return (
@@ -233,7 +234,7 @@ function App() {
 
 
 
-
+        <Route path="/user/forgot-password" element={<ForgotPassword/>}/>
 
 
 

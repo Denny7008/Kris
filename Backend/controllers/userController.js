@@ -2,12 +2,10 @@ import User from "../models/User.js"; // Assuming you have a User model
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator"; // For validation middleware
-import mailjet from 'node-mailjet';
+import mailjet from "node-mailjet";
 
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
-
-
 
 // REGISTER THE USER CONTROLLER
 // export const registerUser = async (req, res) => {
@@ -120,12 +118,12 @@ export const registerUser = async (req, res) => {
     }
 
     // Send email with plaintext password using Mailjet
-    await mailjetClient.post('send', { version: 'v3.1' }).request({
+    await mailjetClient.post("send", { version: "v3.1" }).request({
       Messages: [
         {
           From: {
             Email: process.env.MAILJET_FROM_EMAIL,
-            Name: 'HR Management System',
+            Name: "HR Management System",
           },
           To: [
             {
@@ -133,9 +131,23 @@ export const registerUser = async (req, res) => {
               Name: `${firstName} ${lastName}`,
             },
           ],
-          Subject: 'Your HR Management System Login Credentials',
-          TextPart: `Hello ${firstName},\n\nYour account has been created.\nEmail: ${email}\nPassword: ${password}\n\nPlease login and change your password immediately.`,
-          HTMLPart: `<h3>Hello ${firstName},</h3><p>Your account has been created.<br><strong>Email:</strong> ${email}<br><strong>Password:</strong> ${password}</p><p>Please login and change your password immediately.</p>`,
+          Subject: "Your HR Management System Login Credentials",
+          TextPart: `Hello ${firstName},\n\nWelcome to Kris Software Consultancy! We're thrilled to have you on board.\n\nHere are your login details:\nEmail: ${email}\nPassword: ${password}\n\nPlease log in and update your password at your earliest convenience.\n\nLooking forward to achieving great things together!\n\nBest regards,\nThe [Your Company Name] HR Team`,
+          HTMLPart: `<div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+                <h2 style="color: #007BFF; text-align: center;">Welcome to Our Organization, ${firstName}!</h2>
+                <p>We are excited to have you as part of our team at <strong>Kris Software Consultancy</strong>. Let's achieve great things together!</p>
+                <p><strong>Your Login Credentials:</strong></p>
+                <ul>
+                  <li><strong>Email:</strong> ${email}</li>
+                  <li><strong>Password:</strong> ${password}</li>
+                </ul>
+                <p>Please log in and update your password as soon as possible to ensure your account's security.</p>
+                <p>If you have any questions, feel free to reach out to our HR team anytime.</p>
+                <p style="text-align: center; margin-top: 20px;"><a href="http://localhost:5173/" style="background-color: #007BFF; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Login Now</a></p>
+                <p style="margin-top: 20px;">We look forward to working with you and achieving success together!</p>
+                <p>Best regards,</p>
+                <p><strong>The Kris Software Consultancy HR Team</strong></p>
+                </div>`,
         },
       ],
     });
@@ -155,10 +167,12 @@ export const registerUser = async (req, res) => {
 
     await newUser.save();
 
-    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     res.status(201).json({
-      message: 'User registered successfully',
+      message: "User registered successfully",
       user: {
         id: newUser._id,
         firstName: newUser.firstName,
@@ -170,12 +184,10 @@ export const registerUser = async (req, res) => {
       token,
     });
   } catch (error) {
-    console.error('Error during registration:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error during registration:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
-
-
 
 // [ BULK REGISTER-USER-API]
 export const bulkRegisterUsers = async (req, res) => {
@@ -726,8 +738,11 @@ export const updateEducationQualification = async (req, res) => {
     console.log("Received Params:", req.params);
     console.log("Received Body:", req.body);
 
-
-    console.log("Updating Education Qualification:", { userId: id, recordId, updateData });
+    console.log("Updating Education Qualification:", {
+      userId: id,
+      recordId,
+      updateData,
+    });
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: id, "educationDetails.academicRecords._id": recordId },
@@ -736,7 +751,9 @@ export const updateEducationQualification = async (req, res) => {
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ message: "User or education qualification not found" });
+      return res
+        .status(404)
+        .json({ message: "User or education qualification not found" });
     }
 
     res.status(200).json({
@@ -745,7 +762,9 @@ export const updateEducationQualification = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating education qualification:", error);
-    res.status(500).json({ message: "Error updating record", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error updating record", error: error.message });
   }
 };
 
@@ -756,7 +775,11 @@ export const updateProfessionalQualification = async (req, res) => {
     const { id, recordId } = req.params;
     const updateData = req.body;
 
-    console.log("Updating Professional Qualification:", { userId: id, recordId, updateData });
+    console.log("Updating Professional Qualification:", {
+      userId: id,
+      recordId,
+      updateData,
+    });
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: id, "educationDetails.professionalDetails._id": recordId },
@@ -765,7 +788,9 @@ export const updateProfessionalQualification = async (req, res) => {
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ message: "User or professional qualification not found" });
+      return res
+        .status(404)
+        .json({ message: "User or professional qualification not found" });
     }
 
     res.status(200).json({
@@ -774,10 +799,11 @@ export const updateProfessionalQualification = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating professional qualification:", error);
-    res.status(500).json({ message: "Error updating record", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error updating record", error: error.message });
   }
 };
-
 
 // ✅ Delete a specific education qualification
 export const deleteEducationQualification = async (req, res) => {
@@ -798,23 +824,23 @@ export const deleteEducationQualification = async (req, res) => {
   }
 };
 
-
 // professional details
 export const createProfessionalQualification = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const {
-      title,
-      institute,
-      location,
-      startDate,
-      endDate,
-      description,
-    } = req.body;
+    const { title, institute, location, startDate, endDate, description } =
+      req.body;
 
-    if (!title || !institute || !location || !startDate || !endDate || !description) {
+    if (
+      !title ||
+      !institute ||
+      !location ||
+      !startDate ||
+      !endDate ||
+      !description
+    ) {
       return res.status(400).json({
         message: "All fields are required",
       });
@@ -829,15 +855,17 @@ export const createProfessionalQualification = async (req, res) => {
       description,
     };
 
-    user.educationDetails.professionalDetails.push(newProfessionalQualification);
+    user.educationDetails.professionalDetails.push(
+      newProfessionalQualification
+    );
 
     await user.save();
-    res.status(201).json({ user, message: "Professional qualification added successfully" });
+    res
+      .status(201)
+      .json({ user, message: "Professional qualification added successfully" });
   } catch (error) {
-    res.status(400).json({ message: "Error adding professional qualification", error });
+    res
+      .status(400)
+      .json({ message: "Error adding professional qualification", error });
   }
 };
-
-
-
-

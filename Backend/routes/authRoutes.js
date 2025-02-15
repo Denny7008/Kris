@@ -67,6 +67,7 @@ import {
   getFinancialDetails,
   updateFinancialDetails,
 } from "../controllers/financialController.js";
+import { ForgotPassword } from "../controllers/ForgotPassword.js";
 
 const router = express.Router();
 
@@ -319,5 +320,11 @@ router.post('/payroll/payout', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+// forgot password route
+
+// POST route for Forgot Password
+router.post('/user/forgot-password', ForgotPassword);
 
 export default router;

@@ -88,12 +88,12 @@ const UserLogin = () => {
                 <input type="checkbox" className="form-checkbox" />
                 <span className="ml-2 text-gray-600">Remember me</span>
               </label>
-              <a
-                href="#"
+              <Link
+                 to="/user/forgot-password"
                 className="text-blue-500 hover:underline text-sm font-semibold"
               >
-                Reset Password?
-              </a>
+                forgot Password?
+              </Link>
             </div>
             <button
               type="submit"
