@@ -83,18 +83,18 @@ const UserSchema = new mongoose.Schema(
       type: String,
     },
     nextDetails: {
-      kinName: { type: String, required: true },
-      occupation: { type: String, required: true },
-      phone: { type: String, required: true },
-      relationship: { type: String, required: true },
-      address: { type: String, required: true },
+      kinName: { type: String,  },
+      occupation: { type: String,  },
+      phone: { type: String,  },
+      relationship: { type: String,  },
+      address: { type: String,  },
     },
     guarantorDetails: {
-      name: { type: String, required: true },
-      position: { type: String, required: true },
+      name: { type: String,  },
+      position: { type: String,  },
       phone: {
         type: String,
-        required: [true, "Primary phone number is required"],
+        // required: [true, "Primary phone number is required"],
         match: [
           /^[0-9]{10,15}$/,
           "Please enter a valid phone number with 10-15 digits",
@@ -104,11 +104,11 @@ const UserSchema = new mongoose.Schema(
     familyDetails: {
       type: [
         {
-          name: { type: String, required: true },
-          relationship: { type: String, required: true },
+          name: { type: String, },
+          relationship: { type: String, },
           phone: {
             type: String,
-            required: true,
+            // required: true,
             match: [
               /^[0-9]{10,15}$/,
               "Please enter a valid phone number with 10-15 digits",

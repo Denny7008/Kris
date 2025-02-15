@@ -2,8 +2,96 @@ import User from "../models/User.js"; // Assuming you have a User model
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator"; // For validation middleware
+import mailjet from 'node-mailjet';
+
+import dotenv from 'dotenv';
+dotenv.config();
+
+
 
 // REGISTER THE USER CONTROLLER
+// export const registerUser = async (req, res) => {
+//   const {
+//     firstName,
+//     lastName,
+//     email,
+//     phone,
+//     password,
+//     confirmPassword,
+//     receiveNewsletters,
+//     agreeTerms,
+//   } = req.body;
+
+//   // Check if passwords match
+//   if (password !== confirmPassword) {
+//     return res.status(400).json({ message: "Passwords do not match" });
+//   }
+//   console.log("Password:", password);
+//   console.log("Confirm Password:", confirmPassword);
+
+//   // Validate user input
+//   const errors = validationResult(req);
+//   if (!errors.isEmpty()) {
+//     return res.status(400).json({ errors: errors.array() });
+//   }
+
+//   try {
+//     // Check if user already exists
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) {
+//       return res.status(400).json({ message: "User already exists" });
+//     }
+
+//     // Hash the password
+//     const saltRounds = 10;
+//     const hashedPassword = await bcrypt.hash(password, saltRounds); // Hash password
+//     console.log("Generated hashed password:", hashedPassword);
+
+//     // Create new user (excluding confirmPassword)
+//     const newUser = new User({
+//       firstName,
+//       lastName,
+//       email,
+//       phone,
+//       password: hashedPassword,
+//       receiveNewsletters,
+//       agreeTerms,
+//     });
+
+//     // Save user to database
+//     await newUser.save();
+
+//     // Generate JWT token
+//     const token = jwt.sign(
+//       { userId: newUser._id }, // Payload
+//       process.env.JWT_SECRET, // Secret key
+//       { expiresIn: "1h" } // Expiration time
+//     );
+
+//     res.status(201).json({
+//       message: "User registered successfully",
+//       user: {
+//         id: newUser._id,
+//         firstName: newUser.firstName,
+//         lastName: newUser.lastName,
+//         email: newUser.email,
+//         phone: newUser.phone,
+//         receiveNewsletters: newUser.receiveNewsletters,
+//       },
+//       token,
+//     });
+//   } catch (error) {
+//     console.error("Error during registration:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
+
+
+const mailjetClient = mailjet.apiConnect(
+  process.env.MAILJET_API_KEY,
+  process.env.MAILJET_API_SECRET
+);
+
 export const registerUser = async (req, res) => {
   const {
     firstName,
@@ -16,32 +104,45 @@ export const registerUser = async (req, res) => {
     agreeTerms,
   } = req.body;
 
-  // Check if passwords match
   if (password !== confirmPassword) {
     return res.status(400).json({ message: "Passwords do not match" });
   }
-  console.log("Password:", password);
-  console.log("Confirm Password:", confirmPassword);
 
-  // Validate user input
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
   try {
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Hash the password
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds); // Hash password
-    console.log("Generated hashed password:", hashedPassword);
+    // Send email with plaintext password using Mailjet
+    await mailjetClient.post('send', { version: 'v3.1' }).request({
+      Messages: [
+        {
+          From: {
+            Email: process.env.MAILJET_FROM_EMAIL,
+            Name: 'HR Management System',
+          },
+          To: [
+            {
+              Email: email,
+              Name: `${firstName} ${lastName}`,
+            },
+          ],
+          Subject: 'Your HR Management System Login Credentials',
+          TextPart: `Hello ${firstName},\n\nYour account has been created.\nEmail: ${email}\nPassword: ${password}\n\nPlease login and change your password immediately.`,
+          HTMLPart: `<h3>Hello ${firstName},</h3><p>Your account has been created.<br><strong>Email:</strong> ${email}<br><strong>Password:</strong> ${password}</p><p>Please login and change your password immediately.</p>`,
+        },
+      ],
+    });
 
-    // Create new user (excluding confirmPassword)
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const newUser = new User({
       firstName,
       lastName,
@@ -52,18 +153,12 @@ export const registerUser = async (req, res) => {
       agreeTerms,
     });
 
-    // Save user to database
     await newUser.save();
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: newUser._id }, // Payload
-      process.env.JWT_SECRET, // Secret key
-      { expiresIn: "1h" } // Expiration time
-    );
+    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     res.status(201).json({
-      message: "User registered successfully",
+      message: 'User registered successfully',
       user: {
         id: newUser._id,
         firstName: newUser.firstName,
@@ -75,8 +170,8 @@ export const registerUser = async (req, res) => {
       token,
     });
   } catch (error) {
-    console.error("Error during registration:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error('Error during registration:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
