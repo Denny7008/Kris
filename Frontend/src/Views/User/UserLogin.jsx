@@ -92,7 +92,7 @@ const UserLogin = () => {
                  to="/user/forgot-password"
                 className="text-blue-500 hover:underline text-sm font-semibold"
               >
-                forgot Password?
+                Forgot Password?
               </Link>
             </div>
             <button

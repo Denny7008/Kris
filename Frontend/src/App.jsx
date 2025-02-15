@@ -71,6 +71,7 @@ import Navbarr from "../../TestFiles/UserTest";
 import TestNav from "../../TestFiles/UserTest";
 import PayrollDashboard from "./Views/Admin/pages/PayrollDashboard";
 import ForgotPassword from "./Views/User/ForgotPassword";
+import ResetPassword from "./Views/User/ResetPassword";
 
 function App() {
   return (
@@ -235,6 +236,7 @@ function App() {
 
 
         <Route path="/user/forgot-password" element={<ForgotPassword/>}/>
+        <Route path="/user/reset-password/:resetPasswordToken" element={<ResetPassword/>}/>
 
 
 

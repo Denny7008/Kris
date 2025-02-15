@@ -1,5 +1,4 @@
 import express from "express";
-import multer from "multer";
 import {
   registerUser,
   loginUser,
@@ -67,7 +66,7 @@ import {
   getFinancialDetails,
   updateFinancialDetails,
 } from "../controllers/financialController.js";
-import { ForgotPassword } from "../controllers/ForgotPassword.js";
+import { ForgotPassword, ResetPassword } from "../controllers/passwordController.js";
 
 const router = express.Router();
 
@@ -326,5 +325,6 @@ router.post('/payroll/payout', async (req, res) => {
 
 // POST route for Forgot Password
 router.post('/user/forgot-password', ForgotPassword);
+router.post('/user/reset-password/:resetPasswordToken', ResetPassword);
 
 export default router;
