@@ -8,6 +8,7 @@ const FinancialDocs = () => {
       accountName: "John Doe",
       bankName: "GTBank",
       accountType: "Savings",
+      ifscCode:"GTOUTDB",
     },
   ]);
   
@@ -32,7 +33,7 @@ const FinancialDocs = () => {
   };
 
   const handleAddClick = () => {
-    setCurrentDetail({ accountName: "", accountNumber: "", bankName: "", accountType: "Savings" });
+    setCurrentDetail({ accountName: "", accountNumber: "", bankName: "", ifscCode:"", accountType: "Savings" });
     setShowForm(true);
   };
 
@@ -47,6 +48,38 @@ const FinancialDocs = () => {
   };
 
 
+  // const handleSave = async () => {
+  //   try {
+  //     const token = localStorage.getItem("authToken");
+  
+  //     if (currentDetail._id) {
+  //       // Updating existing entry
+  //       await axios.put(`http://localhost:5000/users/add-bankinfo/update/${currentDetail._id}`, currentDetail, {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       });
+  
+  //       setBankDetails((prevDetails) =>
+  //         prevDetails.map((detail) => (detail._id === currentDetail._id ? currentDetail : detail))
+  //       );
+  //     } else {
+  //       // Adding a new entry, ensure it has a unique _id
+  //       // const response = await axios.post(`http://localhost:5000/users/add-bankinfo/${currentDetail._id}`, currentDetail, {
+  //         const response = await axios.post(`http://localhost:5000/users/add-bankinfo`, currentDetail, {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       });
+  //       console.log(response);
+  
+  //       const newBankDetail = response.data.user.bankDetails.at(-1);
+  //       setBankDetails((prevDetails) => [...prevDetails, { ...newBankDetail, _id: newBankDetail._id || Date.now().toString() }]);
+  //     }
+  
+  //     setShowForm(false);
+  //     setCurrentDetail(null);
+  //   } catch (error) {
+  //     console.error("Error saving bankDetails:", error);
+  //   }
+  // };
+  
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("authToken");
@@ -61,13 +94,20 @@ const FinancialDocs = () => {
           prevDetails.map((detail) => (detail._id === currentDetail._id ? currentDetail : detail))
         );
       } else {
-        // Adding a new entry, ensure it has a unique _id
-        const response = await axios.post(`http://localhost:5000/users/add-bankinfo/${currentDetail._id}`, currentDetail, {
+        // Adding a new entry, REMOVE _id from the URL
+        const response = await axios.post(`http://localhost:5000/users/add-bankinfo`, currentDetail, {
           headers: { Authorization: `Bearer ${token}` },
         });
   
+        console.log(response);
+  
+        // Get the newly added bank detail from the response
         const newBankDetail = response.data.user.bankDetails.at(-1);
-        setBankDetails((prevDetails) => [...prevDetails, { ...newBankDetail, _id: newBankDetail._id || Date.now().toString() }]);
+  
+        setBankDetails((prevDetails) => [
+          ...prevDetails,
+          { ...newBankDetail, _id: newBankDetail._id || Date.now().toString() },
+        ]);
       }
   
       setShowForm(false);
@@ -76,7 +116,6 @@ const FinancialDocs = () => {
       console.error("Error saving bankDetails:", error);
     }
   };
-  
   
 
 
@@ -90,11 +129,11 @@ const FinancialDocs = () => {
             <div className="space-y-4">
               {bankDetails.map((detail) => (
                 <div key={detail._id || detail.accountNumber} className="bg-[#F6F9FC] p-4 rounded-lg shadow flex justify-between items-center">
-                {/* <div key={detail.accountNumber} className="bg-[#F6F9FC] p-4 rounded-lg shadow flex justify-between items-center"> */}
                   <div>
                     <h3 className="font-medium">{detail.accountName}</h3>
                     <p className="text-sm text-gray-600"><strong>Bank Name:</strong> {detail.bankName}</p>
                     <p className="text-sm text-gray-600"><strong>Account Number:</strong> {detail.accountNumber}</p>
+                    <p className="text-sm text-gray-600"><strong>IFSC Code:</strong> {detail.ifscCode}</p>
                     <p className="text-sm text-gray-600"><strong>Account Type:</strong> {detail.accountType}</p>
                   </div>
                   <button onClick={() => handleUpdateClick(detail)} className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600">
@@ -116,7 +155,7 @@ const FinancialDocs = () => {
               {currentDetail.accountNumber ? "Update Bank Details" : "Add Bank Details"}
             </h3>
             <div className="space-y-3">
-              {['accountNumber', 'accountName', 'bankName'].map((field) => (
+              {['accountNumber', 'accountName', 'bankName', 'ifscCode'].map((field) => (
                 <div key={field}>
                   <label className="block text-sm font-medium text-gray-700">
                     {field.charAt(0).toUpperCase() + field.slice(1)}

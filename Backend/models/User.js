@@ -127,6 +127,17 @@ const UserSchema = new mongoose.Schema(
         message: "You can add up to 3 family members only",
       },
     },
+
+
+     // 🔥 Added Razorpay Contact & Fund Account fields
+     razorpayContactId: {
+      type: String,
+      default: null, // Will be assigned when bank details are added
+    },
+    fundAccountId: {
+      type: String,
+      default: null, // Will be assigned when bank details are added
+    },
     
     bankDetails: [{
       accountName: { type: String, required: true },

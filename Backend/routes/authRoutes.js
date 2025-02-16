@@ -96,7 +96,7 @@ router.post(
 ); // Register User
 
 router.post("/admin/register", registerAdmin);
-router.post("/admin/login", loginAdmin);
+router.post("/admin/login", loginAdmin); 
 
 // USER ROUTES
 router.post("/user/login", loginUser); // User Login
@@ -211,6 +211,7 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
         ? user.bankDetails.map((user) => ({
             accountName: user.accountName || "",
             accountNumber: user.accountNumber || "",
+            ifscCode: user.ifscCode || "",
             bankName: user.bankName || "",
             accountType: user.accountType || "",
           }))
@@ -253,7 +254,7 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
 
 // FINANICAL DETAILS
 router.get("/", authenticateToken, getFinancialDetails);
-router.post("/users/add-bankinfo/:id", authenticateToken, addFinancialDetails);
+router.post("/users/add-bankinfo", authenticateToken, addFinancialDetails);
 router.put(
   "/users/add-bankinfo/update/:id",
   authenticateToken,

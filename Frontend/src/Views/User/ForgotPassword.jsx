@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import logo from "../../assets/kris logo 3.svg";
+import bgImage from "../../assets/backgd.jpg";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
