@@ -185,56 +185,72 @@ export const getFinancialDetails = async (req, res) => {
 //   }
 // };
 
-export const addFinancialDetails = async (req, res) => { 
+
+
+
+
+
+// create
+export const addFinancialDetails = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
     const { accountName, accountNumber, ifscCode, bankName, accountType } = req.body;
 
     if (!accountName || !accountNumber || !ifscCode || !bankName || !accountType) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // Check if the user already has a Contact ID in Razorpay
-    if (!user.razorpayContactId) {
-      const contact = await razorpay.contacts.create({
-        name: `${user.firstName} ${user.lastName}`,
-        email: user.email,
-        contact: user.phone || "9999999999",
-        type: "customer",
-      });
+    const razorpayKey = process.env.RAZORPAY_KEY_ID;
+    const razorpaySecret = process.env.RAZORPAY_KEY_SECRET;
 
-      user.razorpayContactId = contact.id;
-      await user.save(); // Save Razorpay Contact ID
-    }
+    // Step 1: Create Contact in Razorpay
+    const contactResponse = await axios.post('https://api.razorpay.com/v1/contacts', {
+      name: `${req.user.firstName} ${req.user.lastName}`,
+      email: req.user.email,
+      contact: req.user.phone || '9999999999',
+      type: 'customer',
+    }, {
+      auth: {
+        username: razorpayKey,
+        password: razorpaySecret
+      }
+    });
 
-    // ✅ Correct reference to `fundAccount.create()`
-    const fundAccount = await razorpay.fundAccount.create({
-      contact_id: user.razorpayContactId,
-      account_type: "bank_account",
+    const contactId = contactResponse.data.id;
+
+    // Step 2: Create Fund Account
+    const fundAccountResponse = await axios.post('https://api.razorpay.com/v1/fund_accounts', {
+      contact_id: contactId,
+      account_type: 'bank_account',
       bank_account: {
         name: accountName,
         account_number: accountNumber,
         ifsc: ifscCode,
-      },
+      }
+    }, {
+      auth: {
+        username: razorpayKey,
+        password: razorpaySecret
+      }
     });
-    console.log("fundAccount.create type:", typeof razorpay.fundAccount.create);
 
-    // Save bank details to the user model
+    const fundAccountId = fundAccountResponse.data.id;
+
+    // Save details in the database
+    const user = await User.findById(req.user._id);
     user.bankDetails.push({ accountName, accountNumber, ifscCode, bankName, accountType });
-    user.fundAccountId = fundAccount.id;
-
+    user.fundAccountId = fundAccountId;
     await user.save();
 
-    res.status(200).json({
-      message: "Bank details added successfully",
-      bankDetails: user.bankDetails,
-      fundAccountId: user.fundAccountId,
+    res.status(200).json({ 
+      message: 'Bank details added successfully', 
+      user: { bankDetails: user.bankDetails, fundAccountId: user.fundAccountId } 
     });
   } catch (error) {
     console.error("Error adding bank details:", error);
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
+
 
 // Update financial details
 export const updateFinancialDetails = async (req, res) => {
