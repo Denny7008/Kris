@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Banknote, User, Search, CheckCircle } from "lucide-react";
 import axios from "axios";
-import { sendPaymentSuccessEmail } from "../../../../../Backend/controllers/paymentController.js";
 
 const PayrollDashboard = () => {
   const [userList, setUserList] = useState([]);
@@ -89,8 +88,7 @@ const PayrollDashboard = () => {
       if (response.data.success) {
         setShowModal(false); // Close the payment modal
         setShowSuccessModal(true); // Show the success modal
-
-        await sendPaymentSuccessEmail(selectedUser, salary);
+        
         // Hide the success modal after 3 seconds
         setTimeout(() => {
           setShowSuccessModal(false);
