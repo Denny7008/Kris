@@ -4,6 +4,8 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import connectDB from "./config/db.js";
 import authRoutes from './routes/authRoutes.js';  
+import payRoutes from "./routes/payoutRoutes.js";
+import payoutRoutes from './routes/payoutRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -23,6 +25,8 @@ app.use(express.json());
 
 // Use the authentication routes (register, login, etc.)
 app.use(authRoutes);    
+app.use(payRoutes);     
+app.use('/api', payoutRoutes);
 
 // 404 Route
 app.use((req, res, next) => {

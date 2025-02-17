@@ -10,7 +10,6 @@ import AdminUpperNavbar from "../../Components/AdminUpperNavbar";
 import { Outlet } from "react-router-dom";
 
 const AdminDashboard = () => {
-
   return (
     <div className="flex bg-[#E3EDF9]">
       <AdminSideNavbar />
@@ -24,7 +23,8 @@ const AdminDashboard = () => {
         </div>
       </div>
     </div>
-  );      
+  );
 };
 
 export default AdminDashboard;
+

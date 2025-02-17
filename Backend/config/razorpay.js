@@ -8,8 +8,8 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-console.log("Razorpay Initialized:", razorpay); // Debugging log
-console.log("Razorpay Key ID:", process.env.RAZORPAY_KEY_ID);
-console.log("Razorpay Key Secret:", process.env.RAZORPAY_KEY_SECRET ? "Exists" : "Not Found");
+// console.log("Razorpay Initialized:", razorpay); // Debugging log
+// console.log("Razorpay Key ID:", process.env.RAZORPAY_KEY_ID);
+// console.log("Razorpay Key Secret:", process.env.RAZORPAY_KEY_SECRET ? "Exists" : "Not Found");
 
 export default razorpay;

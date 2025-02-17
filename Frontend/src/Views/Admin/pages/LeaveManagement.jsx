@@ -25,7 +25,7 @@ const LeaveManagement = () => {
   };
 
   return (
-    <div className="flex bg-[#E3EDF9]">
+    <div className="flex bg-[#E3EDF9] h-screen">
       <AdminSideNavbar />
       <div className="flex-col">
         <AdminUpperNavbar />
@@ -94,3 +94,4 @@ const LeaveManagement = () => {
 };
 
 export default LeaveManagement;
+
