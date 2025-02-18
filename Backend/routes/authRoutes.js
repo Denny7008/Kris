@@ -69,6 +69,7 @@ import {
 import { ForgotPassword, ResetPassword } from "../controllers/passwordController.js";
 import { addJob, deleteJob, getJobs } from "../controllers/JobContoller.js";
 import { applyForJob } from "../controllers/applyForJobContoller.js";
+import Job from "../models/JobSchema.js";
 
 const router = express.Router();
 
@@ -340,5 +341,18 @@ router.delete('/delete/job/:id', deleteJob);
 
 // job apply
 router.post('/apply/:jobId', applyForJob);
+
+// ✅ Get Job Details by jobId
+router.get("/job/:jobId", async (req, res) => {
+  try {
+    const job = await Job.findOne({ jobId: req.params.jobId });
+    if (!job) return res.status(404).json({ message: "Job not found" });
+
+    res.json(job);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching job details", error });
+  }
+});
+
 
 export default router;

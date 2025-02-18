@@ -28,21 +28,21 @@ export const getJobs = async (req, res) => {
 
 
 
-export const addJob = async (req, res) => {
-  const { title, company, type, location, postedDate, expirationDate } = req.body;
+// export const addJob = async (req, res) => {
+//   const { title, company, type, location, postedDate, expirationDate } = req.body;
 
-  const jobLink = `${process.env.FRONTEND_URL}/apply-job/${uuidv4()}`;  // Generate unique link
-  console.log(jobLink);
+//   const jobLink = `${process.env.FRONTEND_URL}/job/${uuidv4()}`;  // Generate unique link
 
-  const newJob = new Job({ title, company, type, location, postedDate, expirationDate, jobLink });
+//   const newJob = new Job({ title, company, type, location, postedDate, expirationDate, jobLink });
 
-  try {
-    const savedJob = await newJob.save();
-    res.status(201).json(savedJob);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+//   try {
+//     const savedJob = await newJob.save();
+//     console.log(savedJob);
+//     res.status(201).json(savedJob);
+//   } catch (error) {
+//     res.status(400).json({ message: error.message });
+//   }
+// };
 
 export const deleteJob = async (req, res) => {
     try {
@@ -67,3 +67,29 @@ export const deleteJob = async (req, res) => {
 };
 
   
+export const addJob = async (req, res) => {
+  const { title, company, type, location, postedDate, expirationDate } = req.body;
+
+  // Create the new job object without UUID
+  const newJob = new Job({ title, company, type, location, postedDate, expirationDate });
+
+  try {
+    // Save the new job to the database
+    const savedJob = await newJob.save();
+    console.log(savedJob);
+
+    // Use the saved job's _id to create the job link
+    const jobLink = `${process.env.FRONTEND_URL}/job/${savedJob._id}`;
+
+    // Update the saved job with the correct jobLink
+    savedJob.jobLink = jobLink;
+
+    // Save the updated job link to the database
+    await savedJob.save();
+
+    // Respond with the saved job data
+    res.status(201).json(savedJob);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};

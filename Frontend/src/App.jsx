@@ -75,6 +75,8 @@ import ResetPassword from "./Views/User/ResetPassword";
 import Practical from "../../TestFiles/Practical";
 import AdminJobManagement from "./Views/Admin/pages/AdminJobManagement";
 import Candidates from "./Views/Admin/pages/Candidates";
+import JobApplicationForm from "./Views/Admin/pages/JobApplicationForm";
+import JobDetailPage from "./Views/Admin/pages/JobDetailPage";
 
 function App() {
   return (
@@ -291,6 +293,8 @@ function App() {
 
 
         <Route path="/jobportal" element={<AdminJobManagement/>}/>
+        <Route path="/job/:jobId" element={<JobDetailPage />} />
+        <Route path="/apply/:jobId" element={<JobApplicationForm />} />
          
       </Routes>
     </>
