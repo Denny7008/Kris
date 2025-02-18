@@ -27,15 +27,19 @@ const AdminJobManagement = () => {
     }
   };
 
-  const handleAddJob = async () => {
+  const handleAddJob = async (jobData) => {
+    console.log("Sending job data:", jobData); // Debugging log
+  
     try {
-      await axios.post("http://localhost:5000/addjob", newJob);
-      fetchJobs();
-      setShowModal(false); // Close modal after adding job
+      const response = await axios.post("http://localhost:5000/addjob", jobData);
+      console.log("Job created:", response.data);
+      alert(`Job successfully created! Apply using: ${response.data.jobLink}`);
     } catch (error) {
       console.error("Error adding job:", error);
     }
   };
+  
+  
 
   const handleDeleteJob = async (jobId) => {
     try {
@@ -204,7 +208,7 @@ const AdminJobManagement = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={handleAddJob}
+                  onClick={() => handleAddJob(newJob)}
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                 >
                   Add Job

@@ -68,7 +68,7 @@ import {
 } from "../controllers/financialController.js";
 import { ForgotPassword, ResetPassword } from "../controllers/passwordController.js";
 import { addJob, deleteJob, getJobs } from "../controllers/JobContoller.js";
-import { applyForJob } from "../controllers/applyForJobContoller.js";
+import { applyForJob, getJobByLink } from "../controllers/applyForJobContoller.js";
 
 const router = express.Router();
 
@@ -340,5 +340,8 @@ router.delete('/delete/job/:id', deleteJob);
 
 // job apply
 router.post('/apply/:jobId', applyForJob);
+
+
+router.get('/apply-job/:jobLink', getJobByLink);
 
 export default router;
