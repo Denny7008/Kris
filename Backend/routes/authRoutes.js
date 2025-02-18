@@ -68,8 +68,12 @@ import {
 } from "../controllers/financialController.js";
 import { ForgotPassword, ResetPassword } from "../controllers/passwordController.js";
 import { addJob, deleteJob, getJobs } from "../controllers/JobContoller.js";
+<<<<<<< HEAD
 import { applyForJob } from "../controllers/applyForJobContoller.js";
 import Job from "../models/JobSchema.js";
+=======
+import { applyForJob, getJobByLink } from "../controllers/applyForJobContoller.js";
+>>>>>>> d1b01c2f6a171a3b0c96281955ebdf107cd563da
 
 const router = express.Router();
 
@@ -342,6 +346,7 @@ router.delete('/delete/job/:id', deleteJob);
 // job apply
 router.post('/apply/:jobId', applyForJob);
 
+<<<<<<< HEAD
 // ✅ Get Job Details by jobId
 router.get("/job/:jobId", async (req, res) => {
   try {
@@ -354,5 +359,9 @@ router.get("/job/:jobId", async (req, res) => {
   }
 });
 
+=======
+
+router.get('/apply-job/:jobLink', getJobByLink);
+>>>>>>> d1b01c2f6a171a3b0c96281955ebdf107cd563da
 
 export default router;

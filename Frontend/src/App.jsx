@@ -1,6 +1,6 @@
 import "./App.css";
 import UserLogin from "./Views/User/UserLogin";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Router } from "react-router-dom";
 import UserRegister from "./Views/User/UserRegister";
 import Adminlogin from "./Views/Admin/Adminlogin";
 import AdminSideNavbar from "./Components/AdminSideNavbar";
@@ -76,7 +76,10 @@ import Practical from "../../TestFiles/Practical";
 import AdminJobManagement from "./Views/Admin/pages/AdminJobManagement";
 import Candidates from "./Views/Admin/pages/Candidates";
 import JobApplicationForm from "./Views/Admin/pages/JobApplicationForm";
+<<<<<<< HEAD
 import JobDetailPage from "./Views/Admin/pages/JobDetailPage";
+=======
+>>>>>>> d1b01c2f6a171a3b0c96281955ebdf107cd563da
 
 function App() {
   return (
@@ -293,8 +296,14 @@ function App() {
 
 
         <Route path="/jobportal" element={<AdminJobManagement/>}/>
+<<<<<<< HEAD
         <Route path="/job/:jobId" element={<JobDetailPage />} />
         <Route path="/apply/:jobId" element={<JobApplicationForm />} />
+=======
+
+
+        <Route path="/apply-job/:jobLink" component={<JobApplicationForm/>} />
+>>>>>>> d1b01c2f6a171a3b0c96281955ebdf107cd563da
          
       </Routes>
     </>
