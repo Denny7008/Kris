@@ -49,7 +49,7 @@ const AdminSideNavbar = () => {
         </NavLink>
         <h3 className="mt-4 mb-2 font-semibold">Recruitment</h3>
         <NavLink
-          to="/jobs"
+          to="/admin/login/AdminDashboard/jobportal"
           className={({ isActive }) =>
             `flex items-center p-2 mb-2 rounded-lg ${
               isActive ? "bg-yellow-400 text-black" : "hover:bg-blue-800"

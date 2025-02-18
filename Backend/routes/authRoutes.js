@@ -67,6 +67,7 @@ import {
   updateFinancialDetails,
 } from "../controllers/financialController.js";
 import { ForgotPassword, ResetPassword } from "../controllers/passwordController.js";
+import { addJob, deleteJob, getJobs } from "../controllers/JobContoller.js";
 
 const router = express.Router();
 
@@ -327,5 +328,12 @@ router.post('/payroll/payout', async (req, res) => {
 // POST route for Forgot Password
 router.post('/user/forgot-password', ForgotPassword);
 router.post('/user/reset-password/:resetPasswordToken', ResetPassword);
+
+
+
+// jobs route
+router.get('/getall', getJobs);
+router.post('/addjob', addJob);
+router.delete('/delete/job/:id', deleteJob);
 
 export default router;
