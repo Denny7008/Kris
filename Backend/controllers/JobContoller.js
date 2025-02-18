@@ -68,10 +68,10 @@ export const deleteJob = async (req, res) => {
 
   
 export const addJob = async (req, res) => {
-  const { title, company, type, location, postedDate, expirationDate } = req.body;
+  const { title, company, type, location,description, postedDate, expirationDate } = req.body;
 
   // Create the new job object without UUID
-  const newJob = new Job({ title, company, type, location, postedDate, expirationDate });
+  const newJob = new Job({ title, company, type, location,description, postedDate, expirationDate });
 
   try {
     // Save the new job to the database

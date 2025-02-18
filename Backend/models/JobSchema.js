@@ -21,6 +21,11 @@ const jobSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  description:{
+    type: String,
+    trim: true,
+      // Limit description length to 500 characters
+  },
   postedDate: {
     type: String,
     default: () => new Date().toISOString().split('T')[0],

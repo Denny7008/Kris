@@ -68,12 +68,13 @@ import {
 } from "../controllers/financialController.js";
 import { ForgotPassword, ResetPassword } from "../controllers/passwordController.js";
 import { addJob, deleteJob, getJobs } from "../controllers/JobContoller.js";
-<<<<<<< HEAD
-import { applyForJob } from "../controllers/applyForJobContoller.js";
+
+// import { applyForJob } from "../controllers/applyForJobContoller.js";
 import Job from "../models/JobSchema.js";
-=======
+
 import { applyForJob, getJobByLink } from "../controllers/applyForJobContoller.js";
->>>>>>> d1b01c2f6a171a3b0c96281955ebdf107cd563da
+import mongoose from "mongoose";
+
 
 const router = express.Router();
 
@@ -346,12 +347,23 @@ router.delete('/delete/job/:id', deleteJob);
 // job apply
 router.post('/apply/:jobId', applyForJob);
 
-<<<<<<< HEAD
-// ✅ Get Job Details by jobId
+
+
+
 router.get("/job/:jobId", async (req, res) => {
   try {
-    const job = await Job.findOne({ jobId: req.params.jobId });
-    if (!job) return res.status(404).json({ message: "Job not found" });
+    const { jobId } = req.params;
+
+    // Validate ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(jobId)) {
+      return res.status(400).json({ message: "Invalid job ID format" });
+    }
+
+    const job = await Job.findById(jobId); // Query using _id
+
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
 
     res.json(job);
   } catch (error) {
@@ -359,9 +371,7 @@ router.get("/job/:jobId", async (req, res) => {
   }
 });
 
-=======
 
-router.get('/apply-job/:jobLink', getJobByLink);
->>>>>>> d1b01c2f6a171a3b0c96281955ebdf107cd563da
+
 
 export default router;

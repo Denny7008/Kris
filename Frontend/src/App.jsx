@@ -76,10 +76,9 @@ import Practical from "../../TestFiles/Practical";
 import AdminJobManagement from "./Views/Admin/pages/AdminJobManagement";
 import Candidates from "./Views/Admin/pages/Candidates";
 import JobApplicationForm from "./Views/Admin/pages/JobApplicationForm";
-<<<<<<< HEAD
+
 import JobDetailPage from "./Views/Admin/pages/JobDetailPage";
-=======
->>>>>>> d1b01c2f6a171a3b0c96281955ebdf107cd563da
+
 
 function App() {
   return (
@@ -296,14 +295,14 @@ function App() {
 
 
         <Route path="/jobportal" element={<AdminJobManagement/>}/>
-<<<<<<< HEAD
+
         <Route path="/job/:jobId" element={<JobDetailPage />} />
         <Route path="/apply/:jobId" element={<JobApplicationForm />} />
-=======
+
 
 
         <Route path="/apply-job/:jobLink" component={<JobApplicationForm/>} />
->>>>>>> d1b01c2f6a171a3b0c96281955ebdf107cd563da
+
          
       </Routes>
     </>
