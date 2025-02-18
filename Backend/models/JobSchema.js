@@ -29,6 +29,7 @@ const jobSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  jobLink: { type: String, unique: true },
 }, 
 { timestamps: true });  // Add timestamps here
 

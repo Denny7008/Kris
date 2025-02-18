@@ -68,6 +68,7 @@ import {
 } from "../controllers/financialController.js";
 import { ForgotPassword, ResetPassword } from "../controllers/passwordController.js";
 import { addJob, deleteJob, getJobs } from "../controllers/JobContoller.js";
+import { applyForJob } from "../controllers/applyForJobContoller.js";
 
 const router = express.Router();
 
@@ -335,5 +336,9 @@ router.post('/user/reset-password/:resetPasswordToken', ResetPassword);
 router.get('/getall', getJobs);
 router.post('/addjob', addJob);
 router.delete('/delete/job/:id', deleteJob);
+
+
+// job apply
+router.post('/apply/:jobId', applyForJob);
 
 export default router;

@@ -60,7 +60,7 @@ const AdminSideNavbar = () => {
           <span className="ml-2">Jobs</span>
         </NavLink>
         <NavLink
-          to="/candidates"
+          to="/admin/login/AdminDashboard/candidates"
           className={({ isActive }) =>
             `flex items-center p-2 mb-2 rounded-lg ${
               isActive ? "bg-yellow-400 text-black" : "hover:bg-blue-800"

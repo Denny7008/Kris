@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
+
 
 import Job from '../models/JobSchema.js';
 
@@ -12,9 +14,27 @@ export const getJobs = async (req, res) => {
   }
 };
 
+// export const addJob = async (req, res) => {
+//   const { title, company, type, location, postedDate, expirationDate } = req.body;
+//   const newJob = new Job({ title, company, type, location, postedDate, expirationDate });
+
+//   try {
+//     const savedJob = await newJob.save();
+//     res.status(201).json(savedJob);
+//   } catch (error) {
+//     res.status(400).json({ message: error.message });
+//   }
+// };
+
+
+
 export const addJob = async (req, res) => {
   const { title, company, type, location, postedDate, expirationDate } = req.body;
-  const newJob = new Job({ title, company, type, location, postedDate, expirationDate });
+
+  const jobLink = `${process.env.FRONTEND_URL}/apply-job/${uuidv4()}`;  // Generate unique link
+  console.log(jobLink);
+
+  const newJob = new Job({ title, company, type, location, postedDate, expirationDate, jobLink });
 
   try {
     const savedJob = await newJob.save();

@@ -95,7 +95,7 @@ const AdminJobManagement = () => {
             {jobs.map((job) => (
                  <tr key={job._id} className="hover:bg-gray-50">  
                    <td className="p-2 border">{job.title}</td>
-                   <td className="p-2 border">KRIS</td>
+                   <td className="p-2 border">{job.company}</td>
                    <td className="p-2 border">{job.type}</td>
                    <td className="p-2 border">{job.location}</td>
                    <td className="p-2 border">{job.postedDate}</td>
@@ -143,7 +143,7 @@ const AdminJobManagement = () => {
                 <input
                   type="text"
                   name="company"
-                  value="KRIS"
+                  value={newJob.company}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                   placeholder="Enter company name"

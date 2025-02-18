@@ -74,6 +74,7 @@ import ForgotPassword from "./Views/User/ForgotPassword";
 import ResetPassword from "./Views/User/ResetPassword";
 import Practical from "../../TestFiles/Practical";
 import AdminJobManagement from "./Views/Admin/pages/AdminJobManagement";
+import Candidates from "./Views/Admin/pages/Candidates";
 
 function App() {
   return (
@@ -120,7 +121,7 @@ function App() {
           <Route path="PerformanceManagement" element={<PerformanceManagement />} />
           <Route path="payroll" element={<PayrollDashboard />}/>
           <Route path="jobportal" element={<AdminJobManagement/>}/>
-
+          <Route path="candidates" element={<Candidates />} />
         </Route>
 
         <Route path="JobDetails" index element={<ViewJobDetails />} replace />
