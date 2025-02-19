@@ -2,9 +2,8 @@ import multer from "multer";
 import fs from "fs";
 import User from "../models/User.js"; // Adjust path as needed
 import mongoose from "mongoose";
+import Admin from "../models/Admin.js"; // Adjust path as needed
 
-// Set up multer for storing files temporarily
-const upload = multer({ dest: "uploads/" });
 
 export const uploadProfileImage = async (req, res) => {
   try {
@@ -66,6 +65,100 @@ export const getProfileImage = async (req, res) => {
 
     res.json({
       imageUrl: `data:${user.profilePic.contentType};base64,${base64Image}`,
+    });
+  } catch (error) {
+    console.error("Error retrieving image:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+
+
+
+
+// UPLOAD ADMIN PROFILE IMAGE
+// export const uploadAdminProfileImage = async (req, res) => {
+//   try {
+//     const { adminId } = req.params;
+
+//     // Validate ObjectId format
+//     if (!mongoose.Types.ObjectId.isValid(adminId)) {
+//       return res.status(400).json({ message: "Invalid adminId." });
+//     }
+
+//     if (!req.file) {
+//       return res.status(400).json({ message: "No file uploaded." });
+//     }
+
+//     // Read the image file and convert it to a buffer
+//     const imageData = fs.readFileSync(req.file.path);
+//     const contentType = req.file.mimetype; // Get file type (image/png, image/jpeg, etc.)
+
+//     // Update the user's profile with the new image
+//     const updatedAdmin = await Admin.findByIdAndUpdate(
+//       adminId,
+//       { profilePic: { data: imageData, contentType } },
+//       { new: true }
+//     );
+
+//     // Delete the temp file after storing in MongoDB
+//     fs.unlinkSync(req.file.path);
+
+//     if (!updatedAdmin) {
+//       return res.status(404).json({ message: "Admin not found." });
+//     }
+
+//     res.status(200).json({ message: "Image uploaded successfully." });
+//   } catch (error) {
+//     console.error("Error uploading image:", error);
+//     console.log(error);
+//     res.status(500).json({ message: "Server error. Please try again later." });
+//   }
+// };
+
+
+export const uploadAdminProfileImage = async (req, res) => {
+  try {
+    const { profilePic } = req.body;
+
+    if (!profilePic) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    // Convert base64 to Buffer
+    const buffer = Buffer.from(profilePic, "base64");
+
+    // Simulate saving the buffer (replace this with actual DB logic)
+    console.log("Received file buffer:", buffer);
+
+    res.status(200).json({ message: "Image uploaded successfully" });
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+// GET ADMIN PROFILE IMAGE
+export const getAdminProfileImage = async (req, res) => {
+  try {
+    const { adminId } = req.params;
+
+    // Validate ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(adminId)) {
+      return res.status(400).json({ message: "Invalid adminId." });
+    }
+
+    const admin = await Admin.findById(adminId);
+
+    if (!admin || !admin.profilePic || !admin.profilePic.data) {
+      return res.status(404).json({ message: "Image not found." });
+    }
+
+    // Convert Buffer to Base64
+    const base64Image = admin.profilePic.data.toString("base64");
+
+    res.json({
+      imageUrl: `data:${admin.profilePic.contentType};base64,${base64Image}`,
     });
   } catch (error) {
     console.error("Error retrieving image:", error);

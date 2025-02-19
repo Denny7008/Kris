@@ -18,7 +18,7 @@ const PayrollDashboard = () => {
 
         const processedUsers = await Promise.all(
           users.map(async (user) => {
-            let profileImage = "https://wallpapercave.com/wp/wp2158286.jpg"; // Default profile image
+            let profileImage = "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"; // Default profile image
 
             if (user.profilePic?.data?.data) {
               try {

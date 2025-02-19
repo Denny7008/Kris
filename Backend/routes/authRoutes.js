@@ -31,7 +31,7 @@ import {
   getApprovedLeaveApplications,
 } from "../controllers/leaveController.js";
 import { body } from "express-validator"; // For input validation
-import { loginAdmin, registerAdmin } from "../controllers/adminController.js";
+import { getAdmin, loginAdmin, registerAdmin } from "../controllers/adminController.js";
 import {
   authenticateToken,
   getUserDataFromToken,
@@ -50,7 +50,9 @@ import {
   markMessagesAsRead,
 } from "../controllers/MessageContoller.js";
 import {
+  getAdminProfileImage,
   getProfileImage,
+  uploadAdminProfileImage,
   uploadProfileImage,
 } from "../controllers/uploadController.js";
 import upload from "../middleware/uploadMiddleware.js";
@@ -105,6 +107,7 @@ router.post(
 
 router.post("/admin/register", registerAdmin);
 router.post("/admin/login", loginAdmin); 
+router.get("/admin", getAdmin);
 
 // USER ROUTES
 router.post("/user/login", loginUser); // User Login
@@ -153,6 +156,16 @@ router.post(
   uploadProfileImage
 );
 router.get("/profile-image/:userId", getProfileImage);
+
+// uploadAdminProfileImage
+router.post(
+  "/admin/upload-profile/:adminId",
+  // authenticateToken,
+  upload.single("file"),
+  uploadAdminProfileImage
+);
+router.get("/admin/profile-image/:adminId", getAdminProfileImage);
+
 
 // LEAVE APPLICATION ROUTES
 router.get("/leave-applications", getAllLeaveApplications); // Route to get all leave applications (Admin side)

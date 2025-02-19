@@ -122,4 +122,17 @@ export const loginAdmin = async (req, res) => {
   };
   
 
-
+// GET ADMIN LOG
+  export const getAdmin = async (req, res) => {
+    try {
+      const admins = await Admin.find().select("-password"); // Exclude passwords for security
+      console.log(admins);
+      res.status(200).json({
+        message: "Admins fetched successfully",
+        admins,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Server error", error: error.message });
+    }
+  };

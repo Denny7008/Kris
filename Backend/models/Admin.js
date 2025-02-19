@@ -40,6 +40,10 @@ const AdminSchema = new mongoose.Schema({
     enum: ["user", "admin"], 
     default: "admin",        
   },
+  profilePic: {
+      data: Buffer,
+      contentType: String,
+    },
 }, { timestamps: true });
 
 
