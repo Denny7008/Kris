@@ -25,6 +25,54 @@ export const applyForJob = async (req, res) => {
   }
 };
 
+// export const getCandidates = async (req, res) => {
+//   try {
+//     const candidates = await Candidate.find();
+//     res.status(200).json(candidates);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
+
+export const getCandidates = async (req, res) => {
+  try {
+    const candidates = await Candidate.find().lean();
+    
+    const jobIds = candidates.map(candidate => candidate.jobId).filter(id => id);
+    const jobs = await Job.find({ _id: { $in: jobIds } }).select("title location").lean();
+    
+    const jobMap = jobs.reduce((acc, job) => {
+      acc[job._id] = { title: job.title, location: job.location };
+      return acc;
+    }, {});
+    
+    const candidatesWithJobs = candidates.map(candidate => ({
+      ...candidate,
+      jobTitle: jobMap[candidate.jobId]?.title || "N/A",
+      jobLocation: jobMap[candidate.jobId]?.location || "N/A",
+    }));
+
+    res.status(200).json(candidatesWithJobs);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
+
+export const getCandidatesByJob = async (req, res) => {
+  const { jobId } = req.params;
+
+  try {
+    const candidates = await Candidate.find({ jobId });
+    res.status(200).json(candidates);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 // In your job controller or routes file
 

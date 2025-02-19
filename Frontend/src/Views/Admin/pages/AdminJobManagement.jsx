@@ -38,6 +38,18 @@ const AdminJobManagement = () => {
       console.log("Job created:", response.data);
       alert(`Job successfully created! Apply using: ${response.data.jobLink}`);
 
+      setShowModal(false); // Close modal after successful submission
+    setNewJob({ // Reset form fields after submission
+      title: "",
+      company: "",
+      type: "Full-Time",
+      location: "",
+      expirationDate: "",
+      description: "",
+    });
+
+    fetchJobs(); // Refresh job list
+
     } catch (error) {
       console.error("Error adding job:", error);
     }
@@ -101,14 +113,7 @@ const AdminJobManagement = () => {
             <tbody>
               {jobs.map((job) => (
                 <tr key={job._id} className="hover:bg-gray-50">
-                  <td className="p-2 border">
-                    <Link
-                      to={`/job/${job._id}`} // Link to the job detail page with jobId
-                      className="text-blue-500 hover:underline"
-                    >
-                      {job.title}
-                    </Link>
-                  </td>
+                  <td className="p-2 border">{job.title}</td>
                   <td className="p-2 border">{job.company}</td>
                   <td className="p-2 border">{job.type}</td>
                   <td className="p-2 border">{job.location}</td>

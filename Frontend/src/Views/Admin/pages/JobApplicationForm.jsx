@@ -11,7 +11,7 @@ const JobApplicationForm = () => {
     name: "",
     email: "",
     phone: "",
-    resume: null,
+    resumeLink: null,
   });
   const [message, setMessage] = useState("");
 
@@ -39,13 +39,6 @@ const JobApplicationForm = () => {
     }));
   };
 
-  const handleFileChange = (e) => {
-    const { files } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      resume: files[0],
-    }));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,7 +47,7 @@ const JobApplicationForm = () => {
     formDataToSubmit.append("name", formData.name);
     formDataToSubmit.append("email", formData.email);
     formDataToSubmit.append("phone", formData.phone);
-    formDataToSubmit.append("resume", formData.resume);
+    formDataToSubmit.append("resumeLink", formData.resumeLink);
 
     try {
       const response = await axios.post(
@@ -66,6 +59,7 @@ const JobApplicationForm = () => {
           },
         }
       );
+      console.log(response);
       setMessage(response.data.message);
     } catch (error) {
       setMessage("Error submitting application");
@@ -121,12 +115,12 @@ const JobApplicationForm = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium">Resume (PDF)</label>
+          <label className="block text-sm font-medium">Resume Link(GoogleDrive)</label>
           <input
-            type="file"
-            name="resume"
-            accept=".pdf"
-            onChange={handleFileChange}
+            type="text"
+            name="resumeLink"
+            value={formData.resumeLink}
+            onChange={handleInputChange}
             required
             className="w-full p-2 border border-gray-300 rounded mt-2"
           />

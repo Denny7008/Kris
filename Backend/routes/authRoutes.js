@@ -72,7 +72,7 @@ import { addJob, deleteJob, getJobs } from "../controllers/JobContoller.js";
 // import { applyForJob } from "../controllers/applyForJobContoller.js";
 import Job from "../models/JobSchema.js";
 
-import { applyForJob, getJobByLink } from "../controllers/applyForJobContoller.js";
+import { applyForJob, getCandidates, getCandidatesByJob, getJobByLink } from "../controllers/applyForJobContoller.js";
 import mongoose from "mongoose";
 
 
@@ -345,7 +345,9 @@ router.delete('/delete/job/:id', deleteJob);
 
 
 // job apply
-router.post('/apply/:jobId', applyForJob);
+router.post('/jobs/apply/:jobId', applyForJob);
+router.get('/candidates', getCandidates);
+router.get('/candidates/:jobId', getCandidatesByJob);  // Get candidates by job ID
 
 
 

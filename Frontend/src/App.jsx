@@ -301,7 +301,7 @@ function App() {
 
 
 
-        <Route path="/apply-job/:jobLink" component={<JobApplicationForm/>} />
+        {/* <Route path="/apply-job/:jobLink" component={<JobApplicationForm/>} /> */}
 
          
       </Routes>
