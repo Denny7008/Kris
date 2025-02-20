@@ -1,20 +1,14 @@
 import React, { useState } from "react";
-import AdminSideNavbar from "../../../Components/AdminSideNavbar";
-import AdminUpperNavbar from "../../../Components/AdminUpperNavbar";
 
-const FinancialDetails = () => {
-  const menuItems = [
-    "Personal Details",
-    "Contact Details",
-    "Next of Kin Details",
-    "Education Qualifications",
-    "Guarantor Details",
-    "Family Details",
-    "Job Details",
-    "Financial Details",
-  ];
+const FinancialDetails = ({employee}) => {
 
-  const [activeTab, setActiveTab] = useState("Financial Details");
+
+  if (!employee) {
+    console.log("No Employee Data Found:", employee);
+    return <div className="text-red-500">Error: No Employee Data Available</div>;
+  }
+
+
 
   return (
             <div className="flex-1 bg-white rounded-lg p-8">
@@ -29,7 +23,7 @@ const FinancialDetails = () => {
                     </label>
                     <input
                       type="text"
-                      value="Access Bank"
+                      value={employee.bankDetails[0]?.bankName || ""}
                       className="w-full p-3 border rounded-lg bg-gray-100"
                       readOnly
                     />
@@ -43,7 +37,7 @@ const FinancialDetails = () => {
                       </label>
                       <input
                         type="text"
-                        value="001101100"
+                        value={employee.bankDetails[0]?.accountNumber || ""}
                         className="w-full p-3 border rounded-lg bg-gray-100"
                         readOnly
                       />
@@ -54,43 +48,38 @@ const FinancialDetails = () => {
                       </label>
                       <input
                         type="text"
-                        value="John Doe Smith"
+                        value={employee.bankDetails[0]?.accountName || ""}
                         className="w-full p-3 border rounded-lg bg-gray-100"
                         readOnly
                       />
                     </div>
                   </div>
 
-                  {/* Pension Details */}
+                  
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block font-medium text-gray-700 mb-1">
-                        Registered with
+                        IFSC Code
                       </label>
                       <input
                         type="text"
-                        value="Stanbic IBTC"
+                        value={employee.bankDetails[0]?.ifscCode || ""}
                         className="w-full p-3 border rounded-lg bg-gray-100"
                         readOnly
                       />
                     </div>
                     <div>
                       <label className="block font-medium text-gray-700 mb-1">
-                        Pension Number
+                        Account Type
                       </label>
                       <input
                         type="text"
-                        value="10111010101210101011"
+                        value={employee.bankDetails[0]?.accountType || ""}
                         className="w-full p-3 border rounded-lg bg-gray-100"
                         readOnly
                       />
                     </div>
                   </div>
-
-                  {/* Update Button */}
-                  <button className="mt-6 bg-green-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600">
-                    Update Account Details
-                  </button>
                 </div>
               </div>
             </div>

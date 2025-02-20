@@ -1,17 +1,10 @@
-import React, { useState } from 'react';
-import { PencilLine } from 'lucide-react';
+import React from 'react';
 
-
-const NextOfKinDetails = () => {
+const NextOfKinDetails = ({employee}) => {
 
 
   return (
       <div className="flex-1 p-8 relative">
-        <button className="absolute right-8 top-8 flex items-center text-gray-600 hover:text-gray-900">
-          <PencilLine className="w-5 h-5" />
-          <span className="ml-1">Edit</span>
-        </button>
-
         <div className="max-w-3xl mx-auto space-y-6">
           {/* Name and Job Row */}
           <div className="grid grid-cols-2 gap-6">
@@ -19,8 +12,8 @@ const NextOfKinDetails = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">Next of kin name</label>
               <input
                 type="text"
-                className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-                value="John Doe Samson"
+                className="w-full p-3 bg-[#F1F4FA] rounded-lg select-none pointer-events-none"
+                value={employee.nextDetails.kinName}
                 readOnly
               />
             </div>
@@ -29,7 +22,7 @@ const NextOfKinDetails = () => {
               <input
                 type="text"
                 className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-                value="IT Manager"
+                value={employee.nextDetails.occupation}
                 readOnly
               />
             </div>
@@ -42,7 +35,7 @@ const NextOfKinDetails = () => {
               <input
                 type="tel"
                 className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-                value="08120000000"
+                value={employee.nextDetails.phone}
                 readOnly
               />
             </div>
@@ -52,10 +45,10 @@ const NextOfKinDetails = () => {
                 <input
                   type="text"
                   className="w-full p-3 bg-[#F1F4FA] rounded-lg pr-10"
-                  value="Relative"
+                  value={employee.nextDetails.relationship}
                   readOnly
                 />
-                <span className="absolute right-3 top-1/2 transform -translate-y-1/2">⚫</span>
+                <span className="absolute right-3 top-1/2 transform -translate-y-1/2"></span>
               </div>
             </div>
           </div>
@@ -66,7 +59,7 @@ const NextOfKinDetails = () => {
             <input
               type="text"
               className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-              value="18 Junction site Lekki"
+              value={employee.nextDetails.address}
               readOnly
             />
           </div>

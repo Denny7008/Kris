@@ -1,20 +1,11 @@
-import React, { useState } from "react";
-import AdminSideNavbar from "../../../Components/AdminSideNavbar";
-import AdminUpperNavbar from "../../../Components/AdminUpperNavbar";
+import React from "react";
 
-const ViewFamilyDetails = () => {
-  const menuItems = [
-    "Personal Details",
-    "Contact Details",
-    "Next of Kin Details",
-    "Education Qualifications",
-    "Guarantor Details",
-    "Family Details",
-    "Job Details",
-    "Financial Details",
-  ];
 
-  const [activeTab, setActiveTab] = useState("Family Details");
+const ViewFamilyDetails = ({employee}) => {
+  if (!employee) {
+    console.log("No Employee Data Found:", employee);
+    return <div className="text-red-500">Error: No Employee Data Available</div>;
+  }
 
   return (
             <div className="flex-1 bg-white rounded-lg p-8">
@@ -29,7 +20,7 @@ const ViewFamilyDetails = () => {
                         Full Name
                       </label>
                       <div className="bg-[#F1F4FA] p-4 rounded-lg">
-                        Mr Johnny Francis
+                        {employee.familyDetails[0]?.name || "Not Available"}
                       </div>
                     </div>
 
@@ -39,7 +30,7 @@ const ViewFamilyDetails = () => {
                         Phone No
                       </label>
                       <div className="bg-[#F1F4FA] p-4 rounded-lg">
-                        090 500 500 6000
+                      {employee.familyDetails[0]?.phone || "Not Available"}
                       </div>
                     </div>
                   </div>
@@ -50,7 +41,7 @@ const ViewFamilyDetails = () => {
                       <label className="block font-medium text-gray-700 mb-1">
                         Relationship
                       </label>
-                      <div className="bg-[#F1F4FA] p-4 rounded-lg">Brother</div>
+                      <div className="bg-[#F1F4FA] p-4 rounded-lg">{employee.familyDetails[0]?.relationship || "Not Available"}</div>
                     </div>
                   </div>
 
@@ -60,7 +51,7 @@ const ViewFamilyDetails = () => {
                       Address
                     </label>
                     <div className="bg-[#F1F4FA] p-4 rounded-lg">
-                      333 Adeniyi Street Victoria Island, Lagos
+                    {employee.familyDetails[0]?.address || "Not Available"}
                     </div>
                   </div>
                 </div>

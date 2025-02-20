@@ -1,20 +1,13 @@
 import React, { useState } from "react";
-import AdminSideNavbar from "../../../Components/AdminSideNavbar";
-import AdminUpperNavbar from "../../../Components/AdminUpperNavbar";
 
-const ViewGuarantorDetails = () => {
-  const menuItems = [
-    "Personal Details",
-    "Contact Details",
-    "Next of Kin Details",
-    "Education Qualifications",
-    "Guarantor Details",
-    "Family Details",
-    "Job Details",
-    "Financial Details",
-  ];
 
-  const [activeTab, setActiveTab] = useState("Guarantor Details");
+const ViewGuarantorDetails = ({employee}) => {
+  if (!employee) {
+    console.log("No Employee Data Found:", employee);
+    return <div className="text-red-500">Error: No Employee Data Available</div>;
+  }
+
+  
 
   return (
             <div className="flex-1 bg-white rounded-lg p-8">
@@ -28,7 +21,7 @@ const ViewGuarantorDetails = () => {
                       Guarantor's Name
                     </label>
                     <div className="bg-[#F1F4FA] p-4 rounded-lg">
-                      <p>Babcock University</p>
+                      <p>{employee.guarantorDetails.name}</p>
                     </div>
                   </div>
 
@@ -38,7 +31,7 @@ const ViewGuarantorDetails = () => {
                       Job Title / Occupation
                     </label>
                     <div className="bg-[#F1F4FA] p-4 rounded-lg">
-                      <p>Babcock University</p>
+                      <p>{employee.guarantorDetails.position}</p>
                     </div>
                   </div>
 
@@ -48,7 +41,7 @@ const ViewGuarantorDetails = () => {
                       Phone No
                     </label>
                     <div className="bg-[#F1F4FA] p-4 rounded-lg">
-                      <p>090 500 500 6000</p>
+                      <p>{employee.guarantorDetails.phone}</p>
                     </div>
                   </div>
                 </div>

@@ -1,239 +1,102 @@
-// import React, { useState } from "react";
-// import { PencilLine } from "lucide-react";
-
-// const ContactDetails = () => {
-//   const menuItems = [
-//     "Personal Details",
-//     "Contact Details",
-//     "Next of kin Details",
-//     "Education/Qualifications",
-//     "Guarantor Details",
-//     "Family Details",
-//     "Job Details",
-//     "Financial Details",
-//   ];
-
-//   const [activeTab, setActiveTab] = useState("Contact Details");
-
-//   return (
-//     <div className="flex gap-6">
-//       {/* Main Content */}
-//       <div className="flex-1 rounded-lg p-8 relative">
-//         <button className="absolute right-8 top-8 flex items-center text-gray-600 hover:text-gray-900">
-//           <PencilLine className="w-5 h-5" />
-//           <span className="ml-1">Edit</span>
-//         </button>
-
-//         <div className="max-w-3xl mx-auto space-y-6">
-//           {/* Phone Numbers */}
-//           <div className="grid grid-cols-2 gap-6">
-//             <div>
-//               <label className="block text-sm font-medium text-gray-700 mb-2">
-//                 Phone Number 1
-//               </label>
-//               <input
-//                 type="tel"
-//                 className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-//                 placeholder="Phone Number 1"
-//                 readOnly
-//               />
-//             </div>
-//             <div>
-//               <label className="block text-sm font-medium text-gray-700 mb-2">
-//                 Phone Number 2
-//               </label>
-//               <input
-//                 type="tel"
-//                 className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-//                 placeholder="Phone Number 2"
-//                 readOnly
-//               />
-//             </div>
-//           </div>
-
-//           {/* Email Address */}
-//           <div>
-//             <label className="block text-sm font-medium text-gray-700 mb-2">
-//               E-mail Address
-//             </label>
-//             <input
-//               type="email"
-//               className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-//               value="johndoe@gmail.com"
-//               readOnly
-//             />
-//           </div>
-
-//           {/* Location */}
-//           <div className="grid grid-cols-2 gap-6">
-//             <div>
-//               <label className="block text-sm font-medium text-gray-700 mb-2">
-//                 State of residence
-//               </label>
-//               <input
-//                 type="text"
-//                 className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-//                 placeholder="State"
-//                 readOnly
-//               />
-//             </div>
-//             <div>
-//               <label className="block text-sm font-medium text-gray-700 mb-2">
-//                 City
-//               </label>
-//               <input
-//                 type="text"
-//                 className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-//                 placeholder="City"
-//                 readOnly
-//               />
-//             </div>
-//           </div>
-
-//           {/* Residential Address */}
-//           <div>
-//             <label className="block text-sm font-medium text-gray-700 mb-2">
-//               Residential Address
-//             </label>
-//             <input
-//               type="text"
-//               className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-//               value="18 Junction site Lekki"
-//               readOnly
-//             />
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ContactDetails;
-
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { PencilLine } from "lucide-react";
-import axios from "axios";
 
-const ContactDetails = ({ userId }) => {
-  const [userData, setUserData] = useState({
-    phone: "",
-    email: "",
-    state: "",
-    city: "",
-    address: "",
-  });
-  const [isEditing, setIsEditing] = useState(false);
+const ContactDetails = ({employee}) => {
+  const menuItems = [
+    "Personal Details",
+    "Contact Details",
+    "Next of kin Details",
+    "Education/Qualifications",
+    "Guarantor Details",
+    "Family Details",
+    "Job Details",
+    "Financial Details",
+  ];
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/users/get-allusers`);
-        setUserData(response.data);
-      } catch (error) {
-        console.error("Error fetching user data", error);
-      }
-    };
-    console.log(fetchUserData);
-    fetchUserData();
-  }, [userId]);
-
-  const handleChange = (e) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
-  };
-
-  const handleSave = async () => {
-    try {
-      await axios.post(`http://localhost:5000/users/update-contact`, userData);
-      setIsEditing(false);
-      console.log("User updated", userData);
-    } catch (error) {
-      console.log("Error updating contact");
-      console.error("Error updating user details", error);
-    }
-  };
+  const [activeTab, setActiveTab] = useState("Contact Details");
 
   return (
     <div className="flex gap-6">
+      {/* Main Content */}
       <div className="flex-1 rounded-lg p-8 relative">
-        <button
-          className="absolute right-8 top-8 flex items-center text-gray-600 hover:text-gray-900"
-          onClick={() => setIsEditing(!isEditing)}
-        >
-          <PencilLine className="w-5 h-5" />
-          <span className="ml-1">{isEditing ? "Cancel" : "Edit"}</span>
-        </button>
-
         <div className="max-w-3xl mx-auto space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-            <input
-              type="tel"
-              name="phone"
-              className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-              value={userData.phone}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">E-mail Address</label>
-            <input
-              type="email"
-              name="email"
-              className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-              value={userData.email}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            />
-          </div>
-
+          {/* Phone Numbers */}
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">State of residence</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Phone Number 1
+              </label>
               <input
-                type="text"
-                name="state"
+                type="tel"
                 className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-                value={userData.state}
-                onChange={handleChange}
-                readOnly={!isEditing}
+                value={employee.phone} 
+                readOnly
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Phone Number 2
+              </label>
               <input
-                type="text"
-                name="city"
+                type="tel"
                 className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-                value={userData.city}
-                onChange={handleChange}
-                readOnly={!isEditing}
+                value={employee.phone2} 
+                readOnly
               />
             </div>
           </div>
 
+          {/* Email Address */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Residential Address</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              E-mail Address
+            </label>
             <input
-              type="text"
-              name="address"
+              type="email"
               className="w-full p-3 bg-[#F1F4FA] rounded-lg"
-              value={userData.address}
-              onChange={handleChange}
-              readOnly={!isEditing}
+              value={employee.email} 
+              readOnly
             />
           </div>
 
-          {isEditing && (
-            <button
-              onClick={handleSave}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-            >
-              Save Changes
-            </button>
-          )}
+          {/* Location */}
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                State of residence
+              </label>
+              <input
+                type="text"
+                className="w-full p-3 bg-[#F1F4FA] rounded-lg"
+                value={employee.state} 
+                readOnly
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                City
+              </label>
+              <input
+                type="text"
+                className="w-full p-3 bg-[#F1F4FA] rounded-lg"
+                value={employee.state} 
+                readOnly
+              />
+            </div>
+          </div>
+
+          {/* Residential Address */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Residential Address
+            </label>
+            <input
+              type="text"
+              className="w-full p-3 bg-[#F1F4FA] rounded-lg"
+              value={employee.address} 
+              readOnly
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -241,4 +104,83 @@ const ContactDetails = ({ userId }) => {
 };
 
 export default ContactDetails;
+
+
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+
+// const ContactDetails = ({ userId, employee }) => {
+
+//   if (!employee) {
+//     console.log("No Employee Data Found:", employee);
+//     return <div className="text-red-500">Error: No Employee Data Available</div>;
+//   }
+
+//   const [userData, setUserData] = useState({
+//     phone: "",
+//     email: "",
+//     state: "",
+//     city: "",
+//     address: "",
+//   });
+//   const [isEditing, setIsEditing] = useState(false);
+
+//   useEffect(() => {
+//     const fetchUserData = async () => {
+//       try {
+//         const response = await axios.get(`http://localhost:5000/users/get-allusers`);
+//         setUserData(response.data);
+//       } catch (error) {
+//         console.error("Error fetching user data", error);
+//       }
+//     };
+//     console.log(fetchUserData);
+//     fetchUserData();
+//   }, [userId]);
+
+
+
+//   return (
+//     <div className="flex gap-6">
+
+//       <div className="flex flex-col items-center text-center space-y-4">
+//       <div className="space-y-1">
+//               <p className="text-gray-600 text-sm">City</p>
+//               <h1 className="text-xl font-semibold">{employee.firstName} {employee.lastName}</h1>
+//             </div>
+
+//           <div className="space-y-6 w-full">
+//             <div className="space-y-1">
+//               <p className="text-gray-600 text-sm">Phone Number</p>
+//               <h1 className="text-xl font-semibold">{employee.firstName} {employee.lastName}</h1>
+//             </div>
+
+//             <div className="space-y-1">
+//               <p className="text-gray-600 text-sm">E-mail Address</p>
+//               <p className="text-lg font-medium">{employee.department}</p>
+//             </div>
+
+//             <div className="grid grid-cols-2 gap-4">
+//               <div className="space-y-1">
+//                 <p className="text-gray-600 text-sm">State of Residence</p>
+//                 <p className="text-lg font-medium">{employee.jobTitle}</p>
+//               </div>
+              
+//               <div className="space-y-1">
+//                 <p className="text-gray-600 text-sm">Residential Address</p>
+//                 <p className="text-lg font-medium">{employee.category}</p>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//     </div>
+//   );
+// };
+
+// export default ContactDetails;
+
+
+
+
+
 
