@@ -7,7 +7,7 @@ import { UserPen } from "lucide-react";
 
 const AdminSideNavbar = () => {
 
-  const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg");
+  const [profilePic, setProfilePic] = useState("https://plus.unsplash.com/premium_photo-1664536392896-cd1743f9c02c?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
   const imageInputRef = useRef(null);
   
 
@@ -20,19 +20,29 @@ const AdminSideNavbar = () => {
       try {
         const response = await axios.get("http://localhost:5000/admin");
         console.log("API Response:", response.data.admins[0]._id);
-
+  
         if (response.data.admins && response.data.admins.length > 0) {
           const firstAdmin = response.data.admins[0];
-          setAdmin(firstAdmin); // Store admin details
-          setAdminId(firstAdmin._id); // Set the first admin in the state
+          setAdmin(firstAdmin);
+          setAdminId(firstAdmin._id);
+  
+          // Fetch profile image after setting adminId
+          const imageResponse = await axios.get(
+            `http://localhost:5000/admin/profile-image/${firstAdmin._id}`
+          );
+  
+          if (imageResponse.data.imageUrl) {
+            setProfilePic(imageResponse.data.imageUrl);
+          }
         }
-        fetchProfileImage();
       } catch (error) {
-        console.error("Error fetching admin data:", error);
+        console.error("Error fetching admin data or profile image:", error);
       }
     };
+  
     fetchAdminData();
-  }, []);
+  }, []); // ✅ Runs only once when the component mounts
+  
 
 
 
@@ -57,65 +67,26 @@ const AdminSideNavbar = () => {
     }
   };
 
-
-  // const uploadToBackend = async (file, adminId) => {
-  //   const formData = new FormData();
-  //   formData.append("image", file);
-  //   formData.append("adminId", adminId);
-
-  //   try {
-  //     const response = await axios.post(
-  //      `http://localhost:5000/admin/upload-profile/${adminId}`,
-  //       formData,
-  //       { headers: { "Content-Type": "multipart/form-data" } }
-  //     );
-
-  //     setProfilePic(response.data.imageUrl);
-  //     alert("Image uploaded successfully!");
-  //   } catch (error) {
-  //     console.error("Error uploading image:", error);
-  //     alert("Failed to upload image.");
-  //   }
-  // };
-  // console.log(uploadToBackend);
+ 
 
 
-  const uploadToBackend = async (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
+
+  const uploadToBackend = async (file, adminId) => {
+    const formData = new FormData();
+    formData.append("file", file); // Attach the file
   
-    reader.onload = async () => {
-      try {
-        const base64String = reader.result.split(",")[1]; // Remove the "data:image/png;base64," part
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/admin/upload-profile/${adminId}`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } } // Set proper headers
+      );
   
-        const response = await axios.post(
-          `http://localhost:5000/admin/upload-profile/${adminId}`,
-          { profilePic: base64String },
-          { headers: { "Content-Type": "application/json" } }
-        );
-  
-        console.log("Upload success:", response.data);
-      } catch (error) {
-        console.error("Error uploading image:", error);
-      }
-    };
+      console.log("Upload success:", response.data);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
   };
-  
-  
-
-
-
-  // const fetchProfileImage = async () => {
-  //   if (!adminId) return;
-
-  //   try {
-  //     const response = await axios.get(`http://localhost:5000/admin/profile-image/${adminId}`);
-  //     setProfilePic(response.data.imageUrl); // Set the Base64 image
-  //   } catch (error) {
-  //     // console.error("Error fetching profile image:", error.response?.data || error.message);
-  //     console.log("Error fetching profile image:", error);
-  //   }
-  // };
 
 
   const fetchProfileImage = async () => {
@@ -123,14 +94,12 @@ const AdminSideNavbar = () => {
   
     try {
       const response = await axios.get(
-        `http://localhost:5000/admin/profile-image/${adminId}`
-      );
+        `http://localhost:5000/admin/profile-image/${adminId}`);
+        setProfilePic(response.data.imageUrl);
+
   
-      if (response.data.imageUrl) {
-        setProfilePic(`data:${response.data.contentType};base64,${response.data.imageUrl}`);
-      }
     } catch (error) {
-      console.log("Error fetching profile image:", error);
+      console.log("Error fetching profile image:", error.response?.data || error.message);
     }
   };
   

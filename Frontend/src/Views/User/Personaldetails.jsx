@@ -59,6 +59,11 @@ const Personaldetails = () => {
   };
   
   // Fetch profile image from backend
+ 
+ 
+ 
+ 
+  
   const fetchProfileImage = async () => {
     if (!userId) return;
 
