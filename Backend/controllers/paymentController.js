@@ -60,6 +60,8 @@
 
 import dotenv from "dotenv";
 import Mailjet from "node-mailjet";
+import Payslip from "../models/payslipSchema.js"; // Import Payslip Model
+import mongoose from "mongoose";
 
 dotenv.config();
 // Configure Mailjet with API keys
@@ -115,5 +117,70 @@ export const sendPaymentSuccessEmail = async (user, amount, bankName, accountNum
     console.log("Payment success email sent to:", user.email);
   } catch (error) {
     console.error("Error sending payment success email:", error);
+  }
+};
+
+
+
+
+export const processPayout = async (req, res) => {
+  try {
+    const { amount, userId, bankDetails } = req.body;
+
+    // Simulating payout processing
+    console.log("Processing payout for user:", userId);
+
+    // Sample breakdown of earnings and deductions
+    const payslip = new Payslip({
+      userId,
+      totalEarnings: amount,
+      totalDeductions: 50, // Example deduction
+      netPay: amount - 100,
+      period: "February 2025",
+      payDate: new Date(),
+      earnings: [
+        { name: "Basic Pay", amount: amount * 0.6 },
+        { name: "Allowance", amount: amount * 0.3 },
+      ],
+      deductions: [{ name: "Tax", amount: 50 }],
+    });
+
+    await payslip.save();
+
+    res.json({ success: true, message: "Payout successful", payslip });
+  } catch (error) {
+    console.error("Payout error:", error);
+    res.status(500).json({ success: false, message: "Payout failed" });
+  }
+};
+
+
+// Fetch payslips for a specific user
+export const getPayslipsByUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // ✅ Check if userId exists
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "User ID is required" });
+    }
+
+    // ✅ Validate if userId is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ success: false, message: "Invalid user ID format" });
+    }
+
+    // ✅ Query MongoDB for payslips
+    const payslips = await Payslip.find({ userId });
+
+    // ✅ Handle case where no payslips are found
+    if (payslips.length === 0) {
+      return res.status(404).json({ success: false, message: "No payslips found for this user" });
+    }
+
+    res.json({ success: true, payslips });
+  } catch (error) {
+    console.error("Error fetching payslips:", error);
+    res.status(500).json({ success: false, message: "Error fetching payslips" });
   }
 };

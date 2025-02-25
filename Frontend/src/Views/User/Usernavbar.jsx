@@ -166,8 +166,8 @@ const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system
       <div className="flex space-x-8 text-gray-700 text-lg items-center">
         <Link to="/userlogin/dashboard/userpanel" className="hover:text-blue-500">Dashboard</Link>
         <Link to="#" className="hover:text-blue-500">Requests</Link>
-        <Link to="#" className="hover:text-blue-500">Payroll</Link>
-        <Link to="#" className="hover:text-blue-500">Company</Link>
+        <Link to="/user/dashboard/userpanel/payroll" className="hover:text-blue-500">Payroll</Link>
+        <Link to="/user/dashboard/usepanel/comapny" className="hover:text-blue-500">Company</Link>
         <Link to="#" className="hover:text-blue-500">Extras</Link>
       </div>
 

@@ -78,6 +78,8 @@ import Candidates from "./Views/Admin/pages/Candidates";
 import JobApplicationForm from "./Views/Admin/pages/JobApplicationForm";
 
 import JobDetailPage from "./Views/Admin/pages/JobDetailPage";
+import PayslipSection from "./Views/User/PayslipSection";
+import AboutPage from "./Views/User/Aboutpage";
 
 
 function App() {
@@ -303,7 +305,11 @@ function App() {
 
         {/* <Route path="/apply-job/:jobLink" component={<JobApplicationForm/>} /> */}
 
-         
+
+        
+       <Route path="/user/dashboard/userpanel/payroll" element={<PayslipSection/>}/>
+
+       <Route path="/user/dashboard/usepanel/comapny" element={<AboutPage/>}/>
       </Routes>
     </>
   );

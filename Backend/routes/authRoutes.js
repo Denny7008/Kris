@@ -76,6 +76,7 @@ import Job from "../models/JobSchema.js";
 
 import { applyForJob, getCandidates, getCandidatesByJob, getJobByLink } from "../controllers/applyForJobContoller.js";
 import mongoose from "mongoose";
+import { getPayslipsByUser, processPayout } from "../controllers/paymentController.js";
 
 
 const router = express.Router();
@@ -386,7 +387,7 @@ router.get("/job/:jobId", async (req, res) => {
   }
 });
 
-
-
+router.get("/payslips/:userId", getPayslipsByUser);
+router.post("/api/payouts", processPayout);
 
 export default router;

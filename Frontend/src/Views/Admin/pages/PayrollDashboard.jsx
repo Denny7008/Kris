@@ -10,6 +10,8 @@ const PayrollDashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+  
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -68,9 +70,9 @@ const PayrollDashboard = () => {
 
  
 
-  const handleSendPayout = async () => {
+    const handleSendPayout = async () => {
     if (
-      !selectedUser ||
+    !selectedUser ||
       !selectedUser.bankDetails ||
       !selectedUser.bankDetails[0]
     ) {
@@ -79,13 +81,14 @@ const PayrollDashboard = () => {
     }
   
     try {
-      const response = await axios.post("/api/payouts", {
+      const response = await axios.post("http://localhost:5000/api/payouts", {
         amount: salary,
         userId: selectedUser._id,
         bankDetails: selectedUser.bankDetails[0],
       });
   
       if (response.data.success) {
+        console.log("Payout Successful. Payslip Saved:", response.data.payslip);
         setShowModal(false); // Close the payment modal
         setShowSuccessModal(true); // Show the success modal
         
@@ -297,4 +300,10 @@ const PayrollDashboard = () => {
 };
 
 export default PayrollDashboard;
+
+
+
+
+
+
 
