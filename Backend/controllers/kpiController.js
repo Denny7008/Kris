@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import KPI from "../models/KPI.js";
 import User from "../models/User.js";
 
@@ -65,7 +66,6 @@ export const getAllKPIs = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch KPIs", error: error.message });
   }
 };
-
 
 
 // Update a KPI
