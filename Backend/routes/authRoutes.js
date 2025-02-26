@@ -77,6 +77,7 @@ import Job from "../models/JobSchema.js";
 import { applyForJob, getCandidates, getCandidatesByJob, getJobByLink } from "../controllers/applyForJobContoller.js";
 import mongoose from "mongoose";
 import { getPayslipsByUser, processPayout } from "../controllers/paymentController.js";
+import { calculateAppraisal } from "../controllers/AppriasalController.js";
 
 
 const router = express.Router();
@@ -192,6 +193,7 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
 
     // Concatenate firstName and lastName to create the full name
     const userData = {
+      _id: user._id.toString(),
       name: `${user.firstName} ${user.lastName}`, // Concatenate firstName and lastName
       email: user.email, // You can add any other fields you need here
       jobTitle: user.jobTitle,
@@ -387,7 +389,11 @@ router.get("/job/:jobId", async (req, res) => {
   }
 });
 
-router.get("/payslips/:userId", getPayslipsByUser);
+router.get("/api/payslips/:userId", getPayslipsByUser);
 router.post("/api/payouts", processPayout);
+
+
+
+router.post("/calculate-appraisal/:userId", calculateAppraisal);
 
 export default router;
