@@ -8,7 +8,7 @@ const TodoSchema = new mongoose.Schema(
       required: true,
     },
     title: { type: String, required: true }, // KPI title
-    // description: { type: String }, // Description of the KPI
+    description: { type: String }, // Description of the KPI
     //kpiWeight: { type: Number, required: true }, // KPI weight as a percentage
     targetDate: { type: String, required: true }, // Start date of the KPI
      // End date of the KPI

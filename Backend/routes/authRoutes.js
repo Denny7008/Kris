@@ -78,7 +78,7 @@ import { applyForJob, getCandidates, getCandidatesByJob, getJobByLink } from "..
 import mongoose from "mongoose";
 import { getPayslipsByUser, processPayout } from "../controllers/paymentController.js";
 import { calculateAppraisal } from "../controllers/AppriasalController.js";
-import { deleteTodo, getAllTodos, initiateTodo } from "../controllers/Todocontroller.js";
+import { deleteTodo, getAllTodos, initiateTodo, updateTodoStatus } from "../controllers/Todocontroller.js";
 
 
 const router = express.Router();
@@ -325,6 +325,7 @@ router.delete("/kpi/delete/:kpiId", deleteKPI); // Route to delete a KPI
 router.post("/initiate", initiateTodo);
 router.get("/todo/user/:userId", getAllTodos);
 router.delete("/:id", deleteTodo);
+router.put("/todo/update/:id", updateTodoStatus);
 
 
 

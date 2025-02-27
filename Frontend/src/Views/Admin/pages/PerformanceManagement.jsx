@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import TargetSetup from "./TargetSetup";
 import ManageTargets from "./ManageTargets";
+import Appraisal from "./Appraisals";
 // import Targets from "./Targets";
 // import Appraisals from "./Appraisals";
 // import Settings from "./Settings";
@@ -14,7 +15,7 @@ const PerformanceManagement = () => {
   const components = {
     "Target Setup": <TargetSetup />,
     "Targets": <ManageTargets />,
-    // "Appraisals": <Appraisals />,
+    "Appraisals": <Appraisal />,
     // "Settings": <Settings />,
     // "Reports": <Reports />,
   };

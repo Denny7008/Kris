@@ -3,7 +3,7 @@ import Todo from "../models/TodoSchema.js";
 import KPI from "../models/KPI.js"; // Assuming your KPI model is named KPI
 
 export const initiateTodo = async (req, res) => {
-  const { userId, kpiId, title } = req.body;
+  const { userId, kpiId, title, description} = req.body;
 
   console.log("Received request to initiate KPI for user:", userId, "KPI ID:", kpiId);
 
@@ -38,6 +38,7 @@ export const initiateTodo = async (req, res) => {
         user: userId,
         title: title || kpi.title || "Untitled KPI", // Use KPI title if available
         targetDate: targetDate, // Assign formatted target date
+        description: description || kpi.description || "No description provided", // Use KPI description if available
         status: "In Progress", // Set status to In Progress
       });
 
@@ -97,5 +98,41 @@ export const deleteTodo = async (req, res) => {
     res.status(200).json({ message: "KPI deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to delete KPI", error: error.message });
+  }
+};
+
+
+export const updateTodoStatus = async (req, res) => 
+  {
+  try {
+    const { status } = req.body;
+    const { id } = req.params;
+
+    // Update the Todo collection
+    const updatedTodo = await Todo.findByIdAndUpdate(id, { status }, { new: true });
+
+    if (!updatedTodo) {
+      return res.status(404).json({ message: "Todo not found" });
+    }
+
+    // Update the Performance collection (assuming the same ID exists)
+    const updatedPerformance = await KPI.findOneAndUpdate(
+      { _id: id }, // If Performance uses the same ID
+      { status },
+      { new: true }
+    );
+
+    if (!updatedPerformance) {
+      return res.status(404).json({ message: "Performance record not found" });
+    }
+
+    res.json({
+      message: "Status updated successfully in both collections",
+      updatedTodo,
+      updatedPerformance,
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error updating status", error: error.message });
   }
 };
