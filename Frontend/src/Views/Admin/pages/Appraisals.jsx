@@ -1,148 +1,129 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-// const Appraisal = () => {
-//   const [appraisal, setAppraisal] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-//   const userId = "67a10108e3cf0cd6e9e15f18"; // Replace with actual user ID
+const Appraisals = () => {
+  const [pendingAppraisals, setPendingAppraisals] = useState([]);
+  const [selectedAppraisal, setSelectedAppraisal] = useState(null);
+  const [score, setScore] = useState(0);
+  const [feedback, setFeedback] = useState("");
 
-//   useEffect(() => {
-//     const fetchAppraisal = async () => {
-//       try {
-//         const response = await axios.get(`http://localhost:5000/appraisal/${userId}`);
-//         setAppraisal(response.data);
-//       } catch (error) {
-//         setError("Failed to fetch appraisal data.");
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
+  useEffect(() => {
+    const fetchPendingAppraisals = async () => {
+      try {
+        const { data } = await axios.get(
+          "http://localhost:5000/get-all-appraisal-scores"
+        );
+        setPendingAppraisals(data);
+      } catch (error) {
+        console.error("Error fetching pending appraisals:", error);
+      }
+    };
 
-//     fetchAppraisal();
-//   }, []);
+    fetchPendingAppraisals();
+  }, []);
 
-//   return (
-//     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md mt-6">
-//       <h2 className="text-2xl font-semibold text-blue-700 mb-4">Performance Appraisal</h2>
+  const handleSubmit = async () => {
+    if (!selectedAppraisal) return alert("Please select an appraisal");
 
-//       {loading ? (
-//         <p className="text-gray-500">Loading...</p>
-//       ) : error ? (
-//         <p className="text-red-500">{error}</p>
-//       ) : appraisal ? (
-//         <div>
-//           {/* Score & Feedback */}
-//           <div className="bg-blue-100 p-4 rounded-lg mb-4">
-//             <p className="text-lg font-semibold text-gray-700">
-//               Final Score: <span className="text-blue-600">{appraisal.finalScore}%</span>
-//             </p>
-//             <p className="text-gray-700">Status: {appraisal.status}</p>
-//             <p className="text-gray-700">Feedback: {appraisal.feedback}</p>
-//           </div>
+    try {
+      await axios.put(
+        `http://localhost:5000/update-appraisal/${selectedAppraisal._id}`,
+        {
+          finalScore: score,
+          feedback,
+          status: "Reviewed",
+        }
+      );
 
-//           {/* KPI List */}
-//           <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">Assigned KPIs</h3>
-//           <div className="overflow-x-auto">
-//             <table className="w-full border-collapse border border-gray-300">
-//               <thead>
-//                 <tr className="bg-gray-200 text-gray-700">
-//                   <th className="p-3 border">Title</th>
-//                   <th className="p-3 border">Status</th>
-//                   <th className="p-3 border">Target Date</th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 {appraisal.kpis.map((kpi) => (
-//                   <tr key={kpi._id} className="text-gray-600 hover:bg-gray-100">
-//                     <td className="p-3 border">{kpi.title}</td>
-//                     <td className="p-3 border">{kpi.status}</td>
-//                     <td className="p-3 border">{kpi.targetDate || "N/A"}</td>
-//                   </tr>
-//                 ))}
-//               </tbody>
-//             </table>
-//           </div>
-//         </div>
-//       ) : (
-//         <p className="text-gray-500">No appraisal found.</p>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Appraisal;
-
-
-
-
-
-import React, { useState } from "react";
-
-const Appraisal = () => {
-  // Hardcoded Appraisal Data
-  const appraisal = {
-    finalScore: 85.5,
-    status: "Reviewed",
-    feedback: "Excellent job! Keep up the great work.",
-    kpis: [
-      {
-        _id: "1",
-        title: "Develop E-commerce Website",
-        status: "Completed",
-        targetDate: "2025-02-26 to 2025-02-27",
-      },
-      {
-        _id: "2",
-        title: "Optimize Website Performance",
-        status: "In Progress",
-        targetDate: "2025-03-01 to 2025-03-05",
-      },
-      {
-        _id: "3",
-        title: "Fix Security Vulnerabilities",
-        status: "Not Started",
-        targetDate: "2025-03-10 to 2025-03-15",
-      },
-    ],
+      alert("Appraisal updated successfully!");
+      setPendingAppraisals((prev) =>
+        prev.filter((appraisal) => appraisal._id !== selectedAppraisal._id)
+      );
+      setSelectedAppraisal(null);
+      setScore(0);
+      setFeedback("");
+    } catch (error) {
+      console.error("Error updating appraisal:", error);
+    }
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md mt-6">
-      <h2 className="text-2xl font-semibold text-blue-700 mb-4">Performance Appraisal</h2>
+    <div className="p-6 max-w-3xl mx-auto bg-white ">
+      <h2 className="text-2xl font-semibold mb-4 text-center">
+        Admin Appraisal Review
+      </h2>
 
-      <div className="bg-blue-100 p-4 rounded-lg mb-4">
-        <p className="text-lg font-semibold text-gray-700">
-          Final Score: <span className="text-blue-600">{appraisal.finalScore}%</span>
-        </p>
-        <p className="text-gray-700">Status: {appraisal.status}</p>
-        <p className="text-gray-700">Feedback: {appraisal.feedback}</p>
-      </div>
-
-      {/* KPI List */}
-      <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">Assigned KPIs</h3>
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border border-gray-300">
-          <thead>
-            <tr className="bg-gray-200 text-gray-700">
-              <th className="p-3 border">Title</th>
-              <th className="p-3 border">Status</th>
-              <th className="p-3 border">Target Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {appraisal.kpis.map((kpi) => (
-              <tr key={kpi._id} className="text-gray-600 hover:bg-gray-100">
-                <td className="p-3 border">{kpi.title}</td>
-                <td className="p-3 border">{kpi.status}</td>
-                <td className="p-3 border">{kpi.targetDate}</td>
-              </tr>
+      {pendingAppraisals.length > 0 ? (
+        <>
+          <label className="block mb-2 font-medium">Select an Appraisal</label>
+          <select
+            className="border p-2 mb-4 w-full rounded"
+            onChange={(e) => {
+              const appraisal = pendingAppraisals.find(
+                (item) => item._id === e.target.value
+              );
+              setSelectedAppraisal(appraisal || null);
+            }}
+          >
+            <option value="">-- Choose an Appraisal --</option>
+            {pendingAppraisals.map((appraisal) => (
+              <option key={appraisal._id} value={appraisal._id}>
+                {appraisal.user ? appraisal.user : "Unknown User"} - {appraisal.month}
+              </option>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </select>
+
+          {selectedAppraisal && (
+            <div className="border rounded-lg p-4 bg-gray-50">
+              <h3 className="font-semibold mb-2">User Details</h3>
+              <p><strong>Name:</strong> {selectedAppraisal.user}</p>
+              <p><strong>Self-Appraisal:</strong> {selectedAppraisal.selfAppraisal}</p>
+
+              <h3 className="font-semibold mt-4 mb-2">Assigned KPIs</h3>
+              {selectedAppraisal.kpis.length > 0 ? (
+                <ul className="mb-4">
+                  {selectedAppraisal.kpis.map((kpi) => (
+                    <li key={kpi.kpiId} className="text-gray-700">
+                      📌 <strong>{kpi.title}</strong> (Weight: {kpi.kpiWeight})
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No KPIs assigned.</p>
+              )}
+
+              <h3 className="font-semibold mb-2">Give Score</h3>
+              <input
+                type="number"
+                className="border p-2 w-full rounded"
+                value={score}
+                onChange={(e) => setScore(Number(e.target.value))}
+                min="0"
+                max="100"
+              />
+
+              <h3 className="font-semibold mt-3 mb-2">Give Feedback</h3>
+              <textarea
+                className="border p-2 w-full rounded"
+                value={feedback}
+                onChange={(e) => setFeedback(e.target.value)}
+                rows="3"
+              />
+
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-blue-600"
+                onClick={handleSubmit}
+              >
+                Submit Appraisal
+              </button>
+            </div>
+          )}
+        </>
+      ) : (
+        <p className="text-gray-500 text-center">No pending appraisals.</p>
+      )}
     </div>
   );
 };
 
-export default Appraisal;
+export default Appraisals;

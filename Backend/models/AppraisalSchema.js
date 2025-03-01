@@ -4,33 +4,37 @@ const AppraisalSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Reference to the employee being appraised
+      ref: "User",
       required: true,
     },
     kpis: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "KPI", // Reference to assigned KPIs
+        kpiId: { type: mongoose.Schema.Types.ObjectId, ref: "KPI" }, // Store reference
+        title: { type: String, required: true }, // Store title
+        kpiWeight: { type: Number, required: true }, // Store KPI weight
       },
     ],
+    selfAppraisal: { // ✅ Added this field
+      type: String,
+      required: true,
+    },
     finalScore: { 
       type: Number, 
       required: true, 
       default: 0, 
-    }, // Calculated appraisal score
-
+    },
     feedback: { 
       type: String, 
       default: "No feedback provided." 
-    }, // Manager/HR feedback
-
+    },
     status: { 
       type: String, 
       enum: ["Pending", "Reviewed", "Finalized"], 
       default: "Pending",
-    }, // Status of appraisal review
+    },
   },
   { timestamps: true }
 );
 
 export default mongoose.model("Appraisal", AppraisalSchema);
+

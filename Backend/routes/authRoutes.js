@@ -60,6 +60,7 @@ import {
   createKPI,
   deleteKPI,
   getAllKPIs,
+  getKPIsByUserId,
   updateKPI,
 } from "../controllers/kpiController.js";
 import {
@@ -77,7 +78,7 @@ import Job from "../models/JobSchema.js";
 import { applyForJob, getCandidates, getCandidatesByJob, getJobByLink } from "../controllers/applyForJobContoller.js";
 import mongoose from "mongoose";
 import { getPayslipsByUser, processPayout } from "../controllers/paymentController.js";
-import { calculateAppraisal } from "../controllers/AppriasalController.js";
+import { getAllAppraisalScores, getUserAppraisalScores, requestAppraisal, updateAppraisal } from "../controllers/AppriasalController.js";
 import { deleteTodo, getAllTodos, initiateTodo, updateTodoStatus } from "../controllers/Todocontroller.js";
 
 
@@ -315,6 +316,7 @@ router.delete("/messages/:messageId", deleteMessageNotification);
 
 router.post("/kpi/create", createKPI); // Route to create a KPI
 router.get("/kpi/user", getAllKPIs); // Route to get all KPIs for a user
+router.get("/kpi/usercompleted/:userId",getKPIsByUserId);
 
 
 router.put("/kpi/update/:kpiId", updateKPI); // Route to update a KPI
@@ -328,6 +330,16 @@ router.delete("/:id", deleteTodo);
 router.put("/todo/update/:id", updateTodoStatus);
 
 
+// appraisal 
+router.post("/request-appraisal", requestAppraisal);
+
+// Admin updates appraisal score
+router.put("/update-appraisal/:id", updateAppraisal);
+
+// Get user appraisal scores for chart
+router.get("/user-appraisal-scores/:userId", getUserAppraisalScores);
+
+router.get("/get-all-appraisal-scores", getAllAppraisalScores);
 
 
 
@@ -400,7 +412,5 @@ router.get("/api/payslips/:userId", getPayslipsByUser);
 router.post("/api/payouts", processPayout);
 
 
-
-router.post("/calculate-appraisal/:userId", calculateAppraisal);
 
 export default router;

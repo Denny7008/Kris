@@ -80,6 +80,7 @@ import JobApplicationForm from "./Views/Admin/pages/JobApplicationForm";
 import JobDetailPage from "./Views/Admin/pages/JobDetailPage";
 import PayslipSection from "./Views/User/PayslipSection";
 import AboutPage from "./Views/User/Aboutpage";
+import TakeAppraisal from "./Views/User/TakeAppraisal";
 
 
 function App() {
@@ -310,6 +311,7 @@ function App() {
        <Route path="/user/dashboard/userpanel/payroll" element={<PayslipSection/>}/>
 
        <Route path="/user/dashboard/usepanel/comapny" element={<AboutPage/>}/>
+       <Route path="/userlogin/dashboard/take-appraisal" element={<TakeAppraisal/>}/>
       </Routes>
     </>
   );

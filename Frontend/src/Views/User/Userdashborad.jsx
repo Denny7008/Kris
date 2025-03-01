@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import Barchart from "./Barchart";
 
 const Userdashborad = () => {
   const [userName, setUserName] = useState(""); // State to store user name
@@ -101,7 +102,7 @@ const Userdashborad = () => {
             KPI Goals
           </button>
         </Link>
-        <Link to="/apply-for-leave">
+        <Link to="/userlogin/dashboard/take-appraisal">
           <button className="bg-white text-lg text-blue-600 p-4 rounded-lg shadow hover:bg-blue-100">
             Take Appraisal
           </button>
@@ -277,9 +278,7 @@ const Userdashborad = () => {
         {/* Performance Appraisal */}
         <div className="bg-white rounded-lg p-6 shadow">
           <h2 className="text-xl font-semibold mb-4">Performance Appraisal</h2>
-          <div className="w-full h-40 bg-blue-100 rounded-lg flex items-center justify-center">
-            <p className="text-blue-600">[Bar Chart Placeholder]</p>
-          </div>
+          <Barchart/>
         </div>
       </div>
     </div>

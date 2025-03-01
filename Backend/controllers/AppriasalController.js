@@ -1,52 +1,114 @@
-import KPI from "../models/KPI.js";
 import Appraisal from "../models/AppraisalSchema.js";
 
-export const calculateAppraisal = async (req, res) => {
+// Submit Appraisal Request (User Side)
+export const requestAppraisal = async (req, res) => {
   try {
-    const { userId } = req.params;
+    console.log("Received Appraisal Request:", req.body); // Debugging
 
-    // Fetch all KPIs assigned to the user
-    const kpis = await KPI.find({ user: userId });
+    const { user, kpis, selfAppraisal } = req.body; // ✅ Expect correct names from frontend
 
-    if (kpis.length === 0) {
-      return res.status(404).json({ message: "No KPIs found for this user." });
+    if (!user || !Array.isArray(kpis) || kpis.length === 0) {
+      return res.status(400).json({ message: "User and KPIs are required" });
     }
 
-    let totalWeightedScore = 0;
-    let totalWeight = 0;
+    // ✅ Ensure kpis contain valid objects
+    const formattedKPIs = kpis.map((kpi) => ({
+      kpiId: kpi.kpiId, // Keep only the ID reference
+      title: kpi.title || "Untitled KPI", // Provide a fallback
+      kpiWeight: kpi.kpiWeight || 0, // Provide a default weight if missing
+    }));
 
-    kpis.forEach(kpi => {
-      let completionScore = 0;
-
-      if (kpi.status === "Completed") {
-        completionScore = 100; // Full score
-      } else if (kpi.status === "In Progress") {
-        completionScore = 50; // Partial completion
-      } else {
-        completionScore = 0; // Not started
-      }
-
-      const weightedScore = (completionScore * kpi.kpiWeight) / 100;
-      totalWeightedScore += weightedScore;
-      totalWeight += kpi.kpiWeight;
+    const newAppraisal = new Appraisal({
+      user, // ✅ Store userId correctly
+      kpis: formattedKPIs, // ✅ Now correctly storing KPI details
+      selfAppraisal: selfAppraisal || "No self-appraisal provided.", // Default if missing
+      finalScore: 0,
+      feedback: "No feedback provided.",
+      status: "Pending",
     });
 
-    const finalScore = totalWeight > 0 ? (totalWeightedScore / totalWeight) * 100 : 0;
+    await newAppraisal.save();
 
-    // Store appraisal in the database
-    const appraisal = new Appraisal({
-      user: userId,
-      kpis: kpis.map(kpi => kpi._id),
-      finalScore: finalScore.toFixed(2),
-      feedback: "Great performance!", // Default feedback
-    });
-
-    await appraisal.save();
-
-    res.json({ message: "Appraisal calculated successfully", finalScore });
-
+    console.log("Appraisal saved successfully:", newAppraisal);
+    res.status(201).json({ message: "Appraisal request submitted successfully", appraisal: newAppraisal });
   } catch (error) {
-    console.error("Error calculating appraisal:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error submitting appraisal request:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
+
+
+
+
+// Update Appraisal Score (Admin Side)
+export const updateAppraisal = async (req, res) => {
+  try {
+    const { finalScore, feedback } = req.body;
+    const appraisalId = req.params.id;
+
+    const updatedAppraisal = await Appraisal.findByIdAndUpdate(
+      appraisalId,
+      { finalScore, feedback, status: "Reviewed" },
+      { new: true }
+    );
+
+    if (!updatedAppraisal) {
+      return res.status(404).json({ message: "Appraisal not found" });
+    }
+
+    res.status(200).json({ message: "Appraisal updated successfully", updatedAppraisal });
+  } catch (error) {
+    console.error("Error updating appraisal:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Fetch User's Appraisal Scores (For Bar Chart)
+export const getUserAppraisalScores = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const scores = await Appraisal.find({ user: userId, status: "Reviewed" })
+      .select("finalScore createdAt") // Only get score & date
+      .sort({ createdAt: 1 });
+
+    const formattedScores = scores.map((item) => ({
+      month: new Date(item.createdAt).toLocaleString("en-US", { month: "short" }),
+      score: item.finalScore,
+    }));
+
+    res.status(200).json(formattedScores);
+  } catch (error) {
+    console.error("Error fetching scores:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+export const getAllAppraisalScores = async (req, res) => {
+  try {
+    const scores = await Appraisal.find({ status: "Pending" })
+      .populate("user", "firstName lastName")
+      .sort({ createdAt: 1 });
+
+    const formattedScores = scores.map((item) => ({
+      _id: item._id,
+      user: item.user ? `${item.user.firstName} ${item.user.lastName}` : "Unknown User",
+      month: new Date(item.createdAt).toLocaleString("en-US", { month: "short" }),
+      score: item.finalScore,
+      selfAppraisal: item.selfAppraisal, // Include self-appraisal text
+      kpis: item.kpis.map((kpi) => ({
+        kpiId: kpi.kpiId,
+        title: kpi.title,
+        kpiWeight: kpi.kpiWeight,
+      })),
+    }));
+
+    res.status(200).json(formattedScores);
+  } catch (error) {
+    console.error("Error fetching all appraisal scores:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
