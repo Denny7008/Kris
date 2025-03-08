@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import SuccessModal from "./SucessPop"; // Import the Modal component
@@ -20,6 +21,14 @@ const LeaveDashboard = () => {
     return `${year}-${month}-${day}`;
   };
 
+  // Dynamic Leave Balances
+  const [leaveBalances, setLeaveBalances] = useState({
+    "Annual Leave": 15,
+    "Sick Leave": 15,
+    "Maternity Leave": 15,
+    "Compassionate Leave": 15,
+  });
+
   const leaveTypes = [
     { type: "Annual Leave", route: "/leavedashboard/annualleave" },
     { type: "Sick Leave", route: "/leavedashboard/sickleave" },
@@ -28,32 +37,39 @@ const LeaveDashboard = () => {
   ];
 
   useEffect(() => {
-    const fetchLeaveHistory = async () => {
-      if (!token) {
-        setError("No authentication token found. Please log in.");
-        return;
-      }
-
-      try {
-        setError(null); // Reset error state before fetching new data
-        const response = await axios.get(
-          "http://localhost:5000/get-leave-history",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const fetchLeaveHistory = async () => {
+          if (!token) {
+            setError("No authentication token found. Please log in.");
+            return;
           }
-        );
-        setLeaveHistory(response.data);
-      } catch (err) {
-        setError(
-          err.response?.data?.message || "Failed to fetch leave history"
-        );
-      }
-    };
-
-    fetchLeaveHistory();
-  }, [token]);
+    
+          try {
+            setError(null);
+            const response = await axios.get("http://localhost:5000/get-leave-history", {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+    
+            const leaveData = response.data;
+            setLeaveHistory(leaveData);
+    
+            // Calculate updated leave balances
+            const updatedBalances = { ...leaveBalances };
+            leaveData.forEach((leave) => {
+              if (leave.status === "Approved" && leave.type in updatedBalances) {
+                updatedBalances[leave.type] -= leave.duration;
+              }
+            });
+    
+            setLeaveBalances(updatedBalances);
+          } catch (err) {
+            setError(err.response?.data?.message || "Failed to fetch leave history");
+          }
+        };
+    
+        fetchLeaveHistory();
+      }, [token]);
 
   const openModal = (leave) => {
     setModalData(leave);
@@ -160,7 +176,7 @@ const LeaveDashboard = () => {
               key={index}
               className="bg-blue-600 shadow rounded-lg p-6 flex flex-col items-center"
             >
-              <span className="text-4xl font-bold text-white">60</span>
+              <span className="text-4xl font-bold text-white">{leaveBalances[leave.type] || 0}</span>
               <button
                 onClick={() => openModal(leave)}
                 className="mt-4 px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-green-600"
@@ -376,3 +392,17 @@ const LeaveDashboard = () => {
 };
 
 export default LeaveDashboard;
+
+
+
+
+
+
+
+
+
+
+
+
+
+

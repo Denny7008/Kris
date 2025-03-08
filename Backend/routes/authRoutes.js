@@ -300,17 +300,11 @@ router.put("/notifications/read/:userId", markNotificationsAsRead); // Mark noti
 
 // Message Notification
 
-// 📌 Create a new message notification
-router.post("/messages", createMessageNotification);
 
-// 📌 Get all messages for a user
-router.get("/messages/:userId", getUserMessageNotifications);
-
-// 📌 Mark a specific message as read
-router.put("/messages/read/:messageId", markMessagesAsRead);
-
-// 📌 Delete a specific message notification (fixed route path)
-router.delete("/messages/:messageId", deleteMessageNotification);
+router.post("/messages", createMessageNotification); // 📌 Create a new message notification
+router.get("/messages/:userId", getUserMessageNotifications); // 📌 Get all messages for a user
+router.put("/messages/read/:messageId", markMessagesAsRead); // 📌 Mark a specific message as read
+router.delete("/messages/:messageId", deleteMessageNotification);  // 📌 Delete a specific message notification (fixed route path)
 
 // KPI ROUTES
 
