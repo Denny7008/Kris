@@ -7,6 +7,7 @@ const Userdashborad = () => {
   const [userName, setUserName] = useState(""); // State to store user name
   const [jobTitle, setJobTitle] = useState(""); // State to store user name
   const [error, setError] = useState(null); // Error state
+  const [leaveHistory, setLeaveHistory] = useState([]); 
   const [todos, setTodos] = useState([]); // Declare todos state
   const token = localStorage.getItem("authToken");
   const [expandedTodo, setExpandedTodo] = useState(null); // Track expanded item
@@ -14,51 +15,73 @@ const Userdashborad = () => {
   const toggleExpand = (todoId) => {
     setExpandedTodo(expandedTodo === todoId ? null : todoId);
   };
+
+  const [leaveBalances, setLeaveBalances] = useState({
+    "Annual Leave": 15,
+    "Sick Leave": 15,
+    "Maternity Leave": 15,
+    "Compassionate Leave": 15,
+  }); 
   useEffect(() => {
-    const fetchUserDataAndKPIs = async () => {
+    const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("authToken");
         if (!token) {
           setError("No authentication token found. Please log in.");
           return;
         }
-
-        // Fetch user data
+  
+        // ✅ Fetch user data (Single API Call)
         const { data: userData } = await axios.get(
           "http://localhost:5000/get-user-data",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
-
+  
         console.log("User Data:", userData);
-
+  
         const userId = userData?._id;
         if (!userId) {
           setError("User ID not found.");
           return;
         }
-
+  
         setUserName(userData?.name || "User");
         setJobTitle(userData?.jobTitle || "Job Title");
-
-        // Fetch KPI data using userId
+  
+        // ✅ Fetch KPI Data
         const { data: allTodos } = await axios.get(
           `http://localhost:5000/todo/user/${userId}`
         );
         console.log("All KPIs:", allTodos);
-
-        // Store full KPI objects
         setTodos(allTodos.filter((kpi) => kpi.user._id === userId));
+  
+        // ✅ Fetch Leave History
+        const { data: leaveData } = await axios.get(
+          "http://localhost:5000/get-leave-history",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        console.log("Leave History:", leaveData);
+        setLeaveHistory(leaveData);
+  
+        // ✅ Calculate available leave days dynamically
+        const updatedBalances = { ...leaveBalances };
+        leaveData.forEach((leave) => {
+          if (leave.status === "Approved" && updatedBalances[leave.type] !== undefined) {
+            updatedBalances[leave.type] -= leave.duration;
+          }
+        });
+  
+        setLeaveBalances(updatedBalances);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
-    fetchUserDataAndKPIs();
+  
+    fetchUserData();
   }, []);
+  
+
+  
 
   const updateTodoStatus = async (todoId, newStatus) => {
     try {
@@ -76,6 +99,9 @@ const Userdashborad = () => {
       console.error("Error updating status:", error);
     }
   };
+
+  
+  
 
   return (
     <div className="bg-[#E3EDF9] min-h-screen p-6">
@@ -126,34 +152,31 @@ const Userdashborad = () => {
 
       {/* Dashboard Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+
         {/* Available Leave Days */}
-        <div className="bg-white rounded-lg p-6 shadow">
-          <h2 className="text-xl font-semibold mb-4">Available Leave Days</h2>
-          <ul className="space-y-2">
-            {[
-              { type: "Annual Leave", value: "10 of 40 days" },
-              { type: "Sick Leave", value: "0 of 10 days" },
-              { type: "Compassionate Leave", value: "8 of 15 days" },
-            ].map((leave) => (
-              <li key={leave.type}>
-                <p className="text-gray-700">{leave.type}</p>
-                <div className="w-full bg-gray-300 rounded-full h-2.5 mt-1">
-                  <div
-                    className="bg-blue-500 h-2.5 rounded-full"
-                    style={{
-                      width: `${
-                        (parseInt(leave.value.split(" ")[0]) /
-                          parseInt(leave.value.split(" ")[2])) *
-                        100
-                      }%`,
-                    }}
-                  ></div>
-                </div>
-                <p className="text-sm text-gray-500 mt-1">{leave.value}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
+         {/* Available Leave Days (Filtered from Leave History) */}
+      <div className="bg-white rounded-lg p-6 shadow">
+        <h2 className="text-xl font-semibold mb-4">Available Leave Days</h2>
+        <ul className="space-y-2">
+          {Object.keys(leaveBalances).map((leaveType) => (
+            <li key={leaveType}>
+              <p className="text-gray-700">{leaveType}</p>
+              <div className="w-full bg-gray-300 rounded-full h-2.5 mt-1">
+                <div
+                  className="bg-blue-500 h-2.5 rounded-full"
+                  style={{
+                    width: `${(leaveBalances[leaveType] / 15) * 100}%`,
+                  }}
+                ></div>
+              </div>
+              <p className="text-sm text-gray-500 mt-1">
+                {leaveBalances[leaveType]} days remaining
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
 
         {/* To-Dos */}
         <div className="bg-white rounded-lg p-6 shadow">
