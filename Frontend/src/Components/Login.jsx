@@ -37,8 +37,10 @@ const Login = ({ userType }) => {
       const loginResponse = await axios.post(endpoint, { email, password });
   
       console.log("Login successful:", loginResponse.data);
-  
-      localStorage.setItem("token", loginResponse.data.token);
+      
+      const { token, user } = loginResponse.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("role", role);
   
       // ✅ Redirect based on role

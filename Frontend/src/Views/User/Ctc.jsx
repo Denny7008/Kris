@@ -23,7 +23,7 @@ const Ctc = () => {
     const fetchContactDetails = async () => {
       try {
         const token = localStorage.getItem("token");
-        console.log("Token before request:", token); // Debugging: Check if token exists
+        // console.log("Token before request:", token); 
   
         if (!token) {
           setMessage("No token found. Please log in again.");

@@ -10,7 +10,8 @@ const Userdashborad = () => {
   const [leaveHistory, setLeaveHistory] = useState([]); 
   const [todos, setTodos] = useState([]); // Declare todos state
   const token = localStorage.getItem("token");
-  const [expandedTodo, setExpandedTodo] = useState(null); // Track expanded item
+  const [expandedTodo, setExpandedTodo] = useState(null);
+; // Track expanded item
 
   const toggleExpand = (todoId) => {
     setExpandedTodo(expandedTodo === todoId ? null : todoId);
@@ -36,8 +37,7 @@ const Userdashborad = () => {
           "http://localhost:5000/get-user-data",
           { headers: { Authorization: `Bearer ${token}` } }
         );
-  
-        console.log("User Data:", userData);
+        // console.log("User Data:", userData);
   
         const userId = userData?._id;
         if (!userId) {
@@ -52,7 +52,7 @@ const Userdashborad = () => {
         const { data: allTodos } = await axios.get(
           `http://localhost:5000/todo/user/${userId}`
         );
-        console.log("All KPIs:", allTodos);
+        // console.log("All KPIs:", allTodos);
         setTodos(allTodos.filter((kpi) => kpi.user._id === userId));
   
         // ✅ Fetch Leave History
@@ -60,7 +60,7 @@ const Userdashborad = () => {
           "http://localhost:5000/get-leave-history",
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        console.log("Leave History:", leaveData);
+        // console.log("Leave History:", leaveData);
         setLeaveHistory(leaveData);
   
         // ✅ Calculate available leave days dynamically

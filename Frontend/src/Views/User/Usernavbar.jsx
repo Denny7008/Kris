@@ -13,8 +13,8 @@ const Navbar = () => {
   const [isMailDropdownOpen, setMailDropdownOpen] = useState(false);
   const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [userId, setUserId] = useState(() => {
-  const storedUser = localStorage.getItem("user");
-  return storedUser ? JSON.parse(storedUser).id : null;
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser).id : null;
   });
   const [userName, setUserName] = useState("");
   const [profilePic, setProfilePic] = useState(
@@ -23,8 +23,6 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!userId) return;
-    console.log("this is user id" ,userId)
-
     const fetchData = async () => {
       try {
         const [notificationsRes, messagesRes] = await Promise.all([
@@ -83,9 +81,15 @@ const Navbar = () => {
     }
   };
 
+  useEffect(() => {
+    if (userId) {
+      fetchProfileImage();
+    }
+  }, [userId]);
+
   const fetchProfileImage = async () => {
     if (!userId) return;
-    console.log("this is user id" ,userId)
+
     try {
       const response = await axios.get(
         `http://localhost:5000/profile-image/${userId}`

@@ -12,12 +12,9 @@ const Personaldetails = () => {
   const [category, setCategory] = useState("");
   const [error, setError] = useState("");
 
+  const storedUser = localStorage.getItem("user");
+  const userId = storedUser ? JSON.parse(storedUser).id : null;
   const token = localStorage.getItem("token");
- 
-  const userId = localStorage.getItem("userId");
-
-  // console.log("User ID from Local Storage:", userId);
-  // console.log("Auth Token from Local Storage:", token);
 
   
 
@@ -99,6 +96,7 @@ const Personaldetails = () => {
     };
 
     fetchUserData();
+    fetchProfileImage();
   }, [token, userId]);
 
   // Trigger file input when profile image is clicked

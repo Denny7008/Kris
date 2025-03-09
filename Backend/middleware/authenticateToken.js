@@ -24,7 +24,7 @@ const authenticateToken = async (req, res, next) => {
     req.user = user;
 
     next(); // Call the next middleware or route handler
-    console.log("User fetched from DB:", user);
+    // console.log("User fetched from DB:", user);
 
   } catch (error) {
     console.error('Token verification error:', error);

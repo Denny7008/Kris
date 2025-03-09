@@ -76,7 +76,7 @@ export const getAllTodos = async (req, res) => {
       return res.status(404).json({ message: "No todos found for this user." });
     }
 
-    console.log(`Fetched Todos for user ${userId}:`, userTodos); // Debugging line
+    // console.log(`Fetched Todos for user ${userId}:`, userTodos); 
 
     res.status(200).json(userTodos);
   } catch (error) {
