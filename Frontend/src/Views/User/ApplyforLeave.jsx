@@ -23,16 +23,16 @@ const LeaveDashboard = () => {
 
   // Dynamic Leave Balances
   const [leaveBalances, setLeaveBalances] = useState({
-    "Annual Leave": 15,
-    "Sick Leave": 15,
-    "Maternity Leave": 15,
-    "Compassionate Leave": 15,
+    "Annual Leave": 20,
+    "Sick Leave": 20,
+    "Causal Leave": 20,
+    "Compassionate Leave": 20,
   });
 
   const leaveTypes = [
     { type: "Annual Leave", route: "/leavedashboard/annualleave" },
     { type: "Sick Leave", route: "/leavedashboard/sickleave" },
-    { type: "Maternity Leave", route: "/maternity-leave" },
+    { type: "Causal Leave", route: "/maternity-leave" },
     { type: "Compassionate Leave", route: "/compassionate-leave" },
   ];
 
