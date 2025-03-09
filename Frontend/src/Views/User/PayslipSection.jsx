@@ -16,7 +16,7 @@ const PayslipSection = () => {
   useEffect(() => {
     const fetchUserAndPayslips = async () => {
       try {
-        const token = localStorage.getItem("authToken");
+        const token = localStorage.getItem("token");
         if (!token) {
           setError("No token found. Please log in again.");
           return;
@@ -95,7 +95,7 @@ const PayslipSection = () => {
 
   return (
     <div className="bg-[#E3EDF9] min-h-screen">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="p-6 max-w-6xl mx-auto">
         <div className="flex space-x-4 mb-6">
           <select

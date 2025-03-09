@@ -9,7 +9,7 @@ const Userdashborad = () => {
   const [error, setError] = useState(null); // Error state
   const [leaveHistory, setLeaveHistory] = useState([]); 
   const [todos, setTodos] = useState([]); // Declare todos state
-  const token = localStorage.getItem("authToken");
+  const token = localStorage.getItem("token");
   const [expandedTodo, setExpandedTodo] = useState(null); // Track expanded item
 
   const toggleExpand = (todoId) => {
@@ -25,7 +25,7 @@ const Userdashborad = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem("authToken");
+        const token = localStorage.getItem("token");
         if (!token) {
           setError("No authentication token found. Please log in.");
           return;
@@ -118,7 +118,7 @@ const Userdashborad = () => {
 
       {/* Quick Actions */}
       <div className="flex flex-wrap justify-center gap-8 mb-6">
-        <Link to="/userlogin/dashboard/leaveapply">
+        <Link to="/user/dashboard/leaveapply">
           <button className="bg-white text-lg text-blue-600 p-4 rounded-lg shadow hover:bg-blue-100">
             Apply for Leave
           </button>
@@ -128,17 +128,17 @@ const Userdashborad = () => {
             KPI Goals
           </button>
         </Link>
-        <Link to="/userlogin/dashboard/take-appraisal">
+        <Link to="/user/dashboard/take-appraisal">
           <button className="bg-white text-lg text-blue-600 p-4 rounded-lg shadow hover:bg-blue-100">
             Take Appraisal
           </button>
         </Link>
-        <Link to="/update-profile">
+        <Link to="/user/dashboard/">
           <button className="bg-white text-lg text-blue-600 p-4 rounded-lg shadow hover:bg-blue-100">
             View Payslip
           </button>
         </Link>
-        <Link to="/userlogin/dashboard/updatingjsx">
+        <Link to="/user/dashboard/update-profile">
           <button className="bg-white text-lg text-blue-600 p-4 rounded-lg shadow hover:bg-blue-100">
             Update Profile
           </button>

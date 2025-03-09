@@ -9,7 +9,7 @@ const LeaveDashboard = () => {
   const [modalData, setModalData] = useState(null);
   const [leaveHistory, setLeaveHistory] = useState([]);
   const [error, setError] = useState(null);
-  const token = localStorage.getItem("authToken");
+  const token = localStorage.getItem("token");
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -98,7 +98,7 @@ const LeaveDashboard = () => {
     }
 
     try {
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("token");
       if (!token) {
         console.error("Error: No token found. Please log in.");
         return;
@@ -155,11 +155,6 @@ const LeaveDashboard = () => {
       );
     }
   };
-
-
-  
-
-
 
   return (
     <div className="bg-[#E3EDF9] py-4">

@@ -21,7 +21,7 @@ const NextDetails = () => {
   useEffect(() => {
     const fetchNextDetails = async () => {
       try {
-        const token = localStorage.getItem("authToken");
+        const token = localStorage.getItem("token");
         if (!token) {
           setMessage("No token found. Please log in again.");
           return;

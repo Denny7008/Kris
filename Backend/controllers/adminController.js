@@ -2,6 +2,7 @@
 import Admin from "../models/Admin.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
 export const registerAdmin = async (req, res) => {
   try {
@@ -33,7 +34,6 @@ export const registerAdmin = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-
 
 // ADMIN LOGIN
 // export const loginAdmin = async (req, res) => {
@@ -76,50 +76,57 @@ export const registerAdmin = async (req, res) => {
 //   }
 // };
 
+
+
 export const loginAdmin = async (req, res) => {
-    try {
-      const { email, password } = req.body;
-  
-      // Check if the admin exists
-      const admin = await Admin.findOne({ email });
-      if (!admin) {
-        return res.status(404).json({ message: "Admin not found." });
-      }
-  
-      // Check if the role is admin
-      if (admin.role !== "admin") {
-        return res.status(403).json({ message: "Access denied. Only admins can log in." });
-      }
-  
-      // Compare passwords
-      const isPasswordValid = await bcrypt.compare(password, admin.password);
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: "Invalid credentials." });
-      }
-  
-      // Generate a JWT token
-      const token = jwt.sign(
-        { id: admin._id, email: admin.email, role: admin.role },
-        process.env.JWT_SECRET,
-        { expiresIn: "1d" } // Token validity: 1 day
-      );
-  
-      res.status(200).json({
-        message: "Login successful!",
-        token,
-        admin: {
-          id: admin._id,
-          firstName: admin.firstName,
-          lastName: admin.lastName,
-          email: admin.email,
-          phone: admin.phone,
-          role: admin.role,
-        },
-      });
-    } catch (error) {
-      res.status(500).json({ message: "Server error", error: error.message });
+  try {
+    const { email, password } = req.body;
+
+    // Check if the admin exists in the User collection
+    const admin = await Admin.findOne({ email });
+    console.log("Admin Details from DB:", admin);
+
+
+    if (!admin) {
+      return res.status(404).json({ message: "Admin not found." });
     }
-  };
+
+    // Ensure the user has admin privileges
+    if (admin.role !== "admin") {
+      return res.status(403).json({ message: "Access denied. Only admins can log in." });
+    }
+
+    // Verify password
+    const isPasswordValid = await bcrypt.compare(password, admin.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid email or password." });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: admin._id, email: admin.email, role: admin.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.status(200).json({
+      message: "Login successful!",
+      token,
+      user: {
+        id: admin._id,
+        firstName: admin.firstName,
+        lastName: admin.lastName,
+        email: admin.email,
+        phone: admin.phone,
+        role: admin.role,
+      },
+    });
+    console.log("Sending role from backend:", admin.role);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
   
 
 // GET ADMIN LOG
@@ -136,3 +143,34 @@ export const loginAdmin = async (req, res) => {
       res.status(500).json({ message: "Server error", error: error.message });
     }
   };
+
+
+
+  export const checkUserRole = async (req, res) => {
+    try {
+      const { email } = req.body;
+  
+      const admin = await Admin.findOne({ email });
+      if (admin) return res.json({ role: "admin" });
+  
+      const user = await User.findOne({ email });
+      if (user) return res.json({ role: "user" });
+  
+      return res.status(404).json({ message: "User not found." });
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error: error.message });
+    }
+  };
+
+
+
+// log out controller
+  export const logoutAdmin = async (req, res) => {
+    try {
+      res.status(200).json({ message: "Logout successful!" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Server error", error: error.message });
+    }
+  };
+  

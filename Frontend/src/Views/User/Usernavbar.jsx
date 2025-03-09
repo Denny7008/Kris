@@ -1,11 +1,9 @@
 
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import logo from "../../assets/kris logo 3.png";
 import HRlogo from "../../assets/hr.jpg";
-import Profile from "../../assets/profile.jpg";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -15,48 +13,48 @@ const Navbar = () => {
   const [isMailDropdownOpen, setMailDropdownOpen] = useState(false);
   const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [userId, setUserId] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser).id : null;
+  const storedUser = localStorage.getItem("user");
+  return storedUser ? JSON.parse(storedUser).id : null;
   });
-const [userName, setUserName] = useState(""); 
-const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg");
-
-
-
+  const [userName, setUserName] = useState("");
+  const [profilePic, setProfilePic] = useState(
+    "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
+  );
 
   useEffect(() => {
     if (!userId) return;
+    console.log("this is user id" ,userId)
 
     const fetchData = async () => {
       try {
         const [notificationsRes, messagesRes] = await Promise.all([
           axios.get(`http://localhost:5000/notifications/${userId}`),
-          // axios.get(`http://localhost:5000/messages/${userId}`)
+          
         ]);
-
-        // console.log("Notifications API Response:", notificationsRes.data);
-        // console.log("Messages API Response:", messagesRes.data);
-
         // Fix for notifications API returning an array directly
-        setNotifications(Array.isArray(notificationsRes.data) ? notificationsRes.data : []);
+        setNotifications(
+          Array.isArray(notificationsRes.data) ? notificationsRes.data : []
+        );
 
-        // Fix for messages API incorrectly returning `notifications` key
+        // Fix for messages API incorrectly returning notifications key
         setMessages(messagesRes.data.notifications || []);
       } catch (error) {
-        // console.error("Error fetching data:", error);
-        //toast.error("An error occurred while fetching data.");
+        
       }
     };
 
     fetchData();
   }, [userId]);
 
-
   const handleLogout = async () => {
     try {
       await axios.post("http://localhost:5000/user/logout");
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("user");
+      localStorage.removeItem("token"); // Remove token
+      localStorage.removeItem("user"); // Remove user data
+      localStorage.removeItem("userId");
+      localStorage.clear(); // Remove user ID if stored separately
+
+      // Redirect to login page
       window.location.href = "/";
     } catch (error) {
       console.error("Error logging out:", error);
@@ -85,30 +83,33 @@ const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system
     }
   };
 
-
   const fetchProfileImage = async () => {
     if (!userId) return;
-
+    console.log("this is user id" ,userId)
     try {
-      const response = await axios.get(`http://localhost:5000/profile-image/${userId}`);
+      const response = await axios.get(
+        `http://localhost:5000/profile-image/${userId}`
+      );
       setProfilePic(response.data.imageUrl); // Set the Base64 image
     } catch (error) {
-      console.error("Error fetching profile image:", error.response?.data || error.message);
+      console.error(
+        "Error fetching profile image:",
+        error.response?.data || error.message
+      );
     }
   };
 
+  const token = localStorage.getItem("token");
+  const [error, setError] = useState(null);
 
-  const token = localStorage.getItem("authToken");
   useEffect(() => {
-    
     const fetchUserData = async () => {
       if (!token) {
         setError("No authentication token found. Please log in.");
         return;
       }
-
+  
       try {
-        // Fetch user data using the token
         const userResponse = await axios.get(
           "http://localhost:5000/get-user-data",
           {
@@ -118,40 +119,38 @@ const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system
           }
         );
         fetchProfileImage();
-        // console.log(userResponse);
-
         const fetchedUserName = userResponse.data.name;
-        // console.log(fetchedUserName);
-
         if (!fetchedUserName) {
           console.error("Error: User name is missing.");
           return;
         }
-        setUserName(fetchedUserName); 
+        setUserName(fetchedUserName);
       } catch (error) {
-        // console.error("Error fetching user data:", error);
+        console.error("Error fetching user data:", error);
       }
     };
-
+  
     fetchUserData();
   }, [token]);
 
-
   useEffect(() => {
     if (!userId) return;
-  
+
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/messages/${userId}`);
+        const response = await axios.get(
+          `http://localhost:5000/messages/${userId}`
+        );
         setMessages(response.data.notifications || []);
       } catch (error) {
         // console.error("Error fetching messages:", error);
       }
     };
-  
+
     fetchMessages();
   }, [userId]); // Make sure this effect runs when the userId changes (e.g., on login)
-  
+
+
 
  
 
@@ -164,10 +163,10 @@ const [profilePic, setProfilePic] = useState("https://static.vecteezy.com/system
       </div>
 
       <div className="flex space-x-8 text-gray-700 text-lg items-center">
-        <Link to="/userlogin/dashboard/userpanel" className="hover:text-blue-500">Dashboard</Link>
+        <Link to="/user/dashboard/" className="hover:text-blue-500">Dashboard</Link>
         <Link to="#" className="hover:text-blue-500">Requests</Link>
-        <Link to="/user/dashboard/userpanel/payroll" className="hover:text-blue-500">Payroll</Link>
-        <Link to="/user/dashboard/usepanel/comapny" className="hover:text-blue-500">Company</Link>
+        <Link to="/user/dashboard/payroll" className="hover:text-blue-500">Payroll</Link>
+        <Link to="/user/dashboard/comapny" className="hover:text-blue-500">Company</Link>
         <Link to="#" className="hover:text-blue-500">Extras</Link>
       </div>
 

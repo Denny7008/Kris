@@ -26,9 +26,9 @@ const LeaveManagement = () => {
 
   return (
     <div className="flex bg-[#E3EDF9] h-screen">
-      <AdminSideNavbar />
+      {/* <AdminSideNavbar /> */}
       <div className="flex-col">
-        <AdminUpperNavbar />
+        {/* <AdminUpperNavbar /> */}
 
         <div className="bg-blue-100 my-4 mx-4 w-[80vw] h-screen rounded-lg">
           {/* Header */}

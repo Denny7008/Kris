@@ -16,7 +16,7 @@ const Barchart = () => {
   useEffect(() => {
     const fetchUserDataAndScores = async () => {
       try {
-        const token = localStorage.getItem("authToken");
+        const token = localStorage.getItem("token");
         if (!token) {
           console.error("Error: No token found. Please log in.");
           return;

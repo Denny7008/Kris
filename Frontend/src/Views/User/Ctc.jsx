@@ -22,7 +22,7 @@ const Ctc = () => {
   useEffect(() => {
     const fetchContactDetails = async () => {
       try {
-        const token = localStorage.getItem("authToken");
+        const token = localStorage.getItem("token");
         console.log("Token before request:", token); // Debugging: Check if token exists
   
         if (!token) {

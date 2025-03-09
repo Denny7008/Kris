@@ -12,7 +12,8 @@ const Personaldetails = () => {
   const [category, setCategory] = useState("");
   const [error, setError] = useState("");
 
-  const token = localStorage.getItem("authToken");
+  const token = localStorage.getItem("token");
+ 
   const userId = localStorage.getItem("userId");
 
   // console.log("User ID from Local Storage:", userId);

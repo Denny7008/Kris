@@ -21,7 +21,7 @@ const FinancialDocs = () => {
 
   const fetchUserDetails = async () => {
     try {
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("token");
       const response = await axios.get("http://localhost:5000/get-user-data", {
         headers: { Authorization: `Bearer ${token}` },
       });

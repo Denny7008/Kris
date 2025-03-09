@@ -31,7 +31,7 @@ import {
   getApprovedLeaveApplications,
 } from "../controllers/leaveController.js";
 import { body } from "express-validator"; // For input validation
-import { getAdmin, loginAdmin, registerAdmin } from "../controllers/adminController.js";
+import { checkUserRole, getAdmin, loginAdmin, logoutAdmin, registerAdmin } from "../controllers/adminController.js";
 import {
   authenticateToken,
   getUserDataFromToken,
@@ -88,6 +88,8 @@ const router = express.Router();
 //const upload = multer({ storage });
 
 // ADMIN ROUTES
+router.post("/admin/logout", logoutAdmin);
+router.post("/check-role", checkUserRole);
 router.post(
   "/user/register",
   [
@@ -122,8 +124,8 @@ router.get("/users/employee-count", noOfEmployees); // Get number of employees
 
 router.put("/users/:userId", editProfile); // Update user profile by userId
 router.get("/users/:id", getUser); // Get the user by id
-router.get("/users/user-profile", userProfile); // Get user profile
-
+// router.get("/users/user-profile", userProfile); // Get user profile
+router.get("/profile-image/:userId", getProfileImage);
 router.put(
   "/users/update-contact/:id",
   authenticateToken,
@@ -159,7 +161,7 @@ router.post(
   upload.single("file"),
   uploadProfileImage
 );
-router.get("/profile-image/:userId", getProfileImage);
+
 
 // uploadAdminProfileImage
 router.post(
