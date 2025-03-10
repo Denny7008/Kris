@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import AdminSideNavbar from "../../../Components/AdminSideNavbar";
-import AdminUpperNavbar from "../../../Components/AdminUpperNavbar";
-import leave from "../../../assets/leave 1.png";
 import Leavesetings from "./Leavesetings";
 import Leaverecall from "./Leaverecall";
 import LeaveHistory from "./Leavehistory";
