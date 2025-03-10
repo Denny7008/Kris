@@ -89,9 +89,9 @@ const Login = ({ userType }) => {
               Sign In
             </button>
           </form>
-          <p className="mt-6 text-gray-600 text-center">
+          {/* <p className="mt-6 text-gray-600 text-center">
             Don’t have an account yet? <Link to={`/${userType}/register`} className="text-blue-500 font-bold hover:underline">Join KRIS today.</Link>
-          </p>
+          </p> */}
         </div>
         <div className="w-1/2 relative bg-blue-900 text-white p-8 flex items-center justify-center">
           <div className="absolute inset-0 bg-opacity-70">

@@ -3,7 +3,7 @@ import logo from "../assets/kris logo 2.svg"; // Path to your logo image
 import dp from "../assets/dp 1.png";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
-import { UserPen } from "lucide-react";
+import { UserPen, UserPlus } from "lucide-react";
 
 const AdminSideNavbar = () => {
   const [profilePic, setProfilePic] = useState(
@@ -233,6 +233,17 @@ const AdminSideNavbar = () => {
         >
           <span className="material-icons">book</span>
           <span className="ml-2">Leave Management</span>
+        </NavLink>
+        <NavLink
+          to="/admin/dashboard/add-employee"
+          className={({ isActive }) =>
+            `flex items-center p-2 mb-2 rounded-lg ${
+              isActive ? "bg-yellow-400 text-black" : "hover:bg-blue-800"
+            }`
+          }
+        >
+          <UserPlus />
+          <span className="ml-2">Add Employee</span>
         </NavLink>
         <NavLink
           to="/admin/dashboard/performance-management"

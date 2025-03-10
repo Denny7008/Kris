@@ -10,6 +10,7 @@ import PerformanceManagement from "../Views/Admin/pages/PerformanceManagement";
 import AdminJobManagement from "../Views/Admin/pages/AdminJobManagement";
 import LeaveManagement from "../Views/Admin/pages/LeaveManagement";
 import NotFound from "../Components/NotFound";
+import UserRegister from "../Views/User/UserRegister";
 
 
 const AdminRoutes = () => {
@@ -21,14 +22,12 @@ const AdminRoutes = () => {
           <Route path="/dashboard" element={<AdminLayout />}>
             <Route index element={<JobPanels />} />
             <Route path="candidates" element={<Candidates />} />
-            {/* <Route path="jobportal" element={<AdminJobManagement />} /> */}
             <Route path="payroll" element={<PayrollDashboard />}/>
             <Route path="performance-management" element={<PerformanceManagement />} />
             <Route path="leave-management" element={<LeaveManagement />} />
             <Route path="employee-management" element={<EmployeeManagement />} />
             <Route path="jobportal" element={<AdminJobManagement/>}/>
-            {/* <Route path="job/:jobId" element={<JobDetailPage />} /> */}
-            {/* <Route path="apply/:jobId" element={<JobApplicationForm />} /> */}
+            <Route path="add-employee" element={<UserRegister/>}/>
           </Route>
         </Route>
 
