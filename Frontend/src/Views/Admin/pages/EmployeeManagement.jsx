@@ -3,8 +3,8 @@ import ViewProfile from "../pages/ViewProfile";
 import EditProfile from "../pages/EditProfile";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const EmployeeManagement = () => {
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ const EmployeeManagement = () => {
   const [activeView, setActiveView] = useState("table");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [filterOptions, setFilterOptions] = useState({
     jobTitles: [],
     categories: [],
@@ -24,6 +25,20 @@ const EmployeeManagement = () => {
     category: "",
   });
   const [filterOpen, setFilterOpen] = useState(false);
+
+  const handleSearch = (e) => {
+    const searchQuery = e.target.value.toLowerCase();
+    setSearchTerm(searchQuery);
+  
+    const filtered = employees.filter((emp) =>
+      Object.values(emp)
+        .map((value) => (value ? value.toString().toLowerCase() : "")) // Ensure value exists
+        .some((val) => val.includes(searchQuery))
+    );
+  
+    setFilteredEmployees(filtered);
+  };
+  
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -176,13 +191,22 @@ const EmployeeManagement = () => {
         return (
           <div className="bg-white p-8 rounded-lg shadow-md">
             <div className="flex justify-between mb-4">
+              <div className="flex gap-3">
               <button
                 onClick={() => setFilterOpen(!filterOpen)}
-                className="flex items-center px-4 py-2 bg-gray-200 rounded-md"
+                className="flex items-center px-4 py-2 bg-yellow-300 rounded-md"
               >
                 <span className="material-icons mr-2">filter_list</span>
                 Filter
               </button>
+              <input
+                type="text"
+                placeholder="Search Employee..."
+                value={searchTerm}
+                onChange={handleSearch}
+                className="border p-2 rounded-md"
+              />
+              </div>
               <button
                 onClick={exportToPDF}
                 className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
@@ -314,5 +338,3 @@ const EmployeeManagement = () => {
 };
 
 export default EmployeeManagement;
-
-

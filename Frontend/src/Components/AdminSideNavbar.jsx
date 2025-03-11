@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import logo from "../assets/kris logo 2.svg"; // Path to your logo image
 import dp from "../assets/dp 1.png";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
 import { UserPen, UserPlus } from "lucide-react";
 
 const AdminSideNavbar = () => {
   const [profilePic, setProfilePic] = useState(
-    "https://plus.unsplash.com/premium_photo-1664536392896-cd1743f9c02c?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    "https://i.pinimg.com/1200x/9f/16/72/9f1672710cba6bcb0dfd93201c6d4c00.jpg"
   );
   const imageInputRef = useRef(null);
+  const location = useLocation();
 
   const [admin, setAdmin] = useState(null); // State to store admin data
   const [adminId, setAdminId] = useState(null); // State to store admin ID
@@ -156,17 +157,17 @@ const AdminSideNavbar = () => {
       <div className="flex flex-col mt-6 pl-3">
         <NavLink
           to="/admin/dashboard/"
-          className={({ isActive }) =>
-            `flex items-center p-2 mb-2 rounded-lg ${
-              isActive ? "bg-yellow-400 text-black" : "hover:bg-blue-800"
-            }`
-          }
+          className={`flex items-center p-2 mb-2 rounded-lg ${
+            location.pathname === "/admin/dashboard/"
+              ? "bg-yellow-400 text-black"
+              : "hover:bg-blue-800"
+          }`}
         >
           <span className="material-icons">dashboard</span>
           <span className="ml-2">Dashboard</span>
         </NavLink>
-        <NavLink
-          to="/messages"
+        {/* <NavLink
+          to="/admin/dashboard/tes"
           className={({ isActive }) =>
             `flex items-center p-2 mb-2 rounded-lg ${
               isActive ? "bg-yellow-400 text-black" : "hover:bg-blue-800"
@@ -176,32 +177,32 @@ const AdminSideNavbar = () => {
           <span className="material-icons">mail</span>
           <span className="ml-2">Messages</span>
           <span className="ml-auto text-red-500">13</span>
-        </NavLink>
+        </NavLink> */}
         <h3 className="mt-4 mb-2 font-semibold">Recruitment</h3>
         <NavLink
           to="/admin/dashboard/jobportal"
-          className={({ isActive }) =>
-            `flex items-center p-2 mb-2 rounded-lg ${
-              isActive ? "bg-yellow-400 text-black" : "hover:bg-blue-800"
-            }`
-          }
+          className={`flex items-center p-2 mb-2 rounded-lg ${
+            location.pathname === "/admin/dashboard/jobportal"
+              ? "bg-yellow-400 text-black"
+              : "hover:bg-blue-800"
+          }`}
         >
           <span className="material-icons">work</span>
           <span className="ml-2">Jobs</span>
         </NavLink>
         <NavLink
           to="/admin/dashboard/candidates"
-          className={({ isActive }) =>
-            `flex items-center p-2 mb-2 rounded-lg ${
-              isActive ? "bg-yellow-400 text-black" : "hover:bg-blue-800"
-            }`
-          }
+          className={`flex items-center p-2 mb-2 rounded-lg ${
+            location.pathname === "/admin/dashboard/candidates"
+              ? "bg-yellow-400 text-black"
+              : "hover:bg-blue-800"
+          }`}
         >
           <span className="material-icons">group</span>
           <span className="ml-2">Candidates</span>
         </NavLink>
-        <NavLink
-          to="/admin/login/AdminDashboard/Test"
+        {/* <NavLink
+          to="/admin/dashboard/"
           className={({ isActive }) =>
             `flex items-center p-2 mb-2 rounded-lg ${
               isActive ? "bg-yellow-400 text-black" : "hover:bg-blue-800"
@@ -210,7 +211,7 @@ const AdminSideNavbar = () => {
         >
           <span className="material-icons">description</span>
           <span className="ml-2">Resumes</span>
-        </NavLink>
+        </NavLink> */}
         <h3 className="mt-4 mb-2 font-semibold">Organization</h3>
         <NavLink
           to="/admin/dashboard/employee-management"
