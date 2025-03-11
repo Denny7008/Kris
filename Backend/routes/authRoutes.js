@@ -209,6 +209,9 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
       state: user.state,
       city: user.city,
       address: user.address,
+      profilePic: user.profilePic?.data
+        ? `data:${user.profilePic.contentType};base64,${user.profilePic.data.toString("base64")}`
+        : null,
       nextDetails: user.nextDetails
         ? {
             kinName: user.nextDetails.kinName || "",
