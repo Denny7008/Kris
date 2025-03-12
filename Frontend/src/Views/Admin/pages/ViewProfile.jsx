@@ -91,9 +91,12 @@ import GuarantorDetails from "./ViewGuarantorDetails";
 import ViewFamilyDetails from "./ViewFamilyDetails";
 import ViewJobDetails from "./ViewJobDetails";
 import FinancialDetails from "./FinancialDetails";
+import { Link, useNavigate } from "react-router-dom";
+
 
 const ViewProfile = ({ employee }) => {
   const [selectedMenu, setSelectedMenu] = React.useState("Personal Details");
+  const navigate = useNavigate();
 
   const menuItems = [
     "Personal Details",
@@ -119,9 +122,14 @@ const ViewProfile = ({ employee }) => {
 
   return (
     <div className="flex-col">
+      <div className="flex justify-between">
       <h1 className="text-xl font-semibold">
         Employee Mgmt / Employee Profile / {selectedMenu}
       </h1>
+      <div>
+         <Link to="/admin/dashboard/"  className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back</Link>
+      </div>
+      </div>
 
       <div className="flex mt-4">
         {/* Left Side Menu */}

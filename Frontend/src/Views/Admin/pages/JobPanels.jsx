@@ -6,12 +6,16 @@ import loe from "../../../assets/Ellipse 14.png";
 
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import ViewProfile from "./ViewProfile";
 
 const JobPanels = () => {
   const [employeeCount, setEmployeeCount] = useState(0);
   const [employees, setEmployees] = useState([]);
   const [candidates, setCandidates] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [activeView, setActiveView] = useState("table");
+  const [actionDropdown, setActionDropdown] = useState(null);
 
   useEffect(() => {
     // Fetch employee count
@@ -230,9 +234,20 @@ const JobPanels = () => {
         console.error("Error fetching employee details:", error)
       );
   };
+  const handleViewProfile = (employee) => {
+    setSelectedEmployee(employee);
+    setActiveView("view");
+    setActionDropdown(null);
+  };
 
-  return (
-    <>
+   
+  const renderContent = () => {
+    switch (activeView) {
+      case "view":
+        return selectedEmployee && <ViewProfile employee={selectedEmployee} />;
+      default:
+        return (
+          <div>
       <div className="flex space-x-6 mx-3 my-4 p-4 bg-[#E3EDF9]">
         {/* Messages */}
         <div className="bg-yellow-500 flex items-center justify-between text-white w-36 p-4 rounded-lg">
@@ -363,7 +378,7 @@ const JobPanels = () => {
                     </div>
                   </div>
                   <div className="flex space-x-2">
-                    <button className="bg-blue-500 text-white p-2 rounded-lg">
+                    <button onClick={() => handleViewProfile(employee)} className="bg-blue-500 text-white p-2 rounded-lg">
                       View
                     </button>
                     <button onClick={() => handleDownloadPDF(employee._id)} className="bg-green-500 text-white p-2 rounded-lg">
@@ -465,7 +480,20 @@ const JobPanels = () => {
           </ul>
         </div>
       </div>
-    </>
+    </div>
+          
+        );
+    }
+  };
+
+
+
+  return (
+    <div className="flex min-h-screen bg-[#E3EDF9]">
+      <div className="flex-1">
+        <div className="p-6">{renderContent()}</div>
+      </div>
+    </div>
   );
 };
 
