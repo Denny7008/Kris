@@ -324,14 +324,14 @@ const JobPanels = () => {
                   key={index}
                   className="flex justify-between items-center bg-gray-100 p-3 rounded-lg"
                 >
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-3 overflow-auto">
                     <img
                       src={
                         jobImages[job.title] ||
                         "https://source.unsplash.com/100x100/?work"
                       }
                       alt={`${job.title} logo`}
-                      className="w-12 h-12 object-cover rounded-md"
+                      className="w-11 h-11  rounded-md overflow-auto"
                     />
                     <div>
                       <h3 className="text-gray-800 font-medium">{job.title}</h3>
@@ -364,7 +364,7 @@ const JobPanels = () => {
                     <img
                       src={employee.profilePic || "/path-to-placeholder.png"}
                       alt={`${employee.firstName} ${employee.lastName}'s avatar`}
-                      className="w-10 h-10 rounded-full"
+                      className="w-10 h-10 rounded-full object-cover"
                     />
 
                     <div>
@@ -404,11 +404,11 @@ const JobPanels = () => {
                   className="flex justify-between items-center bg-gray-100 p-3 rounded-lg"
                 >
                   <div className="flex items-center space-x-3">
-                    <img
+                    {/* <img
                       src={candidate.profilePic || "/path-to-placeholder.png"}
                       alt={`${candidate.name}'s avatar`}
                       className="w-10 h-10 rounded-full"
-                    />
+                    /> */}
                     <div>
                       <h3 className="text-gray-800 font-medium">
                         {candidate.name}
@@ -419,7 +419,7 @@ const JobPanels = () => {
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <span
+                    {/* <span
                       className={`text-sm p-1 rounded-lg ${
                         candidate.atsScore > 50
                           ? "bg-green-100 text-green-500"
@@ -427,7 +427,7 @@ const JobPanels = () => {
                       }`}
                     >
                       ATS Score: 60
-                    </span>
+                    </span> */}
                     <button className="bg-blue-500 text-white p-2 rounded-lg">
                       View
                     </button>
