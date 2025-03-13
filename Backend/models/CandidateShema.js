@@ -7,7 +7,8 @@ const CandidateSchema = new mongoose.Schema({
   name: {type:String},                                                  
   email: {type:String},                                                
   phone: {type:Number},                                                 
-  resumeLink: {type:String},                                            
+  resumeLink: {type:String},   
+  atsScore: { type: Number, default: null },                                         
   appliedDate: { 
     type: String,
     default: () => new Date().toISOString().split('T')[0],  

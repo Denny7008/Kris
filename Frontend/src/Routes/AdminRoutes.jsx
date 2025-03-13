@@ -12,7 +12,6 @@ import LeaveManagement from "../Views/Admin/pages/LeaveManagement";
 import NotFound from "../Components/NotFound";
 import UserRegister from "../Views/User/UserRegister";
 
-
 const AdminRoutes = () => {
   return (
     <>
@@ -22,17 +21,25 @@ const AdminRoutes = () => {
           <Route path="/dashboard" element={<AdminLayout />}>
             <Route index element={<JobPanels />} />
             <Route path="candidates" element={<Candidates />} />
-            <Route path="payroll" element={<PayrollDashboard />}/>
-            <Route path="performance-management" element={<PerformanceManagement />} />
+            <Route path="payroll" element={<PayrollDashboard />} />
+            <Route
+              path="performance-management"
+              element={<PerformanceManagement />}
+            />
             <Route path="leave-management" element={<LeaveManagement />} />
-            <Route path="employee-management" element={<EmployeeManagement />} />
-            <Route path="jobportal" element={<AdminJobManagement/>}/>
-            <Route path="add-employee" element={<UserRegister/>}/>
+            <Route
+              path="employee-management"
+              element={<EmployeeManagement />}
+            />
+            <Route path="jobportal" element={<AdminJobManagement />} />
+            <Route path="add-employee" element={<UserRegister />} />
           </Route>
         </Route>
 
         {/* Fallback for unknown routes */}
         <Route path="*" element={<NotFound />} />
+        
+        
       </Routes>
     </>
   );
@@ -40,4 +47,4 @@ const AdminRoutes = () => {
 
 export default AdminRoutes;
 
-//         {/* <Route path="/apply-job/:jobLink" component={<JobApplicationForm/>} /> */}
+

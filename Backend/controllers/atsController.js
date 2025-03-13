@@ -1,21 +1,13 @@
-
-// import Candidate from "../models/CandidateShema.js";
-// import { downloadResume } from "../utils/downloadResume.js";
-// import { extractTextFromPDF, extractTextFromDOCX } from "../utils/extractResume.js";
-// import { extractResumeData } from "../utils/extractData.js";
-// import { calculateAtsScore } from "../utils/calculateAts.js";
-// import fs from "fs";
-// import path from "path";
+import Candidate from "../models/CandidateShema.js";
+import Job from "../models/JobSchema.js"; // ✅ Import Job model to fetch job title
+import { downloadResume } from "../utils/downloadResume.js";
+import { extractTextFromPDF, extractTextFromDOCX } from "../utils/extractResume.js";
+import { extractResumeData } from "../utils/extractData.js";
+import { calculateAtsScore } from "../utils/calculateAts.js";
+import fs from "fs";
 
 // export const calculateAtsScoreForCandidates = async (req, res) => {
 //   try {
-//     const { jobDescription } = req.body;
-
-//     // ✅ Ensure jobDescription is valid
-//     if (!jobDescription || typeof jobDescription !== "string") {
-//       return res.status(400).json({ message: "❌ Invalid job description provided." });
-//     }
-
 //     const candidates = await Candidate.find({ atsScore: { $exists: false } });
 
 //     for (const candidate of candidates) {
@@ -23,6 +15,15 @@
 //         console.warn(`⚠️ Skipping candidate ${candidate._id}: No resume link.`);
 //         continue;
 //       }
+
+//       // ✅ Fetch job title using candidate's jobId
+//       const job = await Job.findById(candidate.jobId);
+//       if (!job || !job.title) {
+//         console.error(`❌ Error: No job found for candidate ${candidate._id}. Skipping...`);
+//         continue;
+//       }
+//       const jobTitle = job.title.trim();
+//       console.log(`🔍 Job Title for Candidate ${candidate._id}: ${jobTitle} Name: ${candidate.name}`);
 
 //       // ✅ Download resume and get the correct file path
 //       const filePath = await downloadResume(candidate.resumeLink, candidate._id);
@@ -54,8 +55,8 @@
 //       // ✅ Extract useful data from resume
 //       const extractedData = extractResumeData(resumeText);
 
-//       // ✅ Calculate ATS score
-//       const atsScore = calculateAtsScore(resumeText, jobDescription);
+//       // ✅ Calculate ATS score using Job Title instead of Job Description
+//       const atsScore = calculateAtsScore(resumeText, jobTitle);
 //       console.log(`✅ ATS Score for ${candidate._id}:`, atsScore);
 
 //       // ✅ Update Candidate Data in MongoDB
@@ -66,6 +67,8 @@
 //       try {
 //         fs.unlinkSync(filePath);
 //         console.log(`🗑️ Deleted file: ${filePath}`);
+//         console.log(`--------------------------------`);
+//         console.log("");
 //       } catch (unlinkError) {
 //         console.error(`❌ Error deleting file ${filePath}:`, unlinkError.message);
 //       }
@@ -79,15 +82,6 @@
 // };
 
 
-
-
-import Candidate from "../models/CandidateShema.js";
-import Job from "../models/JobSchema.js"; // ✅ Import Job model to fetch job title
-import { downloadResume } from "../utils/downloadResume.js";
-import { extractTextFromPDF, extractTextFromDOCX } from "../utils/extractResume.js";
-import { extractResumeData } from "../utils/extractData.js";
-import { calculateAtsScore } from "../utils/calculateAts.js";
-import fs from "fs";
 
 export const calculateAtsScoreForCandidates = async (req, res) => {
   try {
@@ -106,7 +100,7 @@ export const calculateAtsScoreForCandidates = async (req, res) => {
         continue;
       }
       const jobTitle = job.title.trim();
-      console.log(`🔍 Job Title for Candidate ${candidate._id}: ${jobTitle}`);
+      console.log(`🔍 Job Title for Candidate ${candidate._id}: ${jobTitle} Name: ${candidate.name}`);
 
       // ✅ Download resume and get the correct file path
       const filePath = await downloadResume(candidate.resumeLink, candidate._id);
@@ -135,21 +129,23 @@ export const calculateAtsScoreForCandidates = async (req, res) => {
         continue;
       }
 
-      // ✅ Extract useful data from resume
-      const extractedData = extractResumeData(resumeText);
-
-      // ✅ Calculate ATS score using Job Title instead of Job Description
+      // ✅ Calculate ATS score using Job Title
       const atsScore = calculateAtsScore(resumeText, jobTitle);
       console.log(`✅ ATS Score for ${candidate._id}:`, atsScore);
 
-      // ✅ Update Candidate Data in MongoDB
-      Object.assign(candidate, extractedData, { atsScore });
-      await candidate.save();
+      // ✅ Only update atsScore in MongoDB
+      await Candidate.updateOne(
+        { _id: candidate._id },
+        { $set: { atsScore: atsScore } } // Fixed ✅
+      );
+      
 
       // ✅ Safely delete the resume file after processing
       try {
         fs.unlinkSync(filePath);
         console.log(`🗑️ Deleted file: ${filePath}`);
+        console.log(`--------------------------------`);
+        console.log("");
       } catch (unlinkError) {
         console.error(`❌ Error deleting file ${filePath}:`, unlinkError.message);
       }
@@ -161,3 +157,10 @@ export const calculateAtsScoreForCandidates = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+
+
+
+
+
+

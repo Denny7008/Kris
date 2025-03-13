@@ -17,6 +17,8 @@ const JobPanels = () => {
   const [activeView, setActiveView] = useState("table");
   const [actionDropdown, setActionDropdown] = useState(null);
 
+
+
   useEffect(() => {
     // Fetch employee count
     axios
@@ -84,6 +86,8 @@ const JobPanels = () => {
     "Devops Enginner": "https://www.guvi.in/blog/wp-content/uploads/2023/10/devops-logo-1200x675.webp",
     "Tester": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIhpW4XrteLxojOCPgZFmbaxLm1kXxnlhQRRcjHkYOBYEzAl8PoYTnk2b7VB4lmIF3620&usqp=CAU"
   };
+
+
   
   const handleDownloadPDF = (employeeId) => {
     axios
@@ -328,9 +332,9 @@ const JobPanels = () => {
                     <img
                       src={
                         jobImages[job.title] ||
-                        "https://source.unsplash.com/100x100/?work"
+                        "https://t4.ftcdn.net/jpg/08/74/14/13/360_F_874141335_gJ0rrCK1WY8kBufqjvxUSMChfef923cT.jpg"
                       }
-                      alt={`${job.title} logo`}
+                      alt="Logo"
                       className="w-11 h-11  rounded-md overflow-auto"
                     />
                     <div>
