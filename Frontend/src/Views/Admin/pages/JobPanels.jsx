@@ -419,15 +419,15 @@ const JobPanels = () => {
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    {/* <span
+                    <span
                       className={`text-sm p-1 rounded-lg ${
                         candidate.atsScore > 50
                           ? "bg-green-100 text-green-500"
                           : "bg-red-100 text-red-500"
                       }`}
                     >
-                      ATS Score: 60
-                    </span> */}
+                      ATS Score: {candidate.atsScore} 
+                    </span>
                     <button className="bg-blue-500 text-white p-2 rounded-lg">
                       View
                     </button>

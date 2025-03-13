@@ -80,6 +80,7 @@ import mongoose from "mongoose";
 import { getPayslipsByUser, processPayout } from "../controllers/paymentController.js";
 import { getAllAppraisalScores, getUserAppraisalScores, requestAppraisal, updateAppraisal } from "../controllers/AppriasalController.js";
 import { deleteTodo, getAllTodos, initiateTodo, updateTodoStatus } from "../controllers/Todocontroller.js";
+import { calculateAtsScoreForCandidates } from "../controllers/atsController.js";
 
 
 const router = express.Router();
@@ -382,6 +383,8 @@ router.delete('/delete/job/:id', deleteJob);
 router.post('/jobs/apply/:jobId', applyForJob);
 router.get('/candidates', getCandidates);
 router.get('/candidates/:jobId', getCandidatesByJob);  // Get candidates by job ID
+
+router.post("/calculate-ats", calculateAtsScoreForCandidates);
 
 
 
