@@ -27,7 +27,7 @@ const LeaveManagement = () => {
       <div className="flex-col">
         {/* <AdminUpperNavbar /> */}
 
-        <div className="bg-blue-100 my-4 mx-4 w-[80vw] h-screen rounded-lg">
+        <div className="bg-blue-100 my-4 mx-4 w-[80vw] h-auto rounded-lg">
           {/* Header */}
           <header className="flex items-center p-6 bg-blue-100">
             <span className="material-icons text-3xl mr-2">menu_book</span>

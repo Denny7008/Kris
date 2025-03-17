@@ -189,7 +189,7 @@ const EmployeeManagement = () => {
         );
       default:
         return (
-          <div className="bg-white p-8 rounded-lg shadow-md">
+          <div className="bg-white p-8 rounded-lg shadow-md ">
             <div className="flex justify-between mb-4">
               <div className="flex gap-3">
               <button
@@ -262,7 +262,7 @@ const EmployeeManagement = () => {
                 </div>
               )}
             </div>
-            <div className="overflow-x-auto">
+            <div className="overflow-y-auto max-h-[80vh] ">
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="bg-gray-200 text-left text-sm font-medium text-gray-700">
@@ -279,7 +279,7 @@ const EmployeeManagement = () => {
                   {filteredEmployees.map((employee, index) => (
                     <tr
                       key={employee._id}
-                      className="border-b hover:bg-gray-100"
+                      className="border-b hover:bg-gray-100 "
                     >
                       <td className="p-4">{`${employee.firstName} ${employee.lastName}`}</td>
                       <td className="p-4">{employee.department}</td>
@@ -329,7 +329,7 @@ const EmployeeManagement = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#E3EDF9]">
+    <div className="flex min-h-screen bg-[#E3EDF9] ">
       <div className="flex-1">
         <div className="p-6">{renderContent()}</div>
       </div>

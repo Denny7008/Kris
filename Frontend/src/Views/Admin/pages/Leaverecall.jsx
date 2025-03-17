@@ -78,7 +78,7 @@ const Leaverecall = () => {
 
   return (
     <div className="flex bg-blue-900 w-[80vw] rounded-lg shadow-xl">
-      <div className="p-8">
+      <div className="p-5">
         <h2 className="text-2xl font-bold mb-4 text-white">
           Approved Leave Applications
         </h2>

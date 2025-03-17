@@ -83,8 +83,8 @@ const LeaveHistory = () => {
   };
 
   return (
-    <div className="flex bg-blue-900 w-[80vw] rounded-lg shadow-xl">
-      <div className="p-8">
+    <div className="flex bg-blue-900 h-auto w-[80vw] rounded-lg shadow-xl">
+      <div className="p-5">
         <h2 className="text-2xl font-bold mb-4">Leave History</h2>
 
         <div className="overflow-y-scroll w-[75vw] h-[60vh]">
