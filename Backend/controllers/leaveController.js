@@ -3,7 +3,9 @@ import LeaveApplication from '../models/LeaveApplication.js';
 // function to get all leave applications
 export const getAllLeaveApplications = async (req, res) => {
   try {
-    const applications = await LeaveApplication.find();
+    // const applications = await LeaveApplication.find();
+    const applications = await LeaveApplication.find().sort({ startDate: -1 });
+
     res.status(200).json(applications);
   } catch (error) {
     console.error("Error in getAllLeaveApplications controller:", error);
@@ -109,7 +111,9 @@ export const getLeaveHistory = async (req, res) => {
   try {
     const userId = req.user._id; // Extract user ID from authenticated request
 
-    const leaveHistory = await LeaveApplication.find({ userId });
+    // const leaveHistory = await LeaveApplication.find({ userId });
+    const leaveHistory = await LeaveApplication.find({ userId: req.user.id }).sort({ startDate: -1 });
+
 
     if (!leaveHistory || leaveHistory.length === 0) {
       return res.status(404).json({ message: "No leave history found for this user." });
@@ -149,7 +153,8 @@ export const updateLeaveStatus = async (req, res) => {
 // GET APRROVED LEAVE APPLICATION
 export const getApprovedLeaveApplications = async (req, res) => {
   try {
-    const approvedApplications = await LeaveApplication.find({ status: "Approved" });
+    // const approvedApplications = await LeaveApplication.find({ status: "Approved" });
+    const approvedApplications = await LeaveApplication.find({ status: "Approved" }).sort({ startDate: -1 });
     res.status(200).json(approvedApplications);
   } catch (error) {
     console.error("Error in getApprovedLeaveApplications controller:", error);

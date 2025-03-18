@@ -535,7 +535,8 @@ export const addFamilyMember = async (req, res) => {
 // GET EMPLOYEE ALL DATA
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    // const users = await User.find();
+    const users = await User.find().sort({ startDate: -1 });
 
     if (users.length === 0) {
       return res.status(404).json({ message: "No users found." });
