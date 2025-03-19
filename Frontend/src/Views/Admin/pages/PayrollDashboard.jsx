@@ -10,8 +10,6 @@ const PayrollDashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  
-
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -20,7 +18,8 @@ const PayrollDashboard = () => {
 
         const processedUsers = await Promise.all(
           users.map(async (user) => {
-            let profileImage = "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"; // Default profile image
+            let profileImage =
+              "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"; // Default profile image
 
             if (user.profilePic?.data?.data) {
               try {
@@ -68,30 +67,28 @@ const PayrollDashboard = () => {
     setShowModal(true);
   };
 
- 
-
-    const handleSendPayout = async () => {
+  const handleSendPayout = async () => {
     if (
-    !selectedUser ||
+      !selectedUser ||
       !selectedUser.bankDetails ||
       !selectedUser.bankDetails[0]
     ) {
       alert("User bank details are missing.");
       return;
     }
-  
+
     try {
       const response = await axios.post("http://localhost:5000/api/payouts", {
         amount: salary,
         userId: selectedUser._id,
         bankDetails: selectedUser.bankDetails[0],
       });
-  
+
       if (response.data.success) {
         console.log("Payout Successful. Payslip Saved:", response.data.payslip);
         setShowModal(false); // Close the payment modal
         setShowSuccessModal(true); // Show the success modal
-        
+
         // Hide the success modal after 3 seconds
         setTimeout(() => {
           setShowSuccessModal(false);
@@ -103,11 +100,9 @@ const PayrollDashboard = () => {
       console.error("An error occurred while processing the payout:", error);
     }
   };
-  
-  
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 bg-gray-50 min-h-screen ">
       <h1 className="text-3xl font-bold mb-6">Payroll Management</h1>
 
       {/* Search Bar */}
@@ -125,89 +120,84 @@ const PayrollDashboard = () => {
       </div>
 
       {/* Employee Table */}
-      <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
-        <thead>
-          <tr className="bg-gray-100 text-left">
-            <th className="p-3 select-none">
-              <User className="inline mr-2" />
-              Employee
-            </th>
-            <th className="p-3 select-none">Department/Job Title</th>
-            <th className="p-3 select-none">Bank Details</th>
-            <th className="p-3 select-none">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUsers.map((user) => (
-            <tr key={user._id} className="border-b hover:bg-gray-50">
-              {/* Profile Image and Name */}
-              <td className="p-3 flex items-center gap-3">
-                <img
-                  src={user.profileImage}
-                  alt="Profile"
-                  className="h-10 w-10 rounded-full object-cover border border-gray-300"
-                />
-                {user.firstName} {user.lastName}
-              </td>
-
-              <td className="p-3 select-none">
-                <p>
-                  <strong>Department:</strong> {user.department}
-                </p>
-                <p>
-                  <strong>Job Title:</strong> {user.jobTitle}
-                </p>
-              </td>
-              <td className="p-3">
-                {user.bankDetails?.length > 0 ? (
-                  user.bankDetails.map((bank, index) => (
-                    <div key={index} className="mb-2">
-                      <p className="select-none">
-                        <strong>Bank:</strong> {bank.bankName}
+      {/* Employee Table Container with Scrolling */}
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+        <div className="max-h-[600px] overflow-y-auto">
+          <table className="min-w-full ">
+            <thead className="sticky top-0 bg-gray-100 shadow">
+              <tr className="text-left">
+                <th className="p-3 select-none">
+                  <User className="inline mr-2" />
+                  Employee
+                </th>
+                <th className="p-3 select-none">Department/Job Title</th>
+                <th className="p-3 select-none">Bank Details</th>
+                <th className="p-3 select-none">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredUsers.map((user) => (
+                <tr key={user._id} className="border-b hover:bg-gray-50">
+                  <td className="p-3 flex items-center gap-3">
+                    <img
+                      src={user.profileImage}
+                      alt="Profile"
+                      className="h-10 w-10 rounded-full object-cover border border-gray-300"
+                    />
+                    {user.firstName} {user.lastName}
+                  </td>
+                  <td className="p-3 select-none">
+                    <p>
+                      <strong>Department:</strong> {user.department}
+                    </p>
+                    <p>
+                      <strong>Job Title:</strong> {user.jobTitle}
+                    </p>
+                  </td>
+                  <td className="p-3">
+                    {user.bankDetails?.length > 0 ? (
+                      user.bankDetails.map((bank, index) => (
+                        <div key={index} className="mb-2">
+                          <p className="select-none">
+                            <strong>Bank:</strong> {bank.bankName}
+                          </p>
+                          <p className="select-none">
+                            <strong>Acc:</strong> {bank.accountNumber}
+                          </p>
+                          <p className="select-none">
+                            <strong>IFSC:</strong> {bank.ifscCode}
+                          </p>
+                          <hr className="my-2" />
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-gray-500 select-none">
+                        No bank details available
                       </p>
-                      <p className="select-none">
-                        <strong>Acc:</strong> {bank.accountNumber}
-                      </p>
-                      <p className="select-none">
-                        <strong>IFSC:</strong> {bank.ifscCode}
-                      </p>
-                      <hr className="my-2" />
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-500 select-none">
-                    No bank details available
-                  </p>
-                )}
-              </td>
-              {/* <td className="p-3">
-                <button
-                  className="flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
-                  onClick={() => handlePayNow(user)}
-                >
-                  <Banknote className="inline mr-2" />Pay Now
-                </button>
-              </td> */}
-              <td className="p-3">
-                <button
-                  className={`flex items-center ${
-                    user.bankDetails?.length > 0
-                      ? "bg-blue-600 hover:bg-blue-700"
-                      : "bg-gray-400 cursor-not-allowed"
-                  } text-white px-4 py-2 rounded-md`}
-                  onClick={() =>
-                    user.bankDetails?.length > 0 ? handlePayNow(user) : null
-                  } // Only call handlePayNow if bank details exist
-                  disabled={user.bankDetails?.length === 0} // Disable the button if no bank details are available
-                >
-                  <Banknote className="inline mr-2" />
-                  Pay Now
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                    )}
+                  </td>
+                  <td className="p-3">
+                    <button
+                      className={`flex items-center ${
+                        user.bankDetails?.length > 0
+                          ? "bg-blue-600 hover:bg-blue-700"
+                          : "bg-gray-400 cursor-not-allowed"
+                      } text-white px-4 py-2 rounded-md`}
+                      onClick={() =>
+                        user.bankDetails?.length > 0 ? handlePayNow(user) : null
+                      }
+                      disabled={user.bankDetails?.length === 0}
+                    >
+                      <Banknote className="inline mr-2" />
+                      Pay Now
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {filteredUsers.length === 0 && (
         <p className="text-center text-gray-500 mt-4">No users found.</p>
@@ -300,10 +290,3 @@ const PayrollDashboard = () => {
 };
 
 export default PayrollDashboard;
-
-
-
-
-
-
-

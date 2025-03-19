@@ -7,7 +7,8 @@ import Job from '../models/JobSchema.js';
 
 export const getJobs = async (req, res) => {
   try {
-    const jobs = await Job.find();
+    // const jobs = await Job.find();
+    const jobs = await Job.find().sort({ postedDate: -1 });
     res.json(jobs);
   } catch (error) {
     res.status(500).json({ message: error.message });

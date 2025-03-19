@@ -317,9 +317,9 @@ const JobPanels = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2   gap-4 p-4 w-[80vw] h-[100vh]">
+      <div className="grid grid-cols-2 gap-4 p-4 w-[80vw] h-[90vh]">
         {/* Applied Jobs */}
-        <div className="rounded-lg bg-white shadow p-4 max-w-full">
+        <div className="rounded-lg bg-white shadow p-4 max-w-full overflow-y-auto">
           <h2 className="text-lg font-semibold mb-4">Applied Jobs</h2>
           <ul className="space-y-3">
             {appliedJobs.length > 0 ? ( // ✅ No more "undefined.length" error
@@ -445,7 +445,7 @@ const JobPanels = () => {
         </div>
 
         {/* April Payrolls */}
-        <div className="bg-white rounded-lg shadow p-4">
+        <div className="bg-white rounded-lg shadow p-4 overflow-y-auto">
           <h2 className="text-lg font-semibold mb-4">April Payrolls</h2>
           <ul className="space-y-3">
             {payrolls.map((payroll, index) => (
@@ -493,9 +493,10 @@ const JobPanels = () => {
 
 
   return (
-    <div className="flex min-h-screen bg-[#E3EDF9]">
-      <div className="flex-1">
-        <div className="p-6">{renderContent()}</div>
+    // <div className="flex min-h-screen bg-[#E3EDF9]">
+    <div className="flex min-h-screen overflow-hidden bg-[#E3EDF9] overflow-y-auto ">
+      <div className="flex-1 ">
+        <div className="p-2  h-auto">{renderContent()}</div>
       </div>
     </div>
   );
