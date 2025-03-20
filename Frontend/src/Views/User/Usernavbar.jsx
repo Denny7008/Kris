@@ -23,24 +23,23 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!userId) return;
+  
     const fetchData = async () => {
       try {
         const [notificationsRes, messagesRes] = await Promise.all([
           axios.get(`http://localhost:5000/notifications/${userId}`),
-          
+          axios.get(`http://localhost:5000/messages/${userId}`), // Missing API call added
         ]);
-        // Fix for notifications API returning an array directly
+  
         setNotifications(
           Array.isArray(notificationsRes.data) ? notificationsRes.data : []
         );
-
-        // Fix for messages API incorrectly returning notifications key
         setMessages(messagesRes.data.notifications || []);
       } catch (error) {
-        
+        console.error("Error fetching notifications and messages:", error);
       }
     };
-
+  
     fetchData();
   }, [userId]);
 
@@ -71,7 +70,6 @@ const Navbar = () => {
       // console.log(error);
     }
   };
-
   const markMessagesAsRead = async () => {
     try {
       await axios.put(`http://localhost:5000/messages/read/${userId}`);
@@ -80,6 +78,8 @@ const Navbar = () => {
       toast.error("Failed to mark messages as read.");
     }
   };
+
+  
 
   useEffect(() => {
     if (userId) {
@@ -137,23 +137,8 @@ const Navbar = () => {
     fetchUserData();
   }, [token]);
 
-  useEffect(() => {
-    if (!userId) return;
-
-    const fetchMessages = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/messages/${userId}`
-        );
-        setMessages(response.data.notifications || []);
-      } catch (error) {
-        // console.error("Error fetching messages:", error);
-      }
-    };
-
-    fetchMessages();
-  }, [userId]); // Make sure this effect runs when the userId changes (e.g., on login)
-
+  
+  
 
 
  
@@ -235,7 +220,7 @@ const Navbar = () => {
         </div>
 
         {/* Messages */}
-       {/*<div className="relative">
+       <div className="relative">
           <button onClick={() => setMailDropdownOpen(!isMailDropdownOpen)}>
             <span className="material-icons text-green-500 text-3xl">mail</span>
             {Array.isArray(messages) && messages.some((msg) => !msg.isRead) && (
@@ -282,11 +267,11 @@ const Navbar = () => {
               </ul>
             </div>
           )}
-        </div>*/}
+        </div>
 
         {/* Messages */}
         
-<div className="relative">
+{/* <div className="relative">
   <button onClick={() => setMailDropdownOpen(!isMailDropdownOpen)}>
     <span className="material-icons text-green-500 text-3xl">mail</span>
     {Array.isArray(messages) && messages.some((msg) => !msg.isRead) && (
@@ -334,7 +319,7 @@ const Navbar = () => {
       </ul>
     </div>
   )}
-</div>
+</div> */}
 
 
         {/* Profile Dropdown */}

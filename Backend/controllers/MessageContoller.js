@@ -42,6 +42,8 @@ export const createMessageNotification = async (req, res) => {
   
 
 // 📌 GET All Messages for a User
+
+
 export const getUserMessageNotifications = async (req, res) => {
     try {
       const { userId } = req.params;
@@ -63,68 +65,80 @@ export const getUserMessageNotifications = async (req, res) => {
     }
   };
 
-// 📌 Mark Message as Read
-// export const markMessageAsRead = async (req, res) => {
-//   try {
-//     const { messageId } = req.params;
-//     const message = await Message.findById(messageId);
-
-//     if (!message) {
-//       return res.status(404).json({ error: "Message not found" });
-//     }
-
-//     message.isRead = true;
-//     await message.save();
-
-//     res.status(200).json({ success: true, message: "Message marked as read", notification: message });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
-// export const markMessagesAsRead = async (req, res) => {
-//   try {
-//     const { userId } = req.params;
-
-//     // Mark all messages for the user as read
-//     await Message.updateMany({ userId }, { isRead: true });
-
-//     res.status(200).json({ success: true, message: "All messages marked as read" });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
-
-export const markMessagesAsRead = async (req, res) => {
+export const getAllMessages = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    // Ensure only unread messages are marked as read
-    const updatedMessages = await Message.updateMany(
-      { userId, isRead: false }, // Only target unread messages
-      { $set: { isRead: true } }
-    );
+    // Fetch all messages for the user, sorting unread first
+    const messages = await Message.find({ userId }).sort({ isRead: 1, createdAt: -1 });
 
-    if (updatedMessages.nModified === 0) {
-      return res.status(200).json({ success: false, message: "No unread messages to mark as read" });
-    }
+    // Map messages to include a textColor field
+    const formattedMessages = messages.map((msg) => ({
+      ...msg.toObject(), // Convert Mongoose document to plain object
+      textColor: msg.isRead ? "gray" : "black", // Black for unread, Gray for read
+    }));
 
-    // Optional: Return the updated messages or the count of modified documents
-    res.status(200).json({
-      success: true,
-      message: "All unread messages marked as read",
-      updatedCount: updatedMessages.nModified, // Returns how many documents were updated
-    });
+    res.json({ success: true, messages: formattedMessages });
   } catch (error) {
-    console.error("Error marking messages as read:", error);
-    res.status(500).json({ error: error.message });
+    console.error("Error fetching messages:", error);
+    res.status(500).json({ error: "Error fetching messages" });
   }
 };
 
 
 
+  export const getUnreadMessages = async (req, res) => {
+    try {
+      const { userId } = req.params;
+  
+      // Fetch only unread messages for the given userId
+      const unreadMessages = await Message.find({ userId, isRead: true });
+  
+      res.json(unreadMessages);
+    } catch (error) {
+      console.error("Error fetching unread messages:", error);
+      res.status(500).json({ error: "Error fetching unread messages" });
+    }
+  };
+  
+
+
+  export const markMessagesAsRead = async (req, res) => {
+    try {
+      const { userId } = req.params;
+  
+      // Ensure only unread messages are marked as read
+      const updatedMessages = await Message.updateMany(
+        { userId, isRead: false }, // Only target unread messages
+        { $set: { isRead: true } }
+      );
+  
+      if (updatedMessages.modifiedCount === 0) {
+        return res.status(200).json({ success: false, message: "No unread messages to mark as read" });
+      }
+  
+      // Return the count of modified documents
+      res.status(200).json({
+        success: true,
+        message: "All unread messages marked as read",
+        updatedCount: updatedMessages.modifiedCount,
+      });
+    } catch (error) {
+      console.error("Error marking messages as read:", error);
+      res.status(500).json({ error: error.message });
+    }
+  };
+  
+
+
+
 // 📌 DELETE a Message Notification
+
+
+
+
+
+
 export const deleteMessageNotification = async (req, res) => {
   try {
     const { messageId } = req.params;

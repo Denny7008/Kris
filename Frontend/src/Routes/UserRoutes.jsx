@@ -34,11 +34,7 @@ const UserRoutes = () => {
 
       {/* Fallback for unknown routes and public routes */}
       <Route path="*" element={<NotFound />} />
-      <Route path="/user/forgot-password" element={<ForgotPassword />} />
-      <Route
-        path="/user/reset-password/:resetPasswordToken"
-        element={<ResetPassword />}
-      />
+      
     </Routes>
   );
 };

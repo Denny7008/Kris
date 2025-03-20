@@ -48,6 +48,8 @@ import {
   // markMessageAsRead,
   deleteMessageNotification,
   markMessagesAsRead,
+  getUnreadMessages,
+  getAllMessages,
 } from "../controllers/MessageContoller.js";
 import {
   getAdminProfileImage,
@@ -309,8 +311,11 @@ router.put("/notifications/read/:userId", markNotificationsAsRead); // Mark noti
 
 router.post("/messages", createMessageNotification); // 📌 Create a new message notification
 router.get("/messages/:userId", getUserMessageNotifications); // 📌 Get all messages for a user
-router.put("/messages/read/:messageId", markMessagesAsRead); // 📌 Mark a specific message as read
+router.get("/messagess/:userId", getAllMessages); // 📌 Get all messages for a user
+router.put("/messages/read/:userId", markMessagesAsRead); // 📌 Mark a specific message as read
+
 router.delete("/messages/:messageId", deleteMessageNotification);  // 📌 Delete a specific message notification (fixed route path)
+router.get("/messagess/:userId",getUnreadMessages)
 
 // KPI ROUTES
 

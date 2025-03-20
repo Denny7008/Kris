@@ -7,6 +7,8 @@ import NotFound from "./Components/NotFound";
 import Login from "./Components/Login";
 import JobDetailPage from "./Views/Admin/pages/JobDetailPage";
 import JobApplicationForm from "./Views/Admin/pages/JobApplicationForm";
+import ForgotPassword from "./Views/User/ForgotPassword";
+import ResetPassword from "./Views/User/ResetPassword";
 
 function App() {
   return (
@@ -19,6 +21,11 @@ function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/job/:jobId" element={<JobDetailPage />} />
         {/* <Route path="/apply/:jobId" element={<JobApplicationForm />} /> */}
+        <Route path="/user/forgot-password" element={<ForgotPassword />} />
+              <Route
+                path="/user/reset-password/:resetPasswordToken"
+                element={<ResetPassword />}
+              />
       </Routes>
     </>
   );

@@ -81,7 +81,7 @@ const Login = ({ userType }) => {
                 <input type="checkbox" className="form-checkbox" />
                 <span className="ml-2 text-gray-600">Remember me</span>
               </label>
-              <Link to={`/${userType}/forgot-password`} className="text-blue-500 hover:underline text-sm font-semibold">
+              <Link to="/user/forgot-password" className="text-blue-500 hover:underline text-sm font-semibold">
                 Forgot Password?
               </Link>
             </div>
