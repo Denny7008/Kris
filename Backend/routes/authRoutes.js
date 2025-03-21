@@ -81,7 +81,7 @@ import { applyForJob, getCandidates, getCandidatesByJob, getJobByLink } from "..
 import mongoose from "mongoose";
 import { getPayslipsByUser, processPayout } from "../controllers/paymentController.js";
 import { getAllAppraisalScores, getUserAppraisalScores, requestAppraisal, updateAppraisal } from "../controllers/AppriasalController.js";
-import { deleteTodo, getAllTodos, initiateTodo, updateTodoStatus } from "../controllers/Todocontroller.js";
+import { deleteTodo, getAllTodos, getPendingTodos, initiateTodo, updateTodoStatus } from "../controllers/Todocontroller.js";
 import { calculateAtsScoreForCandidates } from "../controllers/atsController.js";
 
 
@@ -333,6 +333,7 @@ router.post("/initiate", initiateTodo);
 router.get("/todo/user/:userId", getAllTodos);
 router.delete("/:id", deleteTodo);
 router.put("/todo/update/:id", updateTodoStatus);
+router.get("/todos/pending/:userId", getPendingTodos);
 
 
 // appraisal 

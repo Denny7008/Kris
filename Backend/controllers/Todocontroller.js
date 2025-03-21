@@ -136,3 +136,60 @@ export const updateTodoStatus = async (req, res) =>
     res.status(500).json({ message: "Error updating status", error: error.message });
   }
 };
+
+
+// export const getPendingTodos = async (req, res) => {
+//   try {
+//     const { userId } = req.params; // Get userId from request parameters
+
+//     // ✅ Validate if userId is a valid MongoDB ObjectId
+//     if (!mongoose.Types.ObjectId.isValid(userId)) {
+//       return res.status(400).json({ message: "Invalid User ID format." });
+//     }
+
+//     // ✅ Fetch only pending todos (not completed) for the specified user
+//     const pendingTodos = await Todo.find({ user: userId, status: { $ne: "Completed" } })
+//       .populate("user", "firstName lastName");
+
+//     if (!pendingTodos || pendingTodos.length === 0) {
+//       return res.status(404).json({ message: "No pending todos found for this user." });
+//     }
+
+//     console.log(`Fetched Pending Todos for user ${userId}:`, pendingTodos);
+
+//     res.status(200).json(pendingTodos);
+//   } catch (error) {
+//     console.error("Error fetching pending todos:", error);
+//     res.status(500).json({ message: "Failed to fetch pending todos", error: error.message });
+//   }
+// };
+
+
+
+export const getPendingTodos = async (req, res) => {
+  try {
+    const { userId } = req.params; // Get userId from request parameters
+
+    // ✅ Validate if userId is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid User ID format." });
+    }
+
+    // ✅ Fetch only pending todos (not completed) for the specified user
+    const pendingTodos = await Todo.find({ user: userId, status: { $ne: "Completed" } })
+      .populate("user", "firstName lastName");
+
+    // ✅ If no todos exist, return 200 with an empty array and log a message
+    if (!pendingTodos || pendingTodos.length === 0) {
+      console.log(`No pending todos initiated for user ${userId}`);
+      return res.status(200).json({ message: "No todos initiated", todos: [] });
+    }
+
+    console.log(`Fetched Pending Todos for user ${userId}:`, pendingTodos);
+
+    res.status(200).json({ todos: pendingTodos });
+  } catch (error) {
+    console.error("Error fetching pending todos:", error);
+    res.status(500).json({ message: "Failed to fetch pending todos", error: error.message });
+  }
+};

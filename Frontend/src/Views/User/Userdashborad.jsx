@@ -23,62 +23,119 @@ const Userdashborad = () => {
     "Maternity Leave": 15,
     "Compassionate Leave": 15,
   }); 
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const token = localStorage.getItem("token");
+  //       if (!token) {
+  //         setError("No authentication token found. Please log in.");
+  //         return;
+  //       }
+  
+  //       // ✅ Fetch user data (Single API Call)
+  //       const { data: userData } = await axios.get(
+  //         "http://localhost:5000/get-user-data",
+  //         { headers: { Authorization: `Bearer ${token}` } }
+  //       );
+  //       // console.log("User Data:", userData);
+  
+  //       const userId = userData?._id;
+  //       if (!userId) {
+  //         setError("User ID not found.");
+  //         return;
+  //       }
+  
+  //       setUserName(userData?.name || "User");
+  //       setJobTitle(userData?.jobTitle || "Job Title");
+  
+  //       // ✅ Fetch KPI Data
+  //       const { data: allTodos } = await axios.get(
+  //         `http://localhost:5000/todos/pending/${userId}`
+  //       );
+  //       // console.log("All KPIs:", allTodos);
+  //       setTodos(allTodos.filter((kpi) => kpi.user._id === userId));
+  
+  //       // ✅ Fetch Leave History
+  //       const { data: leaveData } = await axios.get(
+  //         "http://localhost:5000/get-leave-history",
+  //         { headers: { Authorization: `Bearer ${token}` } }
+  //       );
+  //       // console.log("Leave History:", leaveData);
+  //       setLeaveHistory(leaveData);
+  
+  //       // ✅ Calculate available leave days dynamically
+  //       const updatedBalances = { ...leaveBalances };
+  //       leaveData.forEach((leave) => {
+  //         if (leave.status === "Approved" && updatedBalances[leave.type] !== undefined) {
+  //           updatedBalances[leave.type] -= leave.duration;
+  //         }
+  //       });
+  
+  //       setLeaveBalances(updatedBalances);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  
+  //   fetchUserData();
+  // }, []);
+  
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem("token");
         if (!token) {
           setError("No authentication token found. Please log in.");
           return;
         }
-  
-        // ✅ Fetch user data (Single API Call)
-        const { data: userData } = await axios.get(
-          "http://localhost:5000/get-user-data",
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        // console.log("User Data:", userData);
-  
+
+        // ✅ Fetch user data
+        const { data: userData } = await axios.get("http://localhost:5000/get-user-data", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
         const userId = userData?._id;
         if (!userId) {
           setError("User ID not found.");
           return;
         }
-  
+
         setUserName(userData?.name || "User");
         setJobTitle(userData?.jobTitle || "Job Title");
-  
-        // ✅ Fetch KPI Data
-        const { data: allTodos } = await axios.get(
-          `http://localhost:5000/todo/user/${userId}`
-        );
-        // console.log("All KPIs:", allTodos);
-        setTodos(allTodos.filter((kpi) => kpi.user._id === userId));
-  
+
+        // ✅ Fetch Pending Todos
+        const { data } = await axios.get(`http://localhost:5000/todos/pending/${userId}`);
+
+        if (data.todos.length === 0) {
+          console.log("No todos initiated to you"); // ✅ Log message when no todos
+        }
+
+        setTodos(data.todos); // ✅ Handles empty array properly
+
         // ✅ Fetch Leave History
-        const { data: leaveData } = await axios.get(
-          "http://localhost:5000/get-leave-history",
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        // console.log("Leave History:", leaveData);
-        setLeaveHistory(leaveData);
-  
-        // ✅ Calculate available leave days dynamically
-        const updatedBalances = { ...leaveBalances };
-        leaveData.forEach((leave) => {
-          if (leave.status === "Approved" && updatedBalances[leave.type] !== undefined) {
-            updatedBalances[leave.type] -= leave.duration;
-          }
+        const { data: leaveData } = await axios.get("http://localhost:5000/get-leave-history", {
+          headers: { Authorization: `Bearer ${token}` },
         });
-  
-        setLeaveBalances(updatedBalances);
+
+        setLeaveHistory(leaveData);
+
+        // ✅ Fix leave balance update
+        setLeaveBalances((prevBalances) => {
+          const updatedBalances = { ...prevBalances };
+          leaveData.forEach((leave) => {
+            if (leave.status === "Approved") {
+              updatedBalances[leave.type] = (updatedBalances[leave.type] || 0) - leave.duration;
+            }
+          });
+          return updatedBalances;
+        });
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-  
+
     fetchUserData();
-  }, []);
+  }, [token]);
   
 
   
@@ -90,6 +147,7 @@ const Userdashborad = () => {
       });
 
       // Update state to reflect changes in the UI
+
       setTodos((prevTodos) =>
         prevTodos.map((todo) =>
           todo._id === todoId ? { ...todo, status: newStatus } : todo
