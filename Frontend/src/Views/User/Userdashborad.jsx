@@ -20,9 +20,11 @@ const Userdashborad = () => {
   const [leaveBalances, setLeaveBalances] = useState({
     "Annual Leave": 15,
     "Sick Leave": 15,
-    "Maternity Leave": 15,
+    "Causal Leave": 15,
     "Compassionate Leave": 15,
   }); 
+
+
   // useEffect(() => {
   //   const fetchUserData = async () => {
   //     try {
@@ -122,10 +124,10 @@ const Userdashborad = () => {
         setLeaveBalances((prevBalances) => {
           const updatedBalances = { ...prevBalances };
           leaveData.forEach((leave) => {
-            if (leave.status === "Approved") {
-              updatedBalances[leave.type] = (updatedBalances[leave.type] || 0) - leave.duration;
-            }
+            const normalizedType = leave.type.trim().toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase()); // ✅ Capitalize First Letter
+            updatedBalances[normalizedType] = (updatedBalances[normalizedType] || 0) - leave.duration;
           });
+        
           return updatedBalances;
         });
 

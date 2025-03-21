@@ -141,7 +141,8 @@ export const getKPIsByUserId = async (req, res) => {
       return res.status(400).json({ message: "Invalid user ID format." });
     }
 
-    const userKPIs = await KPI.find({ user: userId }).populate("user", "firstName lastName");
+    const userKPIs = await KPI.find({ user: userId, status: "Completed" }).populate("user", "firstName lastName");
+
 
     if (userKPIs.length === 0) {
       console.log("No KPIs found for user:", userId);

@@ -11,7 +11,8 @@ const TakeAppraisal = () => {
   useEffect(() => {
     const fetchUserDataAndKPIs = async () => {
       try {
-        const token = localStorage.getItem("authToken");
+        const token = localStorage.getItem("token");
+        console.log("used id ",token);
         if (!token) {
           setMessage("No authentication token found. Please log in.");
           return;
@@ -135,3 +136,14 @@ const TakeAppraisal = () => {
 };
 
 export default TakeAppraisal;
+
+
+
+
+
+
+
+
+
+
+
