@@ -2,17 +2,16 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import Barchart from "./Barchart";
+import Chat from "./Chat";
 
 const Userdashborad = () => {
   const [userName, setUserName] = useState(""); // State to store user name
   const [jobTitle, setJobTitle] = useState(""); // State to store user name
   const [error, setError] = useState(null); // Error state
-  const [leaveHistory, setLeaveHistory] = useState([]); 
+  const [leaveHistory, setLeaveHistory] = useState([]);
   const [todos, setTodos] = useState([]); // Declare todos state
   const token = localStorage.getItem("token");
-  const [expandedTodo, setExpandedTodo] = useState(null);
-; // Track expanded item
-
+  const [expandedTodo, setExpandedTodo] = useState(null); // Track expanded item
   const toggleExpand = (todoId) => {
     setExpandedTodo(expandedTodo === todoId ? null : todoId);
   };
@@ -22,8 +21,7 @@ const Userdashborad = () => {
     "Sick Leave": 15,
     "Causal Leave": 15,
     "Compassionate Leave": 15,
-  }); 
-
+  });
 
   // useEffect(() => {
   //   const fetchUserData = async () => {
@@ -33,30 +31,30 @@ const Userdashborad = () => {
   //         setError("No authentication token found. Please log in.");
   //         return;
   //       }
-  
+
   //       // ✅ Fetch user data (Single API Call)
   //       const { data: userData } = await axios.get(
   //         "http://localhost:5000/get-user-data",
   //         { headers: { Authorization: `Bearer ${token}` } }
   //       );
   //       // console.log("User Data:", userData);
-  
+
   //       const userId = userData?._id;
   //       if (!userId) {
   //         setError("User ID not found.");
   //         return;
   //       }
-  
+
   //       setUserName(userData?.name || "User");
   //       setJobTitle(userData?.jobTitle || "Job Title");
-  
+
   //       // ✅ Fetch KPI Data
   //       const { data: allTodos } = await axios.get(
   //         `http://localhost:5000/todos/pending/${userId}`
   //       );
   //       // console.log("All KPIs:", allTodos);
   //       setTodos(allTodos.filter((kpi) => kpi.user._id === userId));
-  
+
   //       // ✅ Fetch Leave History
   //       const { data: leaveData } = await axios.get(
   //         "http://localhost:5000/get-leave-history",
@@ -64,7 +62,7 @@ const Userdashborad = () => {
   //       );
   //       // console.log("Leave History:", leaveData);
   //       setLeaveHistory(leaveData);
-  
+
   //       // ✅ Calculate available leave days dynamically
   //       const updatedBalances = { ...leaveBalances };
   //       leaveData.forEach((leave) => {
@@ -72,16 +70,16 @@ const Userdashborad = () => {
   //           updatedBalances[leave.type] -= leave.duration;
   //         }
   //       });
-  
+
   //       setLeaveBalances(updatedBalances);
   //     } catch (error) {
   //       console.error("Error fetching data:", error);
   //     }
   //   };
-  
+
   //   fetchUserData();
   // }, []);
-  
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -91,9 +89,12 @@ const Userdashborad = () => {
         }
 
         // ✅ Fetch user data
-        const { data: userData } = await axios.get("http://localhost:5000/get-user-data", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const { data: userData } = await axios.get(
+          "http://localhost:5000/get-user-data",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         const userId = userData?._id;
         if (!userId) {
@@ -105,7 +106,9 @@ const Userdashborad = () => {
         setJobTitle(userData?.jobTitle || "Job Title");
 
         // ✅ Fetch Pending Todos
-        const { data } = await axios.get(`http://localhost:5000/todos/pending/${userId}`);
+        const { data } = await axios.get(
+          `http://localhost:5000/todos/pending/${userId}`
+        );
 
         if (data.todos.length === 0) {
           console.log("No todos initiated to you"); // ✅ Log message when no todos
@@ -114,9 +117,12 @@ const Userdashborad = () => {
         setTodos(data.todos); // ✅ Handles empty array properly
 
         // ✅ Fetch Leave History
-        const { data: leaveData } = await axios.get("http://localhost:5000/get-leave-history", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const { data: leaveData } = await axios.get(
+          "http://localhost:5000/get-leave-history",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         setLeaveHistory(leaveData);
 
@@ -124,13 +130,16 @@ const Userdashborad = () => {
         setLeaveBalances((prevBalances) => {
           const updatedBalances = { ...prevBalances };
           leaveData.forEach((leave) => {
-            const normalizedType = leave.type.trim().toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase()); // ✅ Capitalize First Letter
-            updatedBalances[normalizedType] = (updatedBalances[normalizedType] || 0) - leave.duration;
+            const normalizedType = leave.type
+              .trim()
+              .toLowerCase()
+              .replace(/\b\w/g, (char) => char.toUpperCase()); // ✅ Capitalize First Letter
+            updatedBalances[normalizedType] =
+              (updatedBalances[normalizedType] || 0) - leave.duration;
           });
-        
+
           return updatedBalances;
         });
-
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -138,9 +147,6 @@ const Userdashborad = () => {
 
     fetchUserData();
   }, [token]);
-  
-
-  
 
   const updateTodoStatus = async (todoId, newStatus) => {
     try {
@@ -160,18 +166,40 @@ const Userdashborad = () => {
     }
   };
 
-  
-  
-
   return (
     <div className="bg-[#E3EDF9] min-h-screen p-6">
       {/* Header Section */}
-      <div className="bg-blue-500 text-white rounded-lg p-6 mb-6 shadow-lg flex justify-between items-center">
+      {/* <div className="bg-blue-500 text-white rounded-lg p-6 mb-6 shadow-lg flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold">{userName || "User"}</h1>
           <p className="text-lg">{jobTitle || "JobTitle"}</p>
         </div>
         <button className="bg-yellow-400 text-black px-4 py-2 rounded-lg hover:bg-yellow-500">
+          Edit Profile
+        </button>
+      </div> */}
+
+      <div
+        className="relative rounded-lg p-6 mb-6 shadow-lg flex justify-between items-center overflow-hidden"
+        style={{
+          backgroundImage: `url('https://img.freepik.com/free-vector/cartoon-working-day-scene-illustration_52683-62609.jpg?t=st=1742616289~exp=1742619889~hmac=2e739723116c9463708388a774040d5b24986a9f8fcc8033ce207522b4080a23&w=1380')`,
+          backgroundSize: "cover", // Ensure the image covers the entire div
+          backgroundPosition: "center", // Center the background image
+        }}
+      >
+        {/* Overlay to improve text readability */}
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+
+        {/* Content */}
+        <div className="relative z-10">
+          <h1 className="text-2xl font-bold text-white">
+            {userName || "User"}
+          </h1>
+          <p className="text-lg text-white">{jobTitle || "JobTitle"}</p>
+        </div>
+
+        {/* Edit Profile Button */}
+        <button className="relative z-10 bg-yellow-400 text-black px-4 py-2 rounded-lg hover:bg-yellow-500">
           Edit Profile
         </button>
       </div>
@@ -212,31 +240,29 @@ const Userdashborad = () => {
 
       {/* Dashboard Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-
         {/* Available Leave Days */}
-         {/* Available Leave Days (Filtered from Leave History) */}
-      <div className="bg-white rounded-lg p-6 shadow">
-        <h2 className="text-xl font-semibold mb-4">Available Leave Days</h2>
-        <ul className="space-y-2">
-          {Object.keys(leaveBalances).map((leaveType) => (
-            <li key={leaveType}>
-              <p className="text-gray-700">{leaveType}</p>
-              <div className="w-full bg-gray-300 rounded-full h-2.5 mt-1">
-                <div
-                  className="bg-blue-500 h-2.5 rounded-full"
-                  style={{
-                    width: `${(leaveBalances[leaveType] / 15) * 100}%`,
-                  }}
-                ></div>
-              </div>
-              <p className="text-sm text-gray-500 mt-1">
-                {leaveBalances[leaveType]} days remaining
-              </p>
-            </li>
-          ))}
-        </ul>
-      </div>
+        {/* Available Leave Days (Filtered from Leave History) */}
+        <div className="bg-white rounded-lg p-6 shadow">
+          <h2 className="text-xl font-semibold mb-4">Available Leave Days</h2>
+          <ul className="space-y-2">
+            {Object.keys(leaveBalances).map((leaveType) => (
+              <li key={leaveType}>
+                <p className="text-gray-700">{leaveType}</p>
+                <div className="w-full bg-gray-300 rounded-full h-2.5 mt-1">
+                  <div
+                    className="bg-blue-500 h-2.5 rounded-full"
+                    style={{
+                      width: `${(leaveBalances[leaveType] / 15) * 100}%`,
+                    }}
+                  ></div>
+                </div>
+                <p className="text-sm text-gray-500 mt-1">
+                  {leaveBalances[leaveType]} days remaining
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         {/* To-Dos */}
         <div className="bg-white rounded-lg p-6 shadow">
@@ -321,20 +347,8 @@ const Userdashborad = () => {
         </div>
 
         {/* Announcements */}
-        <div className="bg-white rounded-lg p-6 shadow">
-          <h2 className="text-xl font-semibold mb-4">Announcement(s)</h2>
-          <ul className="space-y-2">
-            {[
-              "Welcome Jill: We have a new staff joining us.",
-              "Send drafts for Project Manager.",
-              "Marriage Alert.",
-              "Office Space Update.",
-            ].map((announcement, index) => (
-              <li key={index} className="text-gray-700">
-                {announcement}
-              </li>
-            ))}
-          </ul>
+        <div className="bg-white rounded-lg shadow h-96 overflow-hidden">
+        <Chat />
         </div>
       </div>
 
@@ -361,7 +375,7 @@ const Userdashborad = () => {
         {/* Performance Appraisal */}
         <div className="bg-white rounded-lg p-6 shadow">
           <h2 className="text-xl font-semibold mb-4">Performance Appraisal</h2>
-          <Barchart/>
+          <Barchart />
         </div>
       </div>
     </div>

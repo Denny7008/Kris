@@ -166,8 +166,8 @@ const AdminSideNavbar = () => {
           <span className="material-icons">dashboard</span>
           <span className="ml-2">Dashboard</span>
         </NavLink>
-        {/* <NavLink
-          to="/admin/dashboard/tes"
+        <NavLink
+          to="/admin/dashboard/messages"
           className={({ isActive }) =>
             `flex items-center p-2 mb-2 rounded-lg ${
               isActive ? "bg-yellow-400 text-black" : "hover:bg-blue-800"
@@ -176,8 +176,7 @@ const AdminSideNavbar = () => {
         >
           <span className="material-icons">mail</span>
           <span className="ml-2">Messages</span>
-          <span className="ml-auto text-red-500">13</span>
-        </NavLink> */}
+        </NavLink>
         <h3 className="mt-4 mb-2 font-semibold">Recruitment</h3>
         <NavLink
           to="/admin/dashboard/jobportal"

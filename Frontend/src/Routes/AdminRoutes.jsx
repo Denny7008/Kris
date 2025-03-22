@@ -11,6 +11,7 @@ import AdminJobManagement from "../Views/Admin/pages/AdminJobManagement";
 import LeaveManagement from "../Views/Admin/pages/LeaveManagement";
 import NotFound from "../Components/NotFound";
 import UserRegister from "../Views/User/UserRegister";
+import AdminChats from "../Views/Admin/pages/AdminChats";
 
 const AdminRoutes = () => {
   return (
@@ -33,6 +34,7 @@ const AdminRoutes = () => {
             />
             <Route path="jobportal" element={<AdminJobManagement />} />
             <Route path="add-employee" element={<UserRegister />} />
+            <Route path="messages" element={<AdminChats />} />
           </Route>
         </Route>
 

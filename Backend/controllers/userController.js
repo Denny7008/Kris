@@ -249,7 +249,10 @@ export const loginUser = async (req, res) => {
       token,
       user: {
         id: user._id,
+        firstName: user.firstName, // Add firstName
+        lastName: user.lastName,   // Add lastName
         email: user.email,
+        phone: user.phone,         
         role: user.role,
       },
     });
