@@ -75,6 +75,15 @@ const io = new Server(server, {
   },
 });
 
+const corsConfig = {
+  origin: "*",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"]
+};
+
+app.options('*', cors(corsConfig));
+app.use(cors(corsConfig));
+
 
 // 🟢 Store Active Users
 const onlineUsers = []; // Array to store online users
