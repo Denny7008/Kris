@@ -61,6 +61,7 @@ import http from "http";
 import { Server } from "socket.io";
 import Chat from "./models/ChatSchema.js";
 import chalk from "chalk"; // ✅ Import Chalk for Colored Console Logs
+import { error } from "console";
 
 
 dotenv.config();
@@ -89,6 +90,13 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(authRoutes);
 app.use(payRoutes);
 app.use("/api", payoutRoutes);
+app.use("/",(req,res,next)=> 
+{
+  res.send({
+    activeStatus:"backend server is connected and runnning", error: false, 
+  });
+}
+)
 
 app.use((req, res, next) => {
   res.status(404).json({ message: "Route not found" });
