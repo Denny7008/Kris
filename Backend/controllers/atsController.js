@@ -1,9 +1,9 @@
 import Candidate from "../models/CandidateShema.js";
 import Job from "../models/JobSchema.js"; // ✅ Import Job model to fetch job title
 import { downloadResume } from "../../Backend/Utils/downloadResume.js";
-import { extractTextFromPDF, extractTextFromDOCX } from "../utils/extractResume.js";
+import { extractTextFromPDF, extractTextFromDOCX } from "../Utils/extractResume.js";
 import { extractResumeData } from "../utils/extractData.js";
-import { calculateAtsScore } from "../utils/calculateAts.js";
+import { calculateAtsScore } from "../Utils/calculateAts.js";
 import fs from "fs";
 
 // export const calculateAtsScoreForCandidates = async (req, res) => {
@@ -80,7 +80,6 @@ import fs from "fs";
 //     res.status(500).json({ message: "Internal Server Error" });
 //   }
 // };
-
 
 
 export const calculateAtsScoreForCandidates = async (req, res) => {
