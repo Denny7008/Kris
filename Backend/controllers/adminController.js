@@ -90,7 +90,7 @@ export const loginAdmin = async (req, res) => {
   export const getAdmin = async (req, res) => {
     try {
       const admins = await Admin.find().select("-password"); // Exclude passwords for security
-      console.log(admins);
+      // console.log(admins);
       res.status(200).json({
         message: "Admins fetched successfully",
         admins,

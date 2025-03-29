@@ -7,7 +7,7 @@ import path from "path";
 export const extractTextFromPDF = async (fileName) => {
   try {
     // ✅ Force the correct path
-    const filePath = path.resolve("Backend/resume", fileName);
+    const filePath = path.resolve("/Backend/temp_resumes", fileName);
     console.log("🔍 Trying to read PDF from:", filePath);
 
     // ✅ Check if the file exists BEFORE reading

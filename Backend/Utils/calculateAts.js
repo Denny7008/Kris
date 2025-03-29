@@ -28,3 +28,9 @@ export const calculateAtsScore = (resumeText, jobDescription) => {
   const commonWords = resumeWords.filter((word) => jobWords.includes(word));
   return Math.round((commonWords.length / jobWords.length) * 100);
 };
+
+
+
+
+
+
