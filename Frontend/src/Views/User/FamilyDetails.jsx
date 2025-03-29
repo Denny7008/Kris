@@ -55,7 +55,7 @@ const FamilyDetails = () => {
   const handleSave = async () => {
     console.log("Current Member Before Sending:", currentMember);
   
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
     if (!token) {
       setMessage("❌ Authentication error. Please log in again.");
       return;

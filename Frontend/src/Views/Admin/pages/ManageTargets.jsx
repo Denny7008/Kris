@@ -92,7 +92,8 @@ const ManageTargets = () => {
                     className={`px-3 py-1 rounded-md text-white text-sm font-semibold
       ${target.status === "Pending" ? "bg-yellow-400" : ""}
       ${target.status === "Completed" ? "bg-green-500" : ""}
-      ${target.status === "Not Completed" ? "bg-red-500" : ""}`}
+      ${target.status === "Not Completed" ? "bg-red-500" : ""}
+      ${target.status === "In Progress" ? "bg-blue-500" : ""}`}
                   >
                     {target.status || "Pending"}
                   </span>

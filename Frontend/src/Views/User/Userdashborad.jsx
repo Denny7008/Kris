@@ -109,16 +109,14 @@ const Userdashborad = () => {
         const { data } = await axios.get(
           `http://localhost:5000/todos/pending/${userId}`
         );
-
         if (data.todos.length === 0) {
           console.log("No todos initiated to you"); // ✅ Log message when no todos
         }
-
         setTodos(data.todos); // ✅ Handles empty array properly
 
+        
         // ✅ Fetch Leave History
-        const { data: leaveData } = await axios.get(
-          "http://localhost:5000/get-leave-history",
+        const { data: leaveData } = await axios.get( "http://localhost:5000/get-leave-history",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

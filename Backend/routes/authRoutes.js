@@ -135,6 +135,8 @@ router.put(
   updateContactDetails
 ); // Update logged-in user's contact details
 
+
+
 // ⭐ [ FAMILY ROUTES ]
 
 router.put("/users/update-next-of-kin/:id", authenticateToken, updateNextOfKin);
@@ -145,6 +147,8 @@ router.put(
   authenticateToken,
   updateFamilyDetails
 ); // Update family details
+
+
 
 // ⭐ [ EDUCATION QUALIFICATION ROUTES ]
 
@@ -158,17 +162,11 @@ router.delete("/:userId/:qualificationId", deleteEducationQualification); // Del
 
 
 // Define routes
-router.post(
-  "/upload-profile/:userId",
-  authenticateToken,
-  upload.single("file"),
-  uploadProfileImage
-);
+router.post("/upload-profile/:userId",authenticateToken,upload.single("file"),uploadProfileImage);
 
 
 // uploadAdminProfileImage
-router.post(
-  "/admin/upload-profile/:adminId",
+router.post("/admin/upload-profile/:adminId",
   // authenticateToken,
   upload.single("file"),
   uploadAdminProfileImage
@@ -182,7 +180,9 @@ router.post(
   "/create-leave-application",
   authenticateToken,
   createLeaveApplication
-); // Route to create a new leave application (User side)
+); 
+
+// Route to create a new leave application (User side)
 // router.put('/leave-applications/:id', updateLeaveApplicationStatus);  // Route to approve/decline leave application (Admin side)
 router.patch("/leave-applications/:id", updateLeaveStatus); // Route to approve/decline leave application
 router.get("/leave-applications/approved", getApprovedLeaveApplications); // Retrive only the approved leave applications
@@ -289,16 +289,8 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
 // FINANICAL DETAILS
 router.get("/", authenticateToken, getFinancialDetails);
 router.post("/users/add-bankinfo", authenticateToken, addFinancialDetails);
-router.put(
-  "/users/add-bankinfo/update/:id",
-  authenticateToken,
-  updateFinancialDetails
-);
-router.delete(
-  "/users/add-bankinfo/delete",
-  authenticateToken,
-  deleteFinancialDetails
-);
+router.put("/users/add-bankinfo/update/:id",authenticateToken,updateFinancialDetails);
+router.delete("/users/add-bankinfo/delete",authenticateToken,deleteFinancialDetails);
 
 // NOTIFICATIONS
 
@@ -308,12 +300,10 @@ router.put("/notifications/read/:userId", markNotificationsAsRead); // Mark noti
 
 // Message Notification
 
-
 router.post("/messages", createMessageNotification); // 📌 Create a new message notification
 router.get("/messages/:userId", getUserMessageNotifications); // 📌 Get all messages for a user
 router.get("/messagess/:userId", getAllMessages); // 📌 Get all messages for a user
 router.put("/messages/read/:userId", markMessagesAsRead); // 📌 Mark a specific message as read
-
 router.delete("/messages/:messageId", deleteMessageNotification);  // 📌 Delete a specific message notification (fixed route path)
 router.get("/messagess/:userId",getUnreadMessages)
 
@@ -322,8 +312,6 @@ router.get("/messagess/:userId",getUnreadMessages)
 router.post("/kpi/create", createKPI); // Route to create a KPI
 router.get("/kpi/user", getAllKPIs); // Route to get all KPIs for a user
 router.get("/kpi/usercompleted/:userId",getKPIsByUserId);
-
-
 router.put("/kpi/update/:kpiId", updateKPI); // Route to update a KPI
 router.delete("/kpi/delete/:kpiId", deleteKPI); // Route to delete a KPI
 

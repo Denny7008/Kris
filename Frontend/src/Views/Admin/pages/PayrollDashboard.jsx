@@ -9,6 +9,22 @@ const PayrollDashboard = () => {
   const [salary, setSalary] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [selectedPeriod, setSelectedPeriod] = useState("");
+
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -82,6 +98,7 @@ const PayrollDashboard = () => {
         amount: salary,
         userId: selectedUser._id,
         bankDetails: selectedUser.bankDetails[0],
+        period: selectedPeriod,
       });
 
       if (response.data.success) {
@@ -252,6 +269,25 @@ const PayrollDashboard = () => {
                 <p className="select-none">
                   <strong>IFSC:</strong> {selectedUser.bankDetails[0]?.ifscCode}
                 </p>
+                <div className="mt-2">
+                  <label className="block mb-1 font-semibold select-none">
+                    Select Period
+                  </label>
+                  <select
+                    className="w-full p-2 border rounded-md"
+                    value={selectedPeriod}
+                    onChange={(e) => setSelectedPeriod(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select a Month
+                    </option>
+                    {months.map((month, index) => (
+                      <option key={index} value={month}>
+                        {month}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
                 <div className="mt-2">
                   <label className="block mb-1 font-semibold select-none">

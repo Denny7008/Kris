@@ -91,7 +91,7 @@ const GuarantorDetails = () => {
     }
   
     try {
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("token");
       const userId = localStorage.getItem("userId");
   
       if (!token) {

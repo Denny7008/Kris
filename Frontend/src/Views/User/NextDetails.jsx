@@ -60,7 +60,7 @@ const NextDetails = () => {
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("token");
       const userId = localStorage.getItem("userId");
   
       if (!token) {

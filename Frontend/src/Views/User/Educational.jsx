@@ -25,6 +25,11 @@ const EducationQualifications = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log(response);
+      
+      if (response.data._id) {
+        localStorage.setItem("userId", response.data._id); // ✅ Save userId in localStorage
+        console.log("User ID stored in localStorage:", localStorage.getItem("userId"));
+      }
       setAcademicDetails(response.data.educationDetails.academicRecords);
       setProfessionalDetails(response.data.educationDetails.professionalDetails);
     } catch (error) {
@@ -34,10 +39,12 @@ const EducationQualifications = () => {
 
   const handleUpdateAcademicDetails = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId"); 
+    // console.log("educational user id", userId)
     const recordId = currentDetail?._id; // Ensure `_id` is used
     console.log("Updating academic record ID:", recordId);
+    console.log("userd id in edu:",userId);
   
     try {
       if (recordId) {
@@ -63,6 +70,7 @@ const EducationQualifications = () => {
           currentDetail,
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        console.log("add new deatils ",userId);
   
         if (response.status === 201) {
           setAcademicDetails([...academicDetails, response.data]);
@@ -84,7 +92,7 @@ const EducationQualifications = () => {
 
   const handleUpdateProfessionalDetails = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId"); 
     const recordId = currentDetail?._id; // Use `_id` properly
     console.log("Updating professional record ID:", recordId);

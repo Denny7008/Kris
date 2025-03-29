@@ -123,12 +123,56 @@ export const sendPaymentSuccessEmail = async (user, amount, bankName, accountNum
 
 
 
+// export const processPayout = async (req, res) => {
+//   try {
+//     const { amount, userId, bankDetails } = req.body;
+
+//     // Simulating payout processing
+//     console.log("Processing payout for user:", userId);
+
+//     // Sample breakdown of earnings and deductions
+//     const payslip = new Payslip({
+//       userId,
+//       totalEarnings: amount,
+//       totalDeductions: 50, // Example deduction
+//       netPay: amount - 100,
+//       period: "February 2025",
+//       payDate: new Date(),
+//       earnings: [
+//         { name: "Basic Pay", amount: amount * 0.6 },
+//         { name: "Allowance", amount: amount * 0.3 },
+//       ],
+//       deductions: [{ name: "Tax", amount: 50 }],
+//     });
+
+//     await payslip.save();
+
+//     res.json({ success: true, message: "Payout successful", payslip });
+//   } catch (error) {
+//     console.error("Payout error:", error);
+//     res.status(500).json({ success: false, message: "Payout failed" });
+//   }
+// };
+
+
+// Fetch payslips for a specific user
+
+
+
+
+
+
+
 export const processPayout = async (req, res) => {
   try {
-    const { amount, userId, bankDetails } = req.body;
+    const { amount, userId, bankDetails, period } = req.body; // ✅ Accept period from frontend
+
+    if (!period) {
+      return res.status(400).json({ success: false, message: "Period is required." });
+    }
 
     // Simulating payout processing
-    console.log("Processing payout for user:", userId);
+    console.log(`Processing payout for user: ${userId} for period: ${period}`);
 
     // Sample breakdown of earnings and deductions
     const payslip = new Payslip({
@@ -136,7 +180,7 @@ export const processPayout = async (req, res) => {
       totalEarnings: amount,
       totalDeductions: 50, // Example deduction
       netPay: amount - 100,
-      period: "February 2025",
+      period: period,// ✅ Use the dynamic period
       payDate: new Date(),
       earnings: [
         { name: "Basic Pay", amount: amount * 0.6 },
@@ -155,7 +199,24 @@ export const processPayout = async (req, res) => {
 };
 
 
-// Fetch payslips for a specific user
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const getPayslipsByUser = async (req, res) => {
   try {
     const { userId } = req.params;

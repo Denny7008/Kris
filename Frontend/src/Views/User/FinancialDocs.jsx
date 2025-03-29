@@ -82,7 +82,7 @@ const FinancialDocs = () => {
   
   const handleSave = async () => {
     try {
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("token");
   
       if (currentDetail._id) {
         // Updating existing entry
