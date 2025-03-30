@@ -14,8 +14,9 @@ const Navbar = () => {
   const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [userId, setUserId] = useState(() => {
     const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser).id : null;
+    return storedUser ? JSON.parse(storedUser)._id : null;
   });
+  console.log(userId);
   const [userName, setUserName] = useState("");
   const [profilePic, setProfilePic] = useState(
     "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
@@ -30,7 +31,11 @@ const Navbar = () => {
           axios.get(`http://localhost:5000/notifications/${userId}`),
           axios.get(`http://localhost:5000/messages/${userId}`), // Missing API call added
         ]);
-  
+        
+        console.log(notificationsRes);
+        console.log(messagesRes);
+
+
         setNotifications(
           Array.isArray(notificationsRes.data) ? notificationsRes.data : []
         );

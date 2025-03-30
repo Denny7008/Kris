@@ -58,6 +58,7 @@ const JobPanels = () => {
       .catch((error) => {
         console.error("Error fetching candidates:", error);
       });
+      
     // ✅ Fetch applied jobs from the API
     axios
       .get("http://localhost:5000/getall")

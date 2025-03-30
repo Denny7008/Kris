@@ -12,15 +12,17 @@ const Personaldetails = () => {
   const [category, setCategory] = useState("");
   const [error, setError] = useState("");
 
-  const storedUser = localStorage.getItem("user");
-  const userId = storedUser ? JSON.parse(storedUser).id : null;
-  const token = localStorage.getItem("token");
-
   
+  const token = localStorage.getItem("token");
+  console.log(token);
+  const storedUser = localStorage.getItem("user");
+  console.log(storedUser);
+  const userId = storedUser ? JSON.parse(storedUser)._id : null;
+  console.log(userId);
 
   // Handle image selection
   const handleImageChange = async (e) => {
-    // console.log("User ID before upload:", userId);
+  console.log("User ID before upload:", userId);
     
     if (!userId) {
       alert("User ID is missing. Cannot upload image.");
@@ -32,8 +34,6 @@ const Personaldetails = () => {
       await uploadToBackend(file);
     }
   };
-
-
 
   const uploadToBackend = async (file) => {
     const formData = new FormData();
@@ -57,11 +57,6 @@ const Personaldetails = () => {
   };
   
   // Fetch profile image from backend
- 
- 
- 
- 
-  
   const fetchProfileImage = async () => {
     if (!userId) return;
 
@@ -151,6 +146,12 @@ const Personaldetails = () => {
 };
 
 export default Personaldetails;
+
+
+
+
+
+
 
 
 

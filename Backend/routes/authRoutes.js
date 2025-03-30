@@ -286,37 +286,45 @@ router.get("/get-user-data", authenticateToken, async (req, res) => {
   }
 });
 
+
+
 // FINANICAL DETAILS
 router.get("/", authenticateToken, getFinancialDetails);
 router.post("/users/add-bankinfo", authenticateToken, addFinancialDetails);
 router.put("/users/add-bankinfo/update/:id",authenticateToken,updateFinancialDetails);
 router.delete("/users/add-bankinfo/delete",authenticateToken,deleteFinancialDetails);
 
-// NOTIFICATIONS
 
+
+// NOTIFICATIONS
 router.post("/notifications", createNotification); // Create a notification
 router.get("/notifications/:userId", getUnreadNotifications); // Fetch unread notifications for a user
 router.put("/notifications/read/:userId", markNotificationsAsRead); // Mark notifications as read
 
-// Message Notification
 
+
+// Message Notification
 router.post("/messages", createMessageNotification); // 📌 Create a new message notification
+
 router.get("/messages/:userId", getUserMessageNotifications); // 📌 Get all messages for a user
 router.get("/messagess/:userId", getAllMessages); // 📌 Get all messages for a user
+
 router.put("/messages/read/:userId", markMessagesAsRead); // 📌 Mark a specific message as read
 router.delete("/messages/:messageId", deleteMessageNotification);  // 📌 Delete a specific message notification (fixed route path)
 router.get("/messagess/:userId",getUnreadMessages)
 
-// KPI ROUTES
 
+
+// KPI ROUTES
 router.post("/kpi/create", createKPI); // Route to create a KPI
 router.get("/kpi/user", getAllKPIs); // Route to get all KPIs for a user
 router.get("/kpi/usercompleted/:userId",getKPIsByUserId);
 router.put("/kpi/update/:kpiId", updateKPI); // Route to update a KPI
 router.delete("/kpi/delete/:kpiId", deleteKPI); // Route to delete a KPI
 
-// todos Routes
 
+
+// todos Routes
 router.post("/initiate", initiateTodo);
 router.get("/todo/user/:userId", getAllTodos);
 router.delete("/:id", deleteTodo);
@@ -340,7 +348,6 @@ router.get("/get-all-appraisal-scores", getAllAppraisalScores);
 
 
 // payroll razor pay
-
 router.post('/payroll/payout', async (req, res) => {
   const { employeeId } = req.body;
   const employee = await User.findById(employeeId);
