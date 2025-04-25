@@ -99,7 +99,7 @@ const Appraisals = () => {
                 value={score}
                 onChange={(e) => setScore(Number(e.target.value))}
                 min="0"
-                max="100"
+                max="10"
               />
 
               <h3 className="font-semibold mt-3 mb-2">Give Feedback</h3>
